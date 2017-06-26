@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { NativeRouter, Route } from 'react-router-native';
 
 import PrivateRoute from './authentication/PrivateRoute';
@@ -10,7 +10,7 @@ import App from './app';
 
 const Root = () => (
   <NativeRouter>
-    <View>
+    <View style={styles.content}>
       <PrivateRoute exact path="/" component={Splash} />
       <Route path="/auth" component={Authentication} />
       <PrivateRoute path="/app" component={App} />
@@ -19,3 +19,11 @@ const Root = () => (
 );
 
 export default Root;
+
+const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
+});
