@@ -6,7 +6,7 @@ import Login from './login/Login.js';
 import Signup from './signup/Signup.js';
 import Forgot from './forgot/Forgot.js';
 
-import backgroundImage from '../assets/images/authentication/background.jpg';
+import backgroundImage from '../../assets/images/authentication/background.jpg';
 
 export default () => (
   <Image source={backgroundImage} style={styles.backgroundImage}>

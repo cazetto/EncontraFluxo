@@ -11,12 +11,12 @@ import _ from 'lodash';
 import Toast from 'react-native-easy-toast';
 
 // Custom components
-import RedirectionWrapper from '../../components/redirection-wrapper/RedirectionWrapper';
+import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 // Services import
 // import User from '../../api/User';
 
-export default class Forgot extends Component {
+export default class Login extends Component {
 
   constructor(props) {
     super(props);
@@ -30,6 +30,12 @@ export default class Forgot extends Component {
       isFetching: false,
       loginComplete: false,
     };
+  }
+
+  componentWillMount() {
+    // User.tryLastLogin()
+    // .then(() => this.loginSuccess())
+    // .catch(() => {});
   }
 
   login() {
@@ -85,7 +91,7 @@ export default class Forgot extends Component {
 
   renderRegisterButton() {
     return !this.state.isFetching ? (
-      <RedirectionWrapper path="/auth/signup" content={
+      <TouchableRedirectorWrapper path="/auth/signup" content={
         <View style={[styles.touchable, styles.registerButtonColor]}>
           <Text style={styles.buttonText}>Cadastrar</Text>
         </View>
@@ -95,7 +101,7 @@ export default class Forgot extends Component {
 
   renderForgotPasswordButton() {
     return !this.state.isFetching ? (
-      <RedirectionWrapper path="/auth/forgot" content={
+      <TouchableRedirectorWrapper path="/auth/forgot" content={
         <View style={[styles.touchable]}>
           <Text style={styles.buttonText}>Recuperar senha</Text>
         </View>

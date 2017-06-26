@@ -10,7 +10,7 @@ import update from 'immutability-helper';
 import Toast from 'react-native-easy-toast';
 
 // Custom components
-import RedirectionWrapper from '../../components/redirection-wrapper/RedirectionWrapper';
+import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 // Services import
 // import User from '../../api/User';
@@ -118,7 +118,7 @@ export default class RegisterComponent extends Component {
 
   renderBack() {
     return !this.state.isFetching ? (
-      <RedirectionWrapper path="/auth/login" content={
+      <TouchableRedirectorWrapper path="/auth/login" content={
         <View style={[styles.touchable]}>
           <Text style={styles.buttonText}>Voltar</Text>
         </View>

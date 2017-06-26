@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
-class RedirectionWrapper extends React.Component {
+class TouchableRedirectorWrapper extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
     content: PropTypes.any.isRequired
@@ -26,4 +26,4 @@ class RedirectionWrapper extends React.Component {
   }
 }
 
-export default withRouter(RedirectionWrapper);
+export default withRouter(TouchableRedirectorWrapper);
