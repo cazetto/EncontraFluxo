@@ -33,7 +33,6 @@ export default class Splash extends Component {
   }
 
   componentDidMount() {
-    console.log('gomotherfuckingtimer');
     // Try adding more than one second... rs! It's my life!
     // const WAIT = 0;
     // this.timer = TimerMixin.setTimeout(() => {

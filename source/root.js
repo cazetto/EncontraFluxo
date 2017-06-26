@@ -4,7 +4,7 @@ import { NativeRouter, Route } from 'react-router-native';
 
 import PrivateRoute from './components/private-route/PrivateRoute';
 
-import Splash from './splash/Splash';
+import Splash from './screens/splash/Splash';
 import Authentication from './screens/authentication/index';
 import App from './app';
 

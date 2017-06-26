@@ -13,6 +13,9 @@ import Toast from 'react-native-easy-toast';
 // Custom components
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+// Shared styles
+import styles from '../styles';
+
 // Services import
 // import User from '../../api/User';
 
@@ -38,28 +41,37 @@ export default class Login extends Component {
     // .catch(() => {});
   }
 
+  componentDidMount() {
+    // Temp
+    // this.loginSuccess();
+  }
+
   login() {
     this.setState({isFetching: true});
-    this.loginSuccess(1000);
+    this.loginSuccess(2000);
     // User.doLogin(this.state.credentials)
     // .then(response => {this.loginSuccess(1000)})
     // .catch(error => {this.loginFail()});
   }
 
   loginSuccess(wait) {
-    this.toast.show('Login efetuado!');
+    if(wait < 2000) wait = 2000;
     if(!wait) this.setState({loginComplete: true, isFetching: false});
     else {
+      this.refs.toast.show('Login efetuado!');
+      this.setState({isFetching: false});
+
       const delay = setTimeout(() => {
         clearTimeout(delay);
-        this.setState({loginComplete: true, isFetching: false});
+        this.setState({loginComplete: true});
+
       }, wait);
     }
   }
 
   loginFail() {
     this.setState({isFetching: false});
-    this.toast.show('Dados incorretos!');
+    this.refs.toast.show('Dados incorretos!');
   }
 
   delayedChangeCredentials(field) {
@@ -147,12 +159,12 @@ export default class Login extends Component {
         </View>
 
         <Toast
-          ref={(c) => { this.toast = c; }}
+          ref="toast"
           style={styles.toast}
-          position='top'
+          position="top"
           positionValue={155}
           fadeInDuration={750}
-          fadeOutDuration={1000}
+          fadeOutDuration={750}
           opacity={0.8}
         />
 
@@ -160,59 +172,3 @@ export default class Login extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    width: null,
-    height: null,
-  },
-  textInputs: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textInputWrapper: {
-    flexDirection: 'row',
-  },
-  textInput: {
-    flex: 1,
-    marginHorizontal: 20,
-    paddingHorizontal: 10,
-    height: 40,
-    marginTop: 10,
-    backgroundColor: '#FFF',
-    borderRadius: 5,
-  },
-  loginButtonColor: {
-    backgroundColor: '#03A9F4',
-  },
-  registerButtonColor: {
-    backgroundColor: '#FBC02D',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16
-  },
-  touchable: {
-    margin: 4,
-    padding: 14,
-    marginHorizontal: 20,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  actions: {
-    marginTop: 20,
-    width: '100%',
-  },
-  loginIndicator: {
-    marginTop: 4,
-    marginBottom: 5,
-  },
-  toast: {
-    backgroundColor:'#d32f2f',
-  }
-});

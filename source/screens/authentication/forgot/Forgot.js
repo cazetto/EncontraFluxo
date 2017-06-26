@@ -13,6 +13,9 @@ import Toast from 'react-native-easy-toast';
 // Custom components
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+// Shared styles
+import styles from '../styles';
+
 // Services import
 // import User from '../../api/User';
 
@@ -22,10 +25,7 @@ export default class Forgot extends Component {
     super(props);
     this.state = {
       credentials: {
-        username: 'cazetto.andre@gmail.com',
-        password: 'andrewelight',
-        // username: '',
-        // password: '',
+        username: '',
       },
       isFetching: false,
       loginComplete: false,
@@ -65,12 +65,12 @@ export default class Forgot extends Component {
     );
   }
 
-  renderLoginButton() {
+  renderForgotButton() {
     return !this.state.isFetching ? (
       <TouchableOpacity
       activeOpacity={0.5}
       onPress={() => {this.login()}}
-      style={[styles.touchable, styles.loginButtonColor]}
+      style={[styles.touchable, styles.forgotButtonColor]}
       >
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
@@ -83,21 +83,11 @@ export default class Forgot extends Component {
     );
   }
 
-  renderRegisterButton() {
+  renderBack() {
     return !this.state.isFetching ? (
-      <TouchableRedirectorWrapper path="/auth/signup" content={
-        <View style={[styles.touchable, styles.registerButtonColor]}>
-          <Text style={styles.buttonText}>Cadastrar</Text>
-        </View>
-      } />
-    ) : null;
-  }
-
-  renderForgotPasswordButton() {
-    return !this.state.isFetching ? (
-      <TouchableRedirectorWrapper path="/auth/forgot" content={
+      <TouchableRedirectorWrapper path="/auth/login" content={
         <View style={[styles.touchable]}>
-          <Text style={styles.buttonText}>Recuperar senha</Text>
+          <Text style={styles.buttonText}>Voltar</Text>
         </View>
       } />
     ) : null;
@@ -121,23 +111,11 @@ export default class Forgot extends Component {
             />
           </View>
 
-          <View style={styles.textInputWrapper}>
-            <TextInput
-              placeholder="Senha"
-              defaultValue={this.state.credentials.password}
-              onChangeText={this.delayedChangeCredentials('password')}
-              secureTextEntry
-              selectTextOnFocus
-              underlineColorAndroid="transparent"
-              style={styles.textInput}
-            />
-          </View>
         </View>
 
         <View style={styles.actions}>
-          {this.renderLoginButton()}
-          {this.renderRegisterButton()}
-          {this.renderForgotPasswordButton()}
+          {this.renderForgotButton()}
+          {this.renderBack()}
         </View>
 
         <Toast
@@ -154,59 +132,3 @@ export default class Forgot extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    width: null,
-    height: null,
-  },
-  textInputs: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textInputWrapper: {
-    flexDirection: 'row',
-  },
-  textInput: {
-    flex: 1,
-    marginHorizontal: 20,
-    paddingHorizontal: 10,
-    height: 40,
-    marginTop: 10,
-    backgroundColor: '#FFF',
-    borderRadius: 5,
-  },
-  loginButtonColor: {
-    backgroundColor: '#03A9F4',
-  },
-  registerButtonColor: {
-    backgroundColor: '#FBC02D',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16
-  },
-  touchable: {
-    margin: 4,
-    padding: 14,
-    marginHorizontal: 20,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  actions: {
-    marginTop: 20,
-    width: '100%',
-  },
-  loginIndicator: {
-    marginTop: 4,
-    marginBottom: 5,
-  },
-  toast: {
-    backgroundColor:'#d32f2f',
-  }
-});

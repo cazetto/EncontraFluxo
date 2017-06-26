@@ -12,6 +12,9 @@ import Toast from 'react-native-easy-toast';
 // Custom components
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+// Shared styles
+import styles from '../styles';
+
 // Services import
 // import User from '../../api/User';
 
@@ -103,7 +106,7 @@ export default class RegisterComponent extends Component {
       <TouchableOpacity
       activeOpacity={0.5}
       onPress={() => {this.register()}}
-      style={[styles.touchable, styles.registerBackgroundColor]}
+      style={[styles.touchable, styles.registerButtonColor]}
       >
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
@@ -183,58 +186,3 @@ export default class RegisterComponent extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    width: null,
-    height: null,
-  },
-  logoImage: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  textInputs: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textInputWrapper: {
-    flexDirection: 'row',
-  },
-  textInput: {
-    flex: 1,
-    marginHorizontal: 20,
-    paddingHorizontal: 10,
-    height: 40,
-    marginTop: 10,
-    backgroundColor: '#FFF',
-    borderRadius: 5,
-  },
-  registerBackgroundColor: {
-    backgroundColor: '#D73352',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16
-  },
-  touchable: {
-    margin: 4,
-    padding: 14,
-    marginHorizontal: 20,
-    borderRadius: 8,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  actions: {
-    marginTop: 20,
-    width: '100%',
-  },
-  loginIndicator: {
-    marginTop: 4,
-    marginBottom: 5,
-  },
-});
