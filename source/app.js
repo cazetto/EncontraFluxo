@@ -3,9 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { NativeRouter, Route } from 'react-router-native';
 
 import PrivateRoute from './components/private-route/PrivateRoute';
-
 import SideMenuHOC from './components/side-menu/SideMenuHOC';
-
 import Header from './components/header/Header';
 
 import Interests from './screens/app/interests/Interests';
@@ -30,5 +28,6 @@ export default SideMenuHOC(App);
 const styles = StyleSheet.create({
   app: {
     backgroundColor: '#FFF',
+    height: '100%',
   },
 });

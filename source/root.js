@@ -11,7 +11,7 @@ import App from './app';
 const Root = () => (
   <NativeRouter>
     <View style={styles.content}>
-      <PrivateRoute exact path="/" component={Splash} />
+      <Route exact path="/" component={Splash} />
       <Route path="/auth" component={Authentication} />
       <PrivateRoute path="/app" component={App} />
     </View>

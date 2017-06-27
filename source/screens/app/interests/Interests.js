@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Icon,
   Switch,
+  Dimensions,
 } from 'react-native';
 
 export default class Interests extends Component {
@@ -91,7 +92,7 @@ export default class Interests extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%'
+    height: Dimensions.get('window').height - 70,
   },
   listHeader: {
     paddingHorizontal: 14,

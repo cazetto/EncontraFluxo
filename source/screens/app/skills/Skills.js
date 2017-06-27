@@ -139,7 +139,7 @@ const inputMargin = 10;
 const styles = StyleSheet.create({
 
   container: {
-    height: '100%'
+    height: Dimensions.get('window').height - 70,
   },
 
   control: {

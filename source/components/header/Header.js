@@ -1,13 +1,21 @@
-// React imports
 import React, { Component } from 'react';
-// React Native imports
+
 import { Platform, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-// Other vendors imports
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { withRouter } from 'react-router';
+
 import PropTypes from 'prop-types';
 
-export default class Header extends Component {
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+class Header extends Component {
+
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+  }
 
   constructor(props) {
     super(props);
@@ -23,6 +31,8 @@ export default class Header extends Component {
   render() {
     const { title } = this.state;
 
+    console.log('this.props.location.pathname', this.props.location.pathname);
+
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>
@@ -31,7 +41,7 @@ export default class Header extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.middeColumn}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{this.props.location.pathname}</Text>
         </View>
         <View style={styles.rightColumn}>
         </View>
@@ -40,9 +50,7 @@ export default class Header extends Component {
   }
 }
 
-Header.propTypes = {
-  title: PropTypes.string.isRequired
-};
+export default withRouter(Header);
 
 // const PADDING_TOP_OS = { ios: 20, android: 20 };
 // paddingTop: PADDING_TOP_OS[Platform.OS] || PADDING_TOP_OS.ios,

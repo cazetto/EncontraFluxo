@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
-class TouchableRedirectorWrapper extends React.Component {
+class TouchableRedirectorWrapper extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
     content: PropTypes.any.isRequired
