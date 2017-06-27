@@ -41,7 +41,7 @@ class Header extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.middeColumn}>
-          <Text style={styles.title}>{this.props.location.pathname}</Text>
+          <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.rightColumn}>
         </View>

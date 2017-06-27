@@ -9,6 +9,7 @@ import Header from './components/header/Header';
 import Interests from './screens/app/interests/Interests';
 import Skills from './screens/app/skills/Skills';
 import Events from './screens/app/events/Events';
+import Dashboard from './screens/app/dashboard/Dashboard';
 
 const App = props => (
   <View style={styles.app}>
@@ -18,6 +19,7 @@ const App = props => (
         <PrivateRoute exact path="/" component={Skills} />
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
+        <PrivateRoute exact path="/dashboard" component={Dashboard} />
       </View>
     </NativeRouter>
   </View>

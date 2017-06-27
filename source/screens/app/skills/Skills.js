@@ -12,7 +12,6 @@ import {
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
-// Custom components
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 import neighborhoods from '../../../static/neighborhoods';
@@ -66,10 +65,6 @@ export default class Skills extends Component {
     this.setState({
       neighborhood: this.neighborhoods[index]
     });
-  }
-
-  done() {
-    this.props.navigation.navigate('ProfileInterests');
   }
 
   render() {
@@ -230,6 +225,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBC02D',
     padding: 8,
     margin: 3,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
   },
 
   btnActionDoneText: {
