@@ -9,8 +9,6 @@ import {
   Switch,
 } from 'react-native';
 
-import Header from '../../../components/header/Header';
-
 export default class Interests extends Component {
 
   constructor(props) {
@@ -77,7 +75,6 @@ export default class Interests extends Component {
     const { pageTitle } = this.state;
     return (
       <View style={styles.container}>
-        <Header title="COMPLETE SEU PERFIL"></Header>
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderLabel}>SELECIONE SEUS INTERESSES</Text>
         </View>

@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/Entypo';
 
 // Custom components
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
-import Header from '../../../components/header/Header';
 
 import neighborhoods from '../../../static/neighborhoods';
 
@@ -27,6 +26,7 @@ export default class Skills extends Component {
       pageTitle: 'Habilidades',
       skill: '',
       skills: [],
+      neighborhood: null,
     };
 
     this.neighborhoods = neighborhoods;
@@ -78,7 +78,7 @@ export default class Skills extends Component {
 
     return (
       <View style={styles.container}>
-        <Header title="COMPLETE SEU PERFIL"></Header>
+
         <View style={styles.control}>
 
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
@@ -93,7 +93,7 @@ export default class Skills extends Component {
                 value={this.state.neighborhood}
                 style={styles.input}
                 ></TextInput>
-              <Icon name="chevron-small-down" style={styles.selectNeighborhoodIcon}/>
+              <Icon name={this.state.neighborhood ? 'check' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
             </View>
           </ModalDropdown>
 
@@ -172,6 +172,12 @@ const styles = StyleSheet.create({
     color: '#BF360C',
     backgroundColor: 'transparent',
   },
+  selectNeighborhoodIconChecked: {
+    color: '#BF360C',
+    fontSize: 20,
+    color: '#8BC34A',
+    marginTop: 7,
+  },
   selectNeighborhoodModal: {
     width: Dimensions.get('window').width - inputMargin * 2,
   },
@@ -201,9 +207,8 @@ const styles = StyleSheet.create({
   },
 
   listItem: {
-    paddingTop: 10,
+    paddingVertical: 14,
     paddingLeft: 10,
-    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ECEFF1',
     backgroundColor: '#FAFAFA',
@@ -211,11 +216,12 @@ const styles = StyleSheet.create({
 
   itemRemoveIconWrapper: {
     position: 'absolute',
-    marginLeft: 348,
+    right: 20,
     marginTop: 10,
   },
 
   itemRemoveIcon: {
+    marginTop: 3,
     fontSize: 20,
     color: '#b71c1c'
   },

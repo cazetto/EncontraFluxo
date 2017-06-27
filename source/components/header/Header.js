@@ -17,7 +17,7 @@ export default class Header extends Component {
   }
 
   openDrawer() {
-    this.props.navigation.navigate('DrawerOpen');
+    this.props.toggleSideMenu();
   }
 
   render() {
@@ -39,8 +39,6 @@ export default class Header extends Component {
     );
   }
 }
-
-PropTypes
 
 Header.propTypes = {
   title: PropTypes.string.isRequired
