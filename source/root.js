@@ -5,7 +5,7 @@ import { NativeRouter, Route } from 'react-router-native';
 import PrivateRoute from './components/private-route/PrivateRoute';
 
 import Splash from './screens/splash/Splash';
-import Authentication from './screens/authentication/index';
+import Authentication from './auth';
 import App from './app';
 
 const Root = () => (

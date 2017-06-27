@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
 
-import BarMenu from '../../common/components/bar-menu';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { CheckBox } from 'react-native-elements';

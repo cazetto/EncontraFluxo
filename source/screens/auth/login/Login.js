@@ -43,7 +43,7 @@ export default class Login extends Component {
 
   componentDidMount() {
     // Temp
-    // this.loginSuccess();
+    this.loginSuccess();
   }
 
   login() {

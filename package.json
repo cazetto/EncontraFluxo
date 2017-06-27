@@ -12,6 +12,10 @@
     "react": "16.0.0-alpha.12",
     "react-native": "0.45.1",
     "react-native-easy-toast": "^1.0.6",
+    "react-native-elements": "^0.13.0",
+    "react-native-modal-dropdown": "^0.4.4",
+    "react-native-tabs": "^1.0.9",
+    "react-native-vector-icons": "^4.2.0",
     "react-router-native": "^4.1.1",
     "react-timer-mixin": "^0.13.3"
   },
