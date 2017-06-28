@@ -16,10 +16,10 @@ const App = props => (
     <Header toggleSideMenu={props.toggleSideMenu} title="Header"/>
     <NativeRouter>
       <View>
-        <PrivateRoute exact path="/" component={Skills} />
+        <PrivateRoute exact path="/skills" component={Skills} />
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/" component={Dashboard} />
       </View>
     </NativeRouter>
   </View>

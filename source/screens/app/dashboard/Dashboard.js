@@ -14,20 +14,16 @@ import TouchableRedirectorWrapper from '../../../components/touchable-redirector
 
 import neighborhoods from '../../../static/neighborhoods';
 
-
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-const Opened = () => <View style={[ styles.container, { backgroundColor: '#ff4081' } ]} />;
-const InFlux = () => <View style={[ styles.container, { backgroundColor: '#673ab7' } ]} />;
-const Happening = () => <View style={[ styles.container, { backgroundColor: '#C0CA33' } ]} />;
+const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
+const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
+const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;
 
 export default class Dashboard extends Component {
 
   constructor(props) {
     super(props);
-
-
-
     this.state = {
       pageTitle: 'Dashboard',
       neighborhood: null,
@@ -39,7 +35,6 @@ export default class Dashboard extends Component {
         { key: '3', title: 'Rolando' },
       ],
     };
-
     this.neighborhoods = neighborhoods;
   }
 
@@ -49,18 +44,33 @@ export default class Dashboard extends Component {
     });
   }
 
+  handleChangeTab = index => this.setState({ index });
 
+  renderLabel = scene => {
+    let color = ['#FBC02D', '#7CB342', '#1E88E5'][scene.index];
+    const labelStyle = { textAlign: 'center', color: '#424242', backgroundColor: 'transparent' }
+    const boxStyle = { borderBottomWidth: 2, borderBottomColor: color, paddingHorizontal: 10, paddingTop: 10, paddingBottom: 4, marginBottom: 6};
+    let label = scene.route.title;
+    return (
+      <View style={boxStyle}>
+        <Text style={labelStyle}>{label}</Text>
+      </View>
+    );
+  }
 
-  _handleChangeTab = index => this.setState({ index });
+  renderHeader = props => <TabBar
+    renderLabel={this.renderLabel}
+    style={{backgroundColor: '#F5F5F5'}}
+    indicatorStyle={{backgroundColor: '#EEEEEE', height: '100%'}}
+    labelStyle={{color: '#424242'}}
+    tabStyle={{  }}
+    {...props} />
 
-  _renderHeader = props => <TabBar {...props} />;
-
-  _renderScene = SceneMap({
+  renderScene = SceneMap({
     '1': Opened,
     '2': InFlux,
     '3': Happening,
   });
-
 
   render() {
     const { pageTitle } = this.state;
@@ -68,9 +78,7 @@ export default class Dashboard extends Component {
 
     return (
       <View style={styles.container}>
-
         <View style={styles.control}>
-
           <Text style={styles.inputLabel}>Filtrar fluxos por bairro:</Text>
           <ModalDropdown style={styles.selectNeighborhood} options={this.neighborhoods}
             onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
@@ -80,50 +88,40 @@ export default class Dashboard extends Component {
               <TextInput
                 editable={false}
                 placeholder="SELECIONE O BAIRRO"
-                value={this.state.neighborhood}
+                value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood}`}
                 style={styles.input}
                 ></TextInput>
               <Icon name={this.state.neighborhood ? 'check' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
             </View>
           </ModalDropdown>
-
         </View>
-
         <TabViewAnimated
           style={styles.tabContainer}
           navigationState={this.state}
-          renderScene={this._renderScene}
-          renderHeader={this._renderHeader}
-          onRequestChangeTab={this._handleChangeTab}
+          renderScene={this.renderScene}
+          renderHeader={this.renderHeader}
+          onRequestChangeTab={this.handleChangeTab}
         />
-
       </View>
     );
   }
-
 }
-
-
 
 const inputMargin = 10;
 const styles = StyleSheet.create({
-
   tabContainer: {
     flex: 1,
   },
-
   container: {
     height: Dimensions.get('window').height - 70,
   },
-
   control: {
-    marginLeft: inputMargin,
-    marginRight: inputMargin,
+    // marginLeft: inputMargin,
+    // marginRight: inputMargin,
   },
-
   inputLabel: {
-    marginTop: 10,
-    marginBottom: 4,
+    marginTop: 14,
+    marginBottom: 10,
     marginLeft: 12,
     color: '#757575',
   },
@@ -153,10 +151,9 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
   selectNeighborhoodModal: {
-    width: Dimensions.get('window').width - inputMargin * 2,
+    // width: Dimensions.get('window').width - inputMargin * 2,
+    width: '100%',
   },
-
-
   btnActionDone: {
     backgroundColor: '#FBC02D',
     padding: 8,
@@ -164,12 +161,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
   },
-
   btnActionDoneText: {
     textAlign: 'center',
     color: '#FFF',
     fontSize: 15,
     padding: 4
   }
-
 });
