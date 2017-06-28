@@ -8,10 +8,16 @@ import PropTypes from 'prop-types';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const headerScreensConfig = {
+  '/': { title: '' },
+  '/dashboard': { title: 'DASHBOARD' },
+  '/skills': { title: 'COMPLETE SEU PERFIL' },
+  '/interests': { title: 'COMPLETE SEU PERFIL' },
+}
+
 class Header extends Component {
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
     match: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
@@ -19,9 +25,6 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      title: this.props.title
-    };
   }
 
   openDrawer() {
@@ -29,10 +32,7 @@ class Header extends Component {
   }
 
   render() {
-    const { title } = this.state;
-
-    console.log('this.props.location.pathname', this.props.location.pathname);
-
+    const title = headerScreensConfig[this.props.location.pathname].title;
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>

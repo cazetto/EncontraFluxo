@@ -15,21 +15,23 @@ import { withRouter } from 'react-router';
 
 const App = props => (
   <View style={styles.app}>
-    <Header toggleSideMenu={props.toggleSideMenu} title="Header"/>
     <NativeRouter>
       <View>
+        <Header toggleSideMenu={props.toggleSideMenu} />
         <PrivateRoute exact path="/skills" component={Skills} />
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/" render={() =>
-          props.location.state && props.location.state.fromSignup ?
-            <Redirect to="/skills"/> :
-            <Redirect to="/dashboard"/> }/>
+        <Route exact path="/" render={() => <Redirect to="/skills"/>  }/>
       </View>
     </NativeRouter>
   </View>
 );
+
+{/* <Route exact path="/" render={() =>
+  props.location.state && props.location.state.fromSignup ?
+    <Redirect to="/skills"/> :
+    <Redirect to="/dashboard"/> }/> */}
 
 export default SideMenuHOC( withRouter (App) );
 
