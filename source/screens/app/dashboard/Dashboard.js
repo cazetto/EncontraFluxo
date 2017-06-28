@@ -7,6 +7,8 @@ import {
   Dimensions
 } from 'react-native';
 
+import { List } from 'react-native-elements';
+
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -16,9 +18,13 @@ import neighborhoods from '../../../static/neighborhoods';
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
-const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
-const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;
+import OpenedTab from './tabs/OpenedTab';
+import InFluxTab from './tabs/InFluxTab';
+import HappeningTab from './tabs/HappeningTab';
+
+// const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
+// const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
+// const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;
 
 export default class Dashboard extends Component {
 
@@ -67,9 +73,9 @@ export default class Dashboard extends Component {
     {...props} />
 
   renderScene = SceneMap({
-    '1': Opened,
-    '2': InFlux,
-    '3': Happening,
+    '1': OpenedTab,
+    '2': InFluxTab,
+    '3': HappeningTab,
   });
 
   render() {
@@ -102,6 +108,12 @@ export default class Dashboard extends Component {
           renderHeader={this.renderHeader}
           onRequestChangeTab={this.handleChangeTab}
         />
+
+        <TouchableRedirectorWrapper path="/create" content={
+          <View style={styles.btnActionDone}>
+            <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
+          </View>
+        } />
       </View>
     );
   }
@@ -155,7 +167,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   btnActionDone: {
-    backgroundColor: '#FBC02D',
+    backgroundColor: '#A1887F',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,

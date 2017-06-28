@@ -10,6 +10,7 @@ import Interests from './screens/app/interests/Interests';
 import Skills from './screens/app/skills/Skills';
 import Events from './screens/app/events/Events';
 import Dashboard from './screens/app/dashboard/Dashboard';
+import Create from './screens/app/create/Create';
 
 import { withRouter } from 'react-router';
 
@@ -22,7 +23,8 @@ const App = props => (
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/" render={() => <Redirect to="/skills"/>  }/>
+        <PrivateRoute exact path="/create" component={Create} />
+        <Route exact path="/" render={() => <Redirect to="/dashboard"/>  }/>
       </View>
     </NativeRouter>
   </View>

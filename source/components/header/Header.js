@@ -8,11 +8,12 @@ import PropTypes from 'prop-types';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const headerScreensConfig = {
+const headerRoutesConfig = {
   '/': { title: '' },
   '/dashboard': { title: 'DASHBOARD' },
   '/skills': { title: 'COMPLETE SEU PERFIL' },
   '/interests': { title: 'COMPLETE SEU PERFIL' },
+  '/create': { title: 'CRIE UM FLUXO' },
 }
 
 class Header extends Component {
@@ -32,7 +33,8 @@ class Header extends Component {
   }
 
   render() {
-    const title = headerScreensConfig[this.props.location.pathname].title;
+    const title = headerRoutesConfig[this.props.location.pathname].title || ' ';
+
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>
