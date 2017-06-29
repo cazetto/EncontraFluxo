@@ -10,29 +10,21 @@ export default FluxListItem = props => {
     <View style={styles.container}>
 
       <View style={styles.leftColumn}>
-
-
         <View style={styles.header}>
           <View style={[styles.bullet, {backgroundColor: props.color}]}></View>
           <Text style={styles.title}>TÍTULO DO FLUXO</Text>
         </View>
-
         <Text style={styles.neighborhood}>Bairro: Nova Iguaçu</Text>
-
         <View>
-
           <Text style={styles.description}>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore facilis nesciunt ducimus itaque dignissimos repellendus, nobis cum debitis maxime consequuntur incidunt repudiandae culpa tempora fuga sit sint, nulla possimus adipisci.
           </Text>
 
         </View>
-
         <View style={styles.info}>
           <Text style={styles.peopleCount}>32 pessoas contectadas</Text>
           <Text style={styles.createdAt}>Data: 01/07/2017</Text>
         </View>
-
-
       </View>
 
       <View style={styles.rightColumn}>
@@ -55,17 +47,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#EEEEEE'
   },
-
   leftColumn: {
     paddingRight: 10,
-    flex: 23,
   },
   rightColumn: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
-
   header: {
     flexDirection: 'row',
     alignItems: 'center',
