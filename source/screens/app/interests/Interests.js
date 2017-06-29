@@ -10,6 +10,8 @@ import {
   Dimensions,
 } from 'react-native';
 
+import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
+
 export default class Interests extends Component {
 
   constructor(props) {
@@ -68,10 +70,6 @@ export default class Interests extends Component {
     });
   }
 
-  done() {
-
-  }
-
   render() {
     const { pageTitle } = this.state;
     return (
@@ -82,9 +80,13 @@ export default class Interests extends Component {
         <ScrollView>
           {this.renderInterests()}
         </ScrollView>
-        <TouchableOpacity onPress={() => { this.done(); }} style={styles.btnActionDone}>
-          <Text style={styles.btnActionDoneText}>FINALIZAR</Text>
-        </TouchableOpacity>
+
+        <TouchableRedirectorWrapper path="/dashboard" content={
+          <View style={styles.btnActionDone}>
+            <Text style={styles.btnActionDoneText}>FINALIZAR</Text>
+          </View>
+        } />
+
       </View>
     );
   }
@@ -123,6 +125,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#EF6C00',
     padding: 8,
     margin: 3,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
   },
   btnActionDoneText: {
     textAlign: 'center',

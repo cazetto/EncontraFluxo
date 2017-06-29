@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 // Other vendors imports
+import { Redirect } from 'react-router-native';
 import _ from 'lodash';
 import update from 'immutability-helper';
 import Toast from 'react-native-easy-toast';
@@ -44,8 +45,14 @@ export default class RegisterComponent extends Component {
     };
   }
 
+  componentDidMount() {
+    // Temp
+    // this.registerSuccess();
+  }
+
   register() {
     this.setState({isFetching: true});
+    this.registerSuccess();
     // User.register(this.state.credentials)
     // .then(response => {
     //   console.log(response);
@@ -59,7 +66,12 @@ export default class RegisterComponent extends Component {
 
   registerSuccess(credentials) {
     this.setState({isFetching: false});
-    this.toast.show('Cadastrado!');
+
+    this.setState({registerComplete: true, isFetching: false});
+
+
+
+    // this.toast.show('Cadastrado!');
     // User.doLogin(credentials)
     // .then(response => {this.loginSuccess(1000)})
     // .catch(error => {this.loginFail()});
@@ -131,6 +143,7 @@ export default class RegisterComponent extends Component {
 
   render() {
     return (
+      this.state.registerComplete ? <Redirect to={{ pathname: '/app', state: { fromSignup: true } }}/> :
       <View style={styles.content}>
         <View style={[styles.textInputs]}>
           <View style={styles.textInputWrapper}>
