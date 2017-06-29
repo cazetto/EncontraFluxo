@@ -7,8 +7,6 @@ import {
   Dimensions
 } from 'react-native';
 
-import { List } from 'react-native-elements';
-
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -31,7 +29,6 @@ export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageTitle: 'Dashboard',
       neighborhood: null,
 
       index: 0,
@@ -79,8 +76,6 @@ export default class Dashboard extends Component {
   });
 
   render() {
-    const { pageTitle } = this.state;
-    const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
@@ -109,7 +104,7 @@ export default class Dashboard extends Component {
           onRequestChangeTab={this.handleChangeTab}
         />
 
-        <TouchableRedirectorWrapper path="/create" content={
+        <TouchableRedirectorWrapper path="/flux/create" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
           </View>
@@ -121,11 +116,11 @@ export default class Dashboard extends Component {
 
 const inputMargin = 10;
 const styles = StyleSheet.create({
-  tabContainer: {
-    flex: 1,
-  },
   container: {
     height: Dimensions.get('window').height - 70,
+  },
+  tabContainer: {
+    flex: 1,
   },
   control: {
     // marginLeft: inputMargin,

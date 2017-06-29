@@ -3,24 +3,44 @@ import { StyleSheet, View, Text, Dimensions } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import TouchableRedirectorWrapper from '../touchable-redirector-wrapper/TouchableRedirectorWrapper';
+
 export default FluxListItem = props => {
   return (
     <View style={styles.container}>
-      <View style={styles.col1}>
+
+      <View style={styles.leftColumn}>
+
+
         <View style={styles.header}>
           <View style={[styles.bullet, {backgroundColor: props.color}]}></View>
           <Text style={styles.title}>TÍTULO DO FLUXO</Text>
         </View>
+
         <Text style={styles.neighborhood}>Bairro: Nova Iguaçu</Text>
-        <Text style={styles.description}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis...</Text>
+
+        <View>
+
+          <Text style={styles.description}>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore facilis nesciunt ducimus itaque dignissimos repellendus, nobis cum debitis maxime consequuntur incidunt repudiandae culpa tempora fuga sit sint, nulla possimus adipisci.
+          </Text>
+
+        </View>
+
         <View style={styles.info}>
           <Text style={styles.peopleCount}>32 pessoas contectadas</Text>
           <Text style={styles.createdAt}>Data: 01/07/2017</Text>
         </View>
+
+
       </View>
-      <View style={styles.col2}>
-        <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color: props.color}]}/>
+
+      <View style={styles.rightColumn}>
+        <TouchableRedirectorWrapper path="/flux/1" content={
+          <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color: props.color}]}/>
+        } />
       </View>
+
     </View>
   );
 }
@@ -28,11 +48,24 @@ export default FluxListItem = props => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 20,
-    paddingRight: 25,
+    paddingTop: 20,
+    paddingBottom: 12,
+    paddingLeft: 20,
+    paddingRight: 0,
     borderBottomWidth: 2,
     borderBottomColor: '#EEEEEE'
   },
+
+  leftColumn: {
+    paddingRight: 10,
+    flex: 23,
+  },
+  rightColumn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -55,6 +88,7 @@ const styles = StyleSheet.create({
   description: {
     marginTop: 8,
     color: '#424242',
+    maxWidth: Dimensions.get('window').width - 70,
   },
   info: {
     flexDirection: 'row',
@@ -71,15 +105,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#424242',
   },
-
-  col1: {
-    paddingRight: 10,
-  },
-  col2: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   arrowIcon: {
-    fontSize: 60,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    fontSize: 50,
   }
 });

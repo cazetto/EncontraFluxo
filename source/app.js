@@ -10,7 +10,9 @@ import Interests from './screens/app/interests/Interests';
 import Skills from './screens/app/skills/Skills';
 import Events from './screens/app/events/Events';
 import Dashboard from './screens/app/dashboard/Dashboard';
-import Create from './screens/app/create/Create';
+import FluxPreview from './screens/app/flux-preview/FluxPreview';
+import FluxCongrats from './screens/app/flux-congrats/FluxCongrats';
+import FluxCreate from './screens/app/flux-create/FluxCreate';
 
 import { withRouter } from 'react-router';
 
@@ -23,7 +25,10 @@ const App = props => (
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/create" component={Create} />
+        <PrivateRoute exact path="/flux/create" component={FluxCreate} />
+        <PrivateRoute exact path="/flux/congrats" component={FluxCongrats} />
+        <PrivateRoute exact path="/flux/:id" component={FluxPreview} />
+
         <Route exact path="/" render={() => <Redirect to="/dashboard"/>  }/>
       </View>
     </NativeRouter>

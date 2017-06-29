@@ -17,7 +17,6 @@ export default class Interests extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageTitle: 'Interesses',
       interests: [
         {title: 'Festa Junina', active: false},
         {title: 'Aulas de espanhol', active: false},
@@ -71,7 +70,6 @@ export default class Interests extends Component {
   }
 
   render() {
-    const { pageTitle } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.listHeader}>

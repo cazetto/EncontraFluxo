@@ -22,7 +22,6 @@ export default class Skills extends Component {
     super(props);
 
     this.state = {
-      pageTitle: 'Habilidades',
       skill: '',
       skills: [],
       neighborhood: null,
@@ -68,9 +67,7 @@ export default class Skills extends Component {
   }
 
   render() {
-    const { pageTitle } = this.state;
-    const { navigation } = this.props;
-
+    
     return (
       <View style={styles.container}>
 
