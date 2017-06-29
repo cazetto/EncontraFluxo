@@ -46,7 +46,6 @@
 		AE7C62DD67024A22BDDD763F /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27524D3517BF44BF8BE72967 /* Octicons.ttf */; };
 		026F0B080D7D421DBD4C189D /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 907B9F3F37B9453598F03061 /* SimpleLineIcons.ttf */; };
 		A18B8C2B06294B7D97F500A0 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A26BCB64215D4A3B8F4F12DC /* Zocial.ttf */; };
-		508C4A591B3440DFADF4D7FF /* libRCTBEEPickerManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB5E8FAFD974FECB4A585C4 /* libRCTBEEPickerManager.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,7 +278,6 @@
 		907B9F3F37B9453598F03061 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		A26BCB64215D4A3B8F4F12DC /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		CCFFF62523B646D29CE0527C /* RCTBEEPickerManager.xcodeproj */ = {isa = PBXFileReference; name = "RCTBEEPickerManager.xcodeproj"; path = "../node_modules/react-native-picker/ios/RCTBEEPickerManager.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		0DB5E8FAFD974FECB4A585C4 /* libRCTBEEPickerManager.a */ = {isa = PBXFileReference; name = "libRCTBEEPickerManager.a"; path = "libRCTBEEPickerManager.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,7 +305,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				CB1D810E18CD4377AA7DACD2 /* libRNVectorIcons.a in Frameworks */,
-				508C4A591B3440DFADF4D7FF /* libRCTBEEPickerManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
