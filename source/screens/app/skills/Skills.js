@@ -12,9 +12,11 @@ import {
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
+import Select from '../../../components/select/Select';
+
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
-import neighborhoods from '../../../static/neighborhoods';
+import NeighborhoodService from '../../../services/NeighborhoodService';
 
 export default class Skills extends Component {
 
@@ -24,10 +26,24 @@ export default class Skills extends Component {
     this.state = {
       skill: '',
       skills: [],
-      neighborhood: null,
+      neighborhoods: null,
+      selectedNeighborhoodId: null,
     };
+  }
 
-    this.neighborhoods = neighborhoods;
+  componentWillMount() {
+    NeighborhoodService.find()
+    .then(response => {
+      let neighborhoods = response.objects;
+      let neighborhoodsNames = neighborhoods.map(neighborhood => neighborhood.nome);
+      this.setState({neighborhoods, neighborhoodsNames});
+    });
+  }
+
+  onNeighborhoodSelectHandle(index) {
+    this.setState({
+      selectedNeighborhoodId: this.state.neighborhoods[index]
+    });
   }
 
   addSkillHandle() {
@@ -60,37 +76,17 @@ export default class Skills extends Component {
     });
   }
 
-  onSelectNeighborhoodHandle(index) {
-    this.setState({
-      neighborhood: this.neighborhoods[index]
-    });
-  }
-
   render() {
-    
     return (
       <View style={styles.container}>
 
         <View style={styles.control}>
 
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.neighborhoods}
-            onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
-            dropdownStyle={styles.selectNeighborhoodModal}
-            >
-            <View>
-              <TextInput
-                editable={false}
-                placeholder="SELECIONE O BAIRRO"
-                value={this.state.neighborhood}
-                style={styles.input}
-                ></TextInput>
-              <Icon name={this.state.neighborhood ? 'check' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
-            </View>
-          </ModalDropdown>
+          <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoodsNames} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
 
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
-          <View style={styles.selectNeighborhood}>
+          <View>
             <View>
               <TextInput
                 placeholder="ADICIONE UMA HABILIDADE"
@@ -151,27 +147,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#FAFAFA',
     color: '#616161',
-  },
-  selectNeighborhood: {
-
-  },
-  selectNeighborhoodIcon: {
-    position: 'absolute',
-    right: 0,
-    fontSize: 35,
-    width: 44,
-    textAlign: 'center',
-    color: '#BF360C',
-    backgroundColor: 'transparent',
-  },
-  selectNeighborhoodIconChecked: {
-    color: '#BF360C',
-    fontSize: 20,
-    color: '#8BC34A',
-    marginTop: 7,
-  },
-  selectNeighborhoodModal: {
-    width: Dimensions.get('window').width - inputMargin * 2,
   },
 
   addSkillTouchable: {

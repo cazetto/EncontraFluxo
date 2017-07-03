@@ -32,9 +32,9 @@ export default class SignupComponent extends Component {
     this.state = {
       data: {
         bairro_id: 1,
-        nome: "André Pesci Cazetto",
-        email: (Math.floor(Math.random()*999))+"user@mail.com",
-        senha: "andre1234",
+        nome: 'André Pesci Cazetto',
+        email: 'cazetto.andre@gmail.com',
+        senha: '123456',
         habilidades: [],
         interesses: [],
       },
@@ -148,6 +148,7 @@ export default class SignupComponent extends Component {
               defaultValue={this.state.data.email}
               onChangeText={this.delayedChangeCredentials('email')}
               keyboardType="email-address"
+              autoCapitalize="none"
               selectTextOnFocus
               underlineColorAndroid="transparent"
               style={styles.textInput}

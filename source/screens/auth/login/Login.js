@@ -18,7 +18,7 @@ import TouchableRedirectorWrapper from '../../../components/touchable-redirector
 import styles from '../styles';
 
 // Utils imports
-import { saveUser, getSavedUser } from '../../../utils/AuthUtils';
+import { saveUser } from '../../../utils/AuthUtils';
 
 // Services import
 import AuthService from '../../../services/AuthService';
@@ -40,18 +40,6 @@ export default class Login extends Component {
       isFetching: false,
       loginComplete: false,
     };
-  }
-
-  componentWillMount() {
-    getSavedUser()
-    .then(response => {
-      this.setState({isFetching: true});
-      response && this.loginSuccess(response);
-    });
-  }
-
-  componentDidMount() {
-    // this.login();
   }
 
   login() {

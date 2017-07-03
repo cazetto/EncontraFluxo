@@ -5,3 +5,5 @@ export const saveUser = user => {
 }
 
 export const getSavedUser = () => AsyncStorage.getItem('@UserStore');
+
+export const removeSavedUser = () => AsyncStorage.removeItem('@UserStore');

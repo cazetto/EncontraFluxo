@@ -28,7 +28,7 @@ const App = props => (
         <PrivateRoute exact path="/flux/create" component={FluxCreate} />
         <PrivateRoute exact path="/flux/congrats" component={FluxCongrats} />
         <PrivateRoute exact path="/flux/:id" component={FluxPreview} />
-        <Route exact path="/" render={() => <Redirect to="/flux/create"/>  }/>
+        <Route exact path="/" render={() => <Redirect to="/skills"/>  }/>
       </View>
     </NativeRouter>
   </View>

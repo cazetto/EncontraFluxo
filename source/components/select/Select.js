@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Dimensions,
 } from 'react-native';
 
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -11,11 +12,11 @@ import Icon from 'react-native-vector-icons/Entypo';
 export default class Select extends Component {
   state = {
     selected: null,
-    selectedText: null,
   }
 
   onSelectHandle(index) {
     this.setState({selected: this.props.options[index]});
+    this.props.onSelect(index);
   }
 
   render() {
@@ -28,24 +29,26 @@ export default class Select extends Component {
           <TextInput
             editable={false}
             placeholder={this.props.placeholder}
-            value={this.state.selectedText}
+            value={this.state.selected}
             style={styles.input}
             ></TextInput>
-          <Icon name={this.state.selectedText ? 'check' : 'chevron-small-down'} style={[styles.selectIcon, this.state.selectedText && styles.selectIconChecked]}/>
+          <Icon name={this.state.selected ? 'check' : 'chevron-small-down'} style={[styles.selectIcon, this.state.selected && styles.selectIconChecked]}/>
         </View>
       </ModalDropdown>
     );
   }
 }
 
+const inputMargin = 10;
 const styles = StyleSheet.create({
   select: {
 
   },
   selectIcon: {
     position: 'absolute',
+    top: 5,
     right: 0,
-    fontSize: 35,
+    fontSize: 30,
     width: 44,
     textAlign: 'center',
     color: '#BF360C',
@@ -53,24 +56,21 @@ const styles = StyleSheet.create({
   },
   selectIconChecked: {
     color: '#BF360C',
-    fontSize: 20,
+    fontSize: 18,
     color: '#8BC34A',
-    marginTop: 7,
+    marginTop: 5,
   },
   selectModal: {
-    width: '100%',
+    width: Dimensions.get('window').width - inputMargin * 2,
   },
 
   input: {
     height: 36,
     padding: 10,
     marginVertical: 2,
-    marginHorizontal: 4,
     fontSize: 16,
     color: '#616161',
     backgroundColor: '#FAFAFA',
-    borderColor: '#EEEEEE',
-    borderWidth: 1,
-    borderRadius: 2,
+
   },
 });
