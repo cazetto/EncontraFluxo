@@ -26,7 +26,7 @@ export default styles = StyleSheet.create({
   loginButtonColor: {
     backgroundColor: '#03A9F4',
   },
-  registerButtonColor: {
+  signupButtonColor: {
     backgroundColor: '#FBC02D',
   },
   forgotButtonColor: {
@@ -55,5 +55,18 @@ export default styles = StyleSheet.create({
   },
   toast: {
     backgroundColor:'#d32f2f',
+  },
+  keepMeLoggedIn: {
+    margin: 10,
+    padding: 3,
+    borderRadius: 5,
+    backgroundColor: '#FFF',
+    paddingTop: 8,
+    paddingLeft: 10,
+    height: 40,
+  },
+  keepMeLoggedInWrapper: {
+    width: '100%',
+    paddingHorizontal: 10,
   }
 });

@@ -8,6 +8,11 @@ import Forgot from './screens/auth/forgot/Forgot.js';
 
 import backgroundImage from './assets/images/authentication/background.jpg';
 
+import APIService from './services/APIService';
+import { APPLICATION_API_CONFIG } from './services/config';
+
+APIService.init(APPLICATION_API_CONFIG.name, APPLICATION_API_CONFIG.url);
+
 export default () => (
   <Image source={backgroundImage} style={styles.backgroundImage}>
     <Route path="/auth/login" component={Login} />
