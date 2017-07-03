@@ -133,8 +133,10 @@ export default class Login extends Component {
               defaultValue={this.state.credentials.username}
               onChangeText={this.delayedChangeCredentials('username')}
               keyboardType="email-address"
-              selectTextOnFocus
               underlineColorAndroid="transparent"
+              selectTextOnFocus
+              autoCorrect={false}
+              autoCapitalize="none"
               style={styles.textInput}
             />
           </View>

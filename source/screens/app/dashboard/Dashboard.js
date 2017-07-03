@@ -20,6 +20,9 @@ import OpenedTab from './tabs/OpenedTab';
 import InFluxTab from './tabs/InFluxTab';
 import HappeningTab from './tabs/HappeningTab';
 
+
+console.log(OpenedTab);
+
 // const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
 // const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
 // const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;
@@ -35,7 +38,7 @@ export default class Dashboard extends Component {
       routes: [
         { key: '1', title: 'Aberto' },
         { key: '2', title: 'No Fluxo' },
-        { key: '3', title: 'Rolando' },
+        { key: '3', title: 'Acontecendo' },
       ],
     };
     this.neighborhoods = neighborhoods;
