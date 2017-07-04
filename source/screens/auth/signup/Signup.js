@@ -21,6 +21,7 @@ import styles from '../styles';
 import { saveUser, getSavedUser } from '../../../utils/AuthUtils';
 
 // Services imports
+import UserService from '../../../services/UserService';
 import AuthService from '../../../services/AuthService';
 import APIService from '../../../services/APIService';
 import { APPLICATION_API_CONFIG } from '../../../services/config';
@@ -53,9 +54,12 @@ export default class SignupComponent extends Component {
   }
 
   signupSuccess(response) {
-    APIService.authorize(APPLICATION_API_CONFIG.name, response.api_key);
+    APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
+    
     this.state.keepMeLoggedIn && saveUser(response);
-    this.toast.show('Cadastrado!');
+    UserService.id = response.id;
+    this.refs.toast.show('Cadastrado!');
+
     const delay = setTimeout(() => {
       clearTimeout(delay);
       this.setState({signupComplete: true});
@@ -64,11 +68,11 @@ export default class SignupComponent extends Component {
 
   signupFail(error) {
     this.setState({isFetching: false});
-    this.toast.show('Dados incorretos!');
+    this.refs.toast.show('Dados incorretos!');
   }
 
   loginSuccess(wait) {
-    this.toast.show('Login efetuado!');
+    this.refs.toast.show('Login efetuado!');
     if(!wait) this.goToNextScreen();
     else {
       const delay = setTimeout(() => {
@@ -86,7 +90,7 @@ export default class SignupComponent extends Component {
 
   loginFail() {
     this.setState({isFetching: false});
-    this.toast.show('Dados incorretos!');
+    this.refs.toast.show('Dados incorretos!');
   }
 
   delayedChangeCredentials(field) {
@@ -183,7 +187,7 @@ export default class SignupComponent extends Component {
         </View>
 
         <Toast
-          ref={(c) => { this.toast = c; }}
+          ref="toast"
           style={{backgroundColor:'#d32f2f'}}
           position='top'
           positionValue={155}

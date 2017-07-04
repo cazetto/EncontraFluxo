@@ -21,6 +21,7 @@ import styles from '../styles';
 import { saveUser } from '../../../utils/AuthUtils';
 
 // Services import
+import UserService from '../../../services/UserService';
 import AuthService from '../../../services/AuthService';
 import APIService from '../../../services/APIService';
 import { APPLICATION_API_CONFIG } from '../../../services/config';
@@ -50,10 +51,12 @@ export default class Login extends Component {
   }
 
   loginSuccess(response) {
-    APIService.authorize(APPLICATION_API_CONFIG.name, response.api_key);
+    APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
+    
     this.state.keepMeLoggedIn && saveUser(response);
+    UserService.id = response.id;
     this.refs.toast.show('Login efetuado!');
-    this.setState({isFetching: false});
+
     const delay = setTimeout(() => {
       clearTimeout(delay);
       this.setState({loginComplete: true});

@@ -20,9 +20,6 @@ import OpenedTab from './tabs/OpenedTab';
 import InFluxTab from './tabs/InFluxTab';
 import HappeningTab from './tabs/HappeningTab';
 
-
-console.log(OpenedTab);
-
 // const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
 // const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
 // const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;

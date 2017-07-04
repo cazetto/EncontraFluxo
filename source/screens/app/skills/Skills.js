@@ -17,18 +17,15 @@ import Select from '../../../components/select/Select';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 import NeighborhoodService from '../../../services/NeighborhoodService';
+import UserService from '../../../services/UserService';
+import SkillsService from '../../../services/SkillsService';
 
 export default class Skills extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      skill: '',
-      skills: [],
-      neighborhoods: null,
-      selectedNeighborhoodId: null,
-    };
+  state = {
+    skill: '',
+    skills: [],
+    neighborhoods: null,
+    selectedNeighborhoodId: null,
   }
 
   componentWillMount() {
@@ -37,6 +34,18 @@ export default class Skills extends Component {
       let neighborhoods = response.objects;
       let neighborhoodsNames = neighborhoods.map(neighborhood => neighborhood.nome);
       this.setState({neighborhoods, neighborhoodsNames});
+    });
+
+
+
+    var immediateID = setImmediate(() => {
+      clearImmediate(immediateID);
+
+      UserService.get()
+      .then(response => {
+        console.log('UserService', response);
+      });
+
     });
   }
 

@@ -8,10 +8,10 @@ const APIService = {
       new api.Tastypie.Provider({name, url})
     );
   },
-  authorize(name, apikey) {
+  authorize(name, username, apikey) {
     const service = this.services[name];
     api.Tastypie.Provider.add(
-      new api.Tastypie.Provider({name: service.name, url: service.url, apikey})
+      new api.Tastypie.Provider({ name: service.name, url: service.url, username, apikey })
     );
   }
 }
