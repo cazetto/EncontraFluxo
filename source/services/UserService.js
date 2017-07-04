@@ -6,7 +6,11 @@ const UserService = {
   id: null,
   get() {
     return this.resource.objects.get(this.id);
+  },
+  update(id, data) {
+    return this.resource.objects.update(id, data);
   }
+
 }
 
 export default UserService;

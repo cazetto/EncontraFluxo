@@ -36,14 +36,17 @@ export default class Skills extends Component {
       this.setState({neighborhoods, neighborhoodsNames});
     });
 
-
-
     var immediateID = setImmediate(() => {
       clearImmediate(immediateID);
 
+      // Authenticated services calls goes here
+
       UserService.get()
       .then(response => {
+        
         console.log('UserService', response);
+
+
       });
 
     });

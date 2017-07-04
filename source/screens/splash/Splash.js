@@ -7,7 +7,9 @@ import TimerMixin from 'react-timer-mixin';
 
 import { getSavedUser, removeSavedUser } from '../../utils/AuthUtils';
 
+import APIService from '../../services/APIService';
 import UserService from '../../services/UserService';
+import { APPLICATION_API_CONFIG } from '../../services/config';
 
 export default class Splash extends Component {
 
@@ -23,14 +25,16 @@ export default class Splash extends Component {
 
   componentWillMount() {
     // removeSavedUser();
+
     getSavedUser()
     .then(response => {
-      this.setState({redirectionRoute: '/app'});
+      APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       UserService.id = response.id;
+      this.setState({redirectionRoute: '/app'});
     })
     .catch(error => {
       this.setState({redirectionRoute: '/auth/login'});
-    })
+    });
   }
 
   componentDidMount() {
