@@ -52,7 +52,7 @@ export default class Login extends Component {
 
   loginSuccess(response) {
     APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
-    
+
     this.state.keepMeLoggedIn && saveUser(response);
     UserService.id = response.id;
     this.refs.toast.show('Login efetuado!');

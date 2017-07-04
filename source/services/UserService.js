@@ -7,10 +7,9 @@ const UserService = {
   get() {
     return this.resource.objects.get(this.id);
   },
-  update(id, data) {
-    return this.resource.objects.update(id, data);
+  update(data) {
+    return this.resource.objects.update(this.id, data);
   }
-
 }
 
 export default UserService;

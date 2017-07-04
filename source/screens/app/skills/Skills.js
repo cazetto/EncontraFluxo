@@ -9,6 +9,8 @@ import {
   Dimensions
 } from 'react-native';
 
+import update from 'immutability-helper';
+
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -29,26 +31,21 @@ export default class Skills extends Component {
   }
 
   componentWillMount() {
+    this.fetchNeighborhoods();
+
+    var immediateID = setImmediate(() => {
+      clearImmediate(immediateID);
+      // Authenticated services calls goes here
+      this.fetchSkills();
+    });
+  }
+
+  fetchNeighborhoods() {
     NeighborhoodService.find()
     .then(response => {
       let neighborhoods = response.objects;
       let neighborhoodsNames = neighborhoods.map(neighborhood => neighborhood.nome);
       this.setState({neighborhoods, neighborhoodsNames});
-    });
-
-    var immediateID = setImmediate(() => {
-      clearImmediate(immediateID);
-
-      // Authenticated services calls goes here
-
-      UserService.get()
-      .then(response => {
-        
-        console.log('UserService', response);
-
-
-      });
-
     });
   }
 
@@ -58,17 +55,30 @@ export default class Skills extends Component {
     });
   }
 
+  fetchSkills() {
+    UserService.get()
+    .then(({habilidades}) => {
+      this.setState({skills: habilidades});
+    });
+  }
+
   addSkillHandle() {
     if(this.state.skill === '') return;
 
     let skills = this.state.skills.slice();
-
-    skills.push({title: this.state.skill});
+    skills.push({nome: this.state.skill});
 
     this.setState(Object.assign({}, this.state, {
       skills,
       skill: '',
     }));
+
+    // UserService.update({
+    //   habilidades: [{id: 4}, {id: 5}],
+    // })
+    // .then(response => {
+    //   console.log('UserService', response);
+    // });
   }
 
   removeSkillHandle() {
@@ -79,7 +89,7 @@ export default class Skills extends Component {
     return this.state.skills.map((skill, index) => {
       return (
         <View style={styles.listItem} key={index}>
-          <Text>{skill.title}</Text>
+          <Text>{skill.nome}</Text>
           <TouchableOpacity onPress={() => { this.removeSkillHandle(); }} style={styles.itemRemoveIconWrapper}>
             <Icon name="minus" style={styles.itemRemoveIcon}/>
           </TouchableOpacity>
