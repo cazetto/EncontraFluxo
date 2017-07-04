@@ -12,16 +12,25 @@ import Icon from 'react-native-vector-icons/Entypo';
 export default class Select extends Component {
   state = {
     selected: null,
+    options: [],
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let options = nextProps.options.map(option => {
+      return option.nome || '';
+    });
+
+    this.setState({options});
   }
 
   onSelectHandle(index) {
-    this.setState({selected: this.props.options[index]});
-    this.props.onSelect(index);
+    this.setState({selected: this.props.options[index].nome});
+    this.props.onSelect(this.props.options[index]);
   }
 
   render() {
     return (
-      <ModalDropdown style={styles.select} options={this.props.options}
+      <ModalDropdown style={styles.select} textStyle={{color: 'red'}} options={this.state.options}
         onSelect={index => { this.onSelectHandle(index); }}
         dropdownStyle={styles.selectModal}
         >

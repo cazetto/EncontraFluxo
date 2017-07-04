@@ -19,47 +19,67 @@ import Select from '../../../components/select/Select';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 import NeighborhoodService from '../../../services/NeighborhoodService';
-import UserService from '../../../services/UserService';
 import SkillsService from '../../../services/SkillsService';
+import UserService from '../../../services/UserService';
+
 
 export default class Skills extends Component {
   state = {
-    skill: '',
     skills: [],
-    neighborhoods: null,
-    selectedNeighborhoodId: null,
+    userSkills: [],
+
+    neighborhoods: [],
+    neighborhood: null,
   }
 
   componentWillMount() {
     this.fetchNeighborhoods();
+    this.fetchSkills();
 
     var immediateID = setImmediate(() => {
       clearImmediate(immediateID);
       // Authenticated services calls goes here
-      this.fetchSkills();
+      this.fetchUserProfile();
     });
   }
-
+  // FETCHES
   fetchNeighborhoods() {
     NeighborhoodService.find()
     .then(response => {
       let neighborhoods = response.objects;
-      let neighborhoodsNames = neighborhoods.map(neighborhood => neighborhood.nome);
-      this.setState({neighborhoods, neighborhoodsNames});
-    });
-  }
-
-  onNeighborhoodSelectHandle(index) {
-    this.setState({
-      selectedNeighborhoodId: this.state.neighborhoods[index]
+      this.setState({neighborhoods});
     });
   }
 
   fetchSkills() {
-    UserService.get()
-    .then(({habilidades}) => {
-      this.setState({skills: habilidades});
+    SkillsService.find()
+    .then(response => {
+      let skills = response.objects;
+      this.setState({skills});
     });
+  }
+
+  fetchUserProfile() {
+    UserService.get()
+    .then(response => {
+      this.setState({userSkills: response.habilidades});
+    });
+  }
+
+  // HANDLES
+  onNeighborhoodSelectHandle(index) {
+    this.setState({
+      neighborhood: this.state.neighborhoods[index]
+    });
+  }
+
+  onSkillSelectHandle(skill) {
+    const userSkills = update(this.state.userSkills, {$push: [skill]});
+    const skills = this.state.skills.slice()
+    .filter(current => {
+      return current.id != skill.id;
+    });
+    this.setState({userSkills, skills});
   }
 
   addSkillHandle() {
@@ -85,8 +105,8 @@ export default class Skills extends Component {
     console.log('Remove Skill');
   }
 
-  renderSkills() {
-    return this.state.skills.map((skill, index) => {
+  renderUserSkills() {
+    return this.state.userSkills.map((skill, index) => {
       return (
         <View style={styles.listItem} key={index}>
           <Text>{skill.nome}</Text>
@@ -105,32 +125,15 @@ export default class Skills extends Component {
         <View style={styles.control}>
 
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
-          <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoodsNames} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
+          <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
 
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
-          <View>
-            <View>
-              <TextInput
-                placeholder="ADICIONE UMA HABILIDADE"
-                onChangeText={ skill => {
-                  this.setState(Object.assign({}, this.state, {
-                    skill
-                  }));
-                }}
-                value={this.state.skill}
-                style={styles.input}
-                ></TextInput>
-
-              <TouchableOpacity style={styles.addSkillTouchable} onPress={() => { this.addSkillHandle(); }}>
-                <Icon name="plus" style={styles.addSkillIcon}/>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.skills} onSelect={this.onSkillSelectHandle.bind(this)}></Select>
 
         </View>
 
         <ScrollView style={styles.list}>
-          {this.renderSkills()}
+          {this.renderUserSkills()}
         </ScrollView>
 
         <TouchableRedirectorWrapper path="/interests" content={
