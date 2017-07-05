@@ -38,7 +38,9 @@ export default class Select extends Component {
           <TextInput
             editable={false}
             placeholder={this.props.placeholder}
-            value={this.state.selected}
+            value={this.props.hideSelectedText ? '' : this.state.selected}
+            dropdownTextHighlightStyle={{backgroundColor:'red'}}
+            dropdownTextStyle={{backgroundColor:'red'}}
             style={styles.input}
             ></TextInput>
           <Icon name={this.state.selected ? 'check' : 'chevron-small-down'} style={[styles.selectIcon, this.state.selected && styles.selectIconChecked]}/>

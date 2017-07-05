@@ -34,7 +34,6 @@ export default class Skills extends Component {
 
   componentWillMount() {
     this.fetchNeighborhoods();
-    this.fetchSkills();
 
     var immediateID = setImmediate(() => {
       clearImmediate(immediateID);
@@ -54,7 +53,15 @@ export default class Skills extends Component {
   fetchSkills() {
     SkillsService.find()
     .then(response => {
-      let skills = response.objects;
+      let skills = response.objects
+      .filter(skill => {
+        var add;
+        for (var i = 0; i < this.state.userSkills.length; i++) {
+          add = this.state.userSkills[i].id != skill.id;
+          if(!add) break;
+        }
+        return add;
+      });
       this.setState({skills});
     });
   }
@@ -63,6 +70,7 @@ export default class Skills extends Component {
     UserService.get()
     .then(response => {
       this.setState({userSkills: response.habilidades});
+      this.fetchSkills();
     });
   }
 
@@ -80,29 +88,34 @@ export default class Skills extends Component {
       return current.id != skill.id;
     });
     this.setState({userSkills, skills});
+
+    let skillsToUpdate = userSkills.map(({id}) => ({id}));
+    console.log('Saving:', skillsToUpdate);
+
+    UserService.update({
+      habilidades: skillsToUpdate,
+    })
+    .then(response => {
+      console.log('UserService:response', response);
+    })
+    .catch(error => {
+      console.log('UserService:error', error);
+    });
   }
 
-  addSkillHandle() {
-    if(this.state.skill === '') return;
-
-    let skills = this.state.skills.slice();
-    skills.push({nome: this.state.skill});
-
-    this.setState(Object.assign({}, this.state, {
-      skills,
-      skill: '',
-    }));
-
-    // UserService.update({
-    //   habilidades: [{id: 4}, {id: 5}],
-    // })
-    // .then(response => {
-    //   console.log('UserService', response);
-    // });
-  }
-
-  removeSkillHandle() {
-    console.log('Remove Skill');
+  removeSkillHandle(skill) {
+    const userSkills = this.state.userSkills.filter(current => current.id != skill.id);
+    this.setState({userSkills});
+    UserService.update({
+      habilidades: userSkills,
+    })
+    .then(response => {
+      console.log('UserService:response', response);
+      this.fetchSkills();
+    })
+    .catch(error => {
+      console.log('UserService:error', error);
+    });
   }
 
   renderUserSkills() {
@@ -110,7 +123,7 @@ export default class Skills extends Component {
       return (
         <View style={styles.listItem} key={index}>
           <Text>{skill.nome}</Text>
-          <TouchableOpacity onPress={() => { this.removeSkillHandle(); }} style={styles.itemRemoveIconWrapper}>
+          <TouchableOpacity onPress={() => { this.removeSkillHandle(skill); }} style={styles.itemRemoveIconWrapper}>
             <Icon name="minus" style={styles.itemRemoveIcon}/>
           </TouchableOpacity>
         </View>
@@ -121,28 +134,20 @@ export default class Skills extends Component {
   render() {
     return (
       <View style={styles.container}>
-
         <View style={styles.control}>
-
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
           <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
-
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
-          <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.skills} onSelect={this.onSkillSelectHandle.bind(this)}></Select>
-
+          <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.skills} onSelect={this.onSkillSelectHandle.bind(this)} hideSelectedText></Select>
         </View>
-
         <ScrollView style={styles.list}>
           {this.renderUserSkills()}
         </ScrollView>
-
         <TouchableRedirectorWrapper path="/interests" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CONTINUAR</Text>
           </View>
         } />
-
-
       </View>
     );
   }

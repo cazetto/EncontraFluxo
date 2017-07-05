@@ -54,8 +54,10 @@ export default class SignupComponent extends Component {
   }
 
   signupSuccess(response) {
+    // NÃO ESTÁ RETORNANDO O TOKEN DA API!!!
+    console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
     APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
-    
+
     this.state.keepMeLoggedIn && saveUser(response);
     UserService.id = response.id;
     this.refs.toast.show('Cadastrado!');

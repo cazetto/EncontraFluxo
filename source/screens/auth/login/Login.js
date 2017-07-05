@@ -34,6 +34,8 @@ export default class Login extends Component {
       data: {
         username: 'andre@welight.co',
         password: '123',
+        // username: 'cazetto.andre@gmail.com',
+        // password: '123456',
         // username: '',
         // password: '',
       },
@@ -51,6 +53,8 @@ export default class Login extends Component {
   }
 
   loginSuccess(response) {
+    console.log('--------------------------------');
+    console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
     APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
 
     this.state.keepMeLoggedIn && saveUser(response);
