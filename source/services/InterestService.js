@@ -1,10 +1,10 @@
 import * as api from "ts-resource-tastypie";
 
-const SkillsService = {
-  resource: new api.Tastypie.Resource('habilidade'),
+const InterestService = {
+  resource: new api.Tastypie.Resource('interesse'),
   find(data) {
     return this.resource.objects.find(data);
   }
 }
 
-export default SkillsService;
+export default InterestService;

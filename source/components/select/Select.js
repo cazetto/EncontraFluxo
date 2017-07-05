@@ -14,12 +14,17 @@ export default class Select extends Component {
     selected: null,
     options: [],
   }
-
+  
   componentWillReceiveProps(nextProps) {
     let options = nextProps.options.map(option => {
       return option.nome || '';
     });
-
+    if(nextProps.defaultSelectedId) {
+      let selected = nextProps.options.filter(option => {
+        return option.id === nextProps.defaultSelectedId;
+      })[0];
+      this.setState({selected: selected.nome});
+    }
     this.setState({options});
   }
 

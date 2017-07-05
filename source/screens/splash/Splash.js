@@ -24,9 +24,10 @@ export default class Splash extends Component {
   }
 
   componentWillMount() {
-    removeSavedUser();
+    // removeSavedUser();
     getSavedUser()
     .then(response => {
+      console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       UserService.id = response.id;
       this.setState({redirectionRoute: '/app'});

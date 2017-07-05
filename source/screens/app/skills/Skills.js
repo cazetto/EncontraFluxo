@@ -19,9 +19,8 @@ import Select from '../../../components/select/Select';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 import NeighborhoodService from '../../../services/NeighborhoodService';
-import SkillsService from '../../../services/SkillsService';
+import SkillService from '../../../services/SkillService';
 import UserService from '../../../services/UserService';
-
 
 export default class Skills extends Component {
   state = {
@@ -29,7 +28,7 @@ export default class Skills extends Component {
     userSkills: [],
 
     neighborhoods: [],
-    neighborhood: null,
+    neighborhoodCurrentId: null,
   }
 
   componentWillMount() {
@@ -51,7 +50,7 @@ export default class Skills extends Component {
   }
 
   fetchSkills() {
-    SkillsService.find()
+    SkillService.find()
     .then(response => {
       let skills = response.objects
       .filter(skill => {
@@ -69,16 +68,17 @@ export default class Skills extends Component {
   fetchUserProfile() {
     UserService.get()
     .then(response => {
-      this.setState({userSkills: response.habilidades});
+      this.setState({userSkills: response.habilidades, neighborhoodCurrentId:response.bairro_id});
       this.fetchSkills();
     });
   }
 
   // HANDLES
-  onNeighborhoodSelectHandle(index) {
-    this.setState({
-      neighborhood: this.state.neighborhoods[index]
-    });
+  onNeighborhoodSelectHandle(neighborhood) {
+    let { id:bairro_id } = neighborhood;
+    UserService.update({bairro_id})
+    .then(response => {})
+    .catch(error => {});
   }
 
   onSkillSelectHandle(skill) {
@@ -90,17 +90,11 @@ export default class Skills extends Component {
     this.setState({userSkills, skills});
 
     let skillsToUpdate = userSkills.map(({id}) => ({id}));
-    console.log('Saving:', skillsToUpdate);
-
     UserService.update({
       habilidades: skillsToUpdate,
     })
-    .then(response => {
-      console.log('UserService:response', response);
-    })
-    .catch(error => {
-      console.log('UserService:error', error);
-    });
+    .then(response => {})
+    .catch(error => {});
   }
 
   removeSkillHandle(skill) {
@@ -110,12 +104,9 @@ export default class Skills extends Component {
       habilidades: userSkills,
     })
     .then(response => {
-      console.log('UserService:response', response);
       this.fetchSkills();
     })
-    .catch(error => {
-      console.log('UserService:error', error);
-    });
+    .catch(error => {});
   }
 
   renderUserSkills() {
@@ -136,7 +127,7 @@ export default class Skills extends Component {
       <View style={styles.container}>
         <View style={styles.control}>
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
-          <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
+          <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} defaultSelectedId={this.state.neighborhoodCurrentId} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
           <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.skills} onSelect={this.onSkillSelectHandle.bind(this)} hideSelectedText></Select>
         </View>
