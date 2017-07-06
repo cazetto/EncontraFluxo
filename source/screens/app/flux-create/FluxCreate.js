@@ -2,11 +2,10 @@ import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity} from 'r
 import React, {Component} from 'react';
 import {IndicatorViewPager, ViewPager, PagerTitleIndicator, PagerDotIndicator, PagerTabIndicator} from 'rn-viewpager';
 
-
-// Page One Imports
 import DatePicker from 'react-native-datepicker';
 import Select from '../../../components/select/Select';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
+import ItemDistributionList from '../../../components/item-distribution-list/ItemDistributionList';
 import Icon from 'react-native-vector-icons/Entypo';
 import update from 'immutability-helper';
 import _ from 'lodash';
@@ -17,25 +16,35 @@ moment.locale('pt-BR');
 
 // Services imports
 import NeighborhoodService from '../../../services/NeighborhoodService';
-
+import SkillService from '../../../services/SkillService';
+import UserService from '../../../services/UserService';
 
 export default class ViewPagerPage extends Component {
-
   state = {
-    name: '',
-    address: '',
-
     neighborhoods: [],
     neighborhood: null,
+
+    availableSkills: [],
+
+    eventData: {
+      nome: null,
+      endereco: null,
+      bairro_id: null,
+      dt_evento: null,
+      descricao: null,
+      habilidades: [],
+      interesses: [],
+    },
   }
 
   componentWillMount() {
     console.log('componentWillMount');
     this.currentPage = 0;
     this.fetchNeighborhoods();
+    this.fetchSkills();
   }
 
-  // FETCHES
+  // Fetches
   fetchNeighborhoods() {
     NeighborhoodService.find()
     .then( ({objects:neighborhoods}) => {
@@ -43,38 +52,63 @@ export default class ViewPagerPage extends Component {
     });
   }
 
-  delayedChangeTextInput(field) {
-    return (
-      _.debounce(value => {
-        let credentials = update(this.state, {$merge: {[field]:value}});
-        this.setState({credentials});
-      }, 100)
-    );
+  fetchSkills() {
+    SkillService.find()
+    .then(response => this.setState({availableSkills: response.objects}))
+    .catch(error => console.log('Error on fetch skills:', error));
   }
 
+  // fetchUserProfile() {
+  //   UserService.get()
+  //   .then(response => {
+  //     this.setState({userSkills: response.habilidades, neighborhoodCurrentId:response.bairro_id});
+  //     this.fetchSkills();
+  //   });
+  // }
+
+  // Handles
   onNeighborhoodSelectHandle(neighborhood) {
-    this.setState({neighborhood});
+    let eventData = update(this.state.eventData, {$merge: {bairro_id:neighborhood.id}});
+    this.setState({neighborhood, eventData});
+  }
+  onChangeDateHandle(date) {
+    this.setState({ eventData: update(this.state.eventData, {$merge: {dt_evento:date}}) })
   }
 
-  renderDotIndicator() {
-    return <PagerDotIndicator pageCount={3} />;
-    // return <PagerTitleIndicator titles={['one', 'two', 'three']} />;
-  }
-
+  // Pages handles
   nextPage() {
+    // console.log(this.state.eventData);
     this.refs.viewPager.setPage(this.currentPage+1);
   }
-
   onPageChange(event) {
     this.currentPage = event.position;
   }
 
+  // Input changes
+  delayedChangeTextInput(field) {
+    return (
+      _.debounce(value => {
+        let eventData = update(this.state.eventData, {$merge: {[field]:value}});
+        this.setState({eventData});
+      }, 100)
+    );
+  }
+
+  // Renderes
+  renderDotIndicator() {
+    return <PagerDotIndicator pageCount={4} />;
+    // return <PagerTitleIndicator titles={['Início', 'Habilidades', 'Material', 'Interesses']} />;
+  }
+
   render() {
-    let today = moment().format('DD-MM-YYYY');
+    // today
+    let minDate = moment().format('DD-MM-YYYY');
+    let maxDate = moment().add(1, 'year').calendar();
 
     return (
       <View style={styles.container}>
         <IndicatorViewPager
+          initialPage={1}
           ref="viewPager"
           style={styles.indicatorViewPager}
           indicator={this.renderDotIndicator()}
@@ -83,8 +117,8 @@ export default class ViewPagerPage extends Component {
             <TextInput
               placeholder="NOME DO FLUXO"
               style={pageOneStyles.input}
-              defaultValue={this.state.name}
-              onChangeText={this.delayedChangeTextInput('name')}
+              defaultValue={this.state.eventData.nome}
+              onChangeText={this.delayedChangeTextInput('nome')}
               autoCorrect={false}
               keyboardType="default"
               autoCapitalize="none"
@@ -93,8 +127,8 @@ export default class ViewPagerPage extends Component {
             <TextInput
               placeholder="ONDE SERÁ REALIZADO"
               style={[pageOneStyles.input, pageOneStyles.address]}
-              defaultValue={this.state.address}
-              onChangeText={this.delayedChangeTextInput('address')}
+              defaultValue={this.state.eventData.endereco}
+              onChangeText={this.delayedChangeTextInput('endereco')}
               autoCorrect={false}
               multiline={true}
               keyboardType="default"
@@ -104,18 +138,18 @@ export default class ViewPagerPage extends Component {
             <Select
               placeholder="SELECIONE O BAIRRO"
               options={this.state.neighborhoods}
-              defaultSelectedId={this.state.neighborhoodCurrentId}
+              defaultSelectedId={this.state.eventData.bairro_id}
               onSelect={this.onNeighborhoodSelectHandle.bind(this)}>
             </Select>
             <DatePicker
               style={pageOneStyles.datePicker}
-              date={this.state.date}
+              date={this.state.eventData.dt_evento}
               mode="date"
               placeholder="DATA"
               locale="pt-br"
-              format="DD/MM/YYYY - dddd"
-              minDate={today}
-              maxDate="01-12-2017"
+              format="DD/MM/YYYY"
+              minDate={minDate}
+              maxDate={maxDate}
               confirmBtnText="Confirmar"
               cancelBtnText="Cancelar"
               customStyles={{
@@ -146,13 +180,13 @@ export default class ViewPagerPage extends Component {
                   color: '#616161',
                 }
               }}
-              onDateChange={(date) => {this.setState({date: date})}}
+              onDateChange={(date) => { this.onChangeDateHandle(date) }}
             />
             <TextInput
               placeholder="DESCRIÇÃO: Descreva o encontro ou a ação e lembre-se de detalhar porque você sugere este encontro, do que se trata e quais são os objetivos."
               style={[pageOneStyles.input, pageOneStyles.description]}
-              defaultValue={this.state.description}
-              onChangeText={this.delayedChangeTextInput('description')}
+              defaultValue={this.state.eventData.descricao}
+              onChangeText={this.delayedChangeTextInput('descricao')}
               autoCorrect={false}
               multiline={true}
               keyboardType="default"
@@ -161,7 +195,9 @@ export default class ViewPagerPage extends Component {
             </TextInput>
           </View>
           <View style={styles.page}>
-            <Text>page two</Text>
+
+            <ItemDistributionList available={this.state.availableSkills} />
+
           </View>
           <View style={styles.page}>
             <Text>page three</Text>

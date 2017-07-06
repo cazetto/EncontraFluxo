@@ -14,8 +14,11 @@ export default class Select extends Component {
     selected: null,
     options: [],
   }
-  
+
   componentWillReceiveProps(nextProps) {
+    if(!nextProps.options) return;
+    
+
     let options = nextProps.options.map(option => {
       return option.nome || '';
     });

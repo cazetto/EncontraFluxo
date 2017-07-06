@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 // Custom components imports
 import Select from '../../../components/select/Select';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
+import ItemDistributionList from '../../../components/item-distribution-list/ItemDistributionList';
 
 // Services imports
 import NeighborhoodService from '../../../services/NeighborhoodService';
@@ -26,7 +27,7 @@ import UserService from '../../../services/UserService';
 
 export default class Skills extends Component {
   state = {
-    skills: [],
+    availableSkills: [],
     userSkills: [],
 
     neighborhoods: [],
@@ -53,17 +54,9 @@ export default class Skills extends Component {
 
   fetchSkills() {
     SkillService.find()
-    .then(response => {
-      let skills = response.objects
-      .filter(skill => {
-        var add;
-        for (var i = 0; i < this.state.userSkills.length; i++) {
-          add = this.state.userSkills[i].id != skill.id;
-          if(!add) break;
-        }
-        return add;
-      });
-      this.setState({skills});
+    .then(({objects:availableSkills}) => {
+      console.log("availableSkillsavailableSkillsavailableSkillsavailableSkillsavailableSkills", availableSkills);
+      this.setState({availableSkills});
     });
   }
 
@@ -83,45 +76,8 @@ export default class Skills extends Component {
     .catch(error => {});
   }
 
-  onSkillSelectHandle(skill) {
-    const userSkills = update(this.state.userSkills, {$push: [skill]});
-    const skills = this.state.skills.slice()
-    .filter(current => {
-      return current.id != skill.id;
-    });
-    this.setState({userSkills, skills});
-
-    let skillsToUpdate = userSkills.map(({id}) => ({id}));
-    UserService.update({
-      habilidades: skillsToUpdate,
-    })
-    .then(response => {})
-    .catch(error => {});
-  }
-
-  removeSkillHandle(skill) {
-    const userSkills = this.state.userSkills.filter(current => current.id != skill.id);
-    this.setState({userSkills});
-    UserService.update({
-      habilidades: userSkills,
-    })
-    .then(response => {
-      this.fetchSkills();
-    })
-    .catch(error => {});
-  }
-
-  renderUserSkills() {
-    return this.state.userSkills.map((skill, index) => {
-      return (
-        <View style={styles.listItem} key={index}>
-          <Text>{skill.nome}</Text>
-          <TouchableOpacity onPress={() => { this.removeSkillHandle(skill); }} style={styles.itemRemoveIconWrapper}>
-            <Icon name="minus" style={styles.itemRemoveIcon}/>
-          </TouchableOpacity>
-        </View>
-      );
-    });
+  onChangeSkillsHandle(addedSkills) {
+    console.warn('addedSkills', addedSkills);
   }
 
   render() {
@@ -131,11 +87,9 @@ export default class Skills extends Component {
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
           <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} defaultSelectedId={this.state.neighborhoodCurrentId} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
-          <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.skills} onSelect={this.onSkillSelectHandle.bind(this)} hideSelectedText></Select>
+          {console.log('this.state.availableSkills',this.state.availableSkills)}
+          <ItemDistributionList available={this.state.availableSkills} added={this.state.userSkills} onChange={added => this.onChangeSkillsHandle.bind(this)} />
         </View>
-        <ScrollView style={styles.list}>
-          {this.renderUserSkills()}
-        </ScrollView>
         <TouchableRedirectorWrapper path="/interests" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CONTINUAR</Text>
@@ -150,10 +104,11 @@ const inputMargin = 10;
 const styles = StyleSheet.create({
 
   container: {
-    height: Dimensions.get('window').height - 70,
+
   },
 
   control: {
+    height: Dimensions.get('window').height - 118,
     marginLeft: inputMargin,
     marginRight: inputMargin,
   },
