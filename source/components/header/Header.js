@@ -13,7 +13,7 @@ const headerRoutesConfig = {
   '/dashboard': { title: 'DASHBOARD' },
   '/skills': { title: 'COMPLETE SEU PERFIL' },
   '/interests': { title: 'COMPLETE SEU PERFIL' },
-  '/flux/create': { title: 'CRIE UM FLUXO' }
+  '/flux/create': { title: 'CRIANDO UM FLUXO' }
 }
 
 class Header extends Component {

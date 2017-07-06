@@ -1,4 +1,6 @@
+// React imports
 import React, { Component } from 'react';
+// React Native imports
 import {
   View,
   ScrollView,
@@ -9,15 +11,15 @@ import {
   Dimensions
 } from 'react-native';
 
+// Other vendors imports
 import update from 'immutability-helper';
-
-import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
+// Custom components imports
 import Select from '../../../components/select/Select';
-
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+// Services imports
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import SkillService from '../../../services/SkillService';
 import UserService from '../../../services/UserService';
