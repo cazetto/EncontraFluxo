@@ -54,10 +54,8 @@ export default class Skills extends Component {
 
   fetchSkills() {
     SkillService.find()
-    .then(({objects:availableSkills}) => {
-      console.log("availableSkillsavailableSkillsavailableSkillsavailableSkillsavailableSkills", availableSkills);
-      this.setState({availableSkills});
-    });
+    .then(({objects:availableSkills}) => this.setState({availableSkills}))
+    .catch(error => console.log('Error when fetching skills.'));
   }
 
   fetchUserProfile() {
@@ -65,7 +63,8 @@ export default class Skills extends Component {
     .then(response => {
       this.setState({userSkills: response.habilidades, neighborhoodCurrentId:response.bairro_id});
       this.fetchSkills();
-    });
+    })
+    .catch(error => console.log('Error when fetching user profile data.'))
   }
 
   // HANDLES
@@ -76,8 +75,16 @@ export default class Skills extends Component {
     .catch(error => {});
   }
 
-  onChangeSkillsHandle(addedSkills) {
-    console.warn('addedSkills', addedSkills);
+  onChangeSkillsHandle(userSkills) {
+    console.log('AEEEEEEEEE - addedSkills', userSkills);
+    UserService.update({
+      habilidades: userSkills,
+    })
+    .then(response => {
+      console.log('adasdadasdasdasdasd-----adasd--- ', response);
+      this.setState({userSkills});
+    })
+    .catch(error => {});
   }
 
   render() {
@@ -88,7 +95,11 @@ export default class Skills extends Component {
           <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} defaultSelectedId={this.state.neighborhoodCurrentId} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
           {console.log('this.state.availableSkills',this.state.availableSkills)}
-          <ItemDistributionList available={this.state.availableSkills} added={this.state.userSkills} onChange={added => this.onChangeSkillsHandle.bind(this)} />
+          <ItemDistributionList
+            available={this.state.availableSkills}
+            added={this.state.userSkills}
+            onAddedItemsChanged={added => this.onChangeSkillsHandle(added)}
+          />
         </View>
         <TouchableRedirectorWrapper path="/interests" content={
           <View style={styles.btnActionDone}>

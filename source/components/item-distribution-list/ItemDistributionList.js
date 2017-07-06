@@ -39,12 +39,14 @@ export default class ItemDistributionList extends Component {
       return current.id != item.id;
     });
     this.setState({addedItems, availableItems});
-    let itemsToUpdate = addedItems.map(({id}) => ({id}));
+    // let itemsToUpdate = addedItems.map(({id}) => ({id}));
+    this.addedItemsChanged(addedItems);
   }
 
   onRemoveItemHandle(item) {
     const addedItems = this.state.addedItems.filter(current => current.id != item.id);
     this.setState({addedItems});
+    this.addedItemsChanged(addedItems);
   }
 
   renderAddedItems() {
@@ -58,6 +60,10 @@ export default class ItemDistributionList extends Component {
         </View>
       );
     });
+  }
+
+  addedItemsChanged(addedItems) {
+    this.props.onAddedItemsChanged(addedItems);
   }
 
   render() {
@@ -85,8 +91,9 @@ const styles = StyleSheet.create({
   listItem: {
     paddingVertical: 14,
     paddingLeft: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECEFF1',
+    borderWidth: 1,
+    borderTopWidth: 0,
+    borderColor: '#ECEFF1',
     backgroundColor: '#FAFAFA',
   },
   itemRemoveIconWrapper: {
