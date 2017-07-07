@@ -76,9 +76,9 @@ export default class Skills extends Component {
     .catch(error => {});
   }
 
-  onChangeSkillsHandle(userSkills) {
+  onChangeSkillsHandle(addedUserSkills) {
     UserService.update({
-      habilidades: userSkills,
+      habilidades: addedUserSkills,
     })
     .then(response => {
       console.log('onChangeSkillsHandle:UserService:response', response);

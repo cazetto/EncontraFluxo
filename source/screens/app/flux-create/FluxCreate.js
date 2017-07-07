@@ -25,6 +25,7 @@ export default class ViewPagerPage extends Component {
     neighborhood: null,
 
     availableSkills: [],
+    addedSkills: [],
 
     eventData: {
       nome: null,
@@ -37,8 +38,11 @@ export default class ViewPagerPage extends Component {
     },
   }
 
+  constructor(props) {
+    super(props);
+  }
+
   componentWillMount() {
-    console.log('componentWillMount');
     this.currentPage = 0;
     this.fetchNeighborhoods();
     this.fetchSkills();
@@ -54,17 +58,19 @@ export default class ViewPagerPage extends Component {
 
   fetchSkills() {
     SkillService.find()
-    .then(response => this.setState({availableSkills: response.objects}))
-    .catch(error => console.log('Error on fetch skills:', error));
+    .then(({objects:availableSkills}) => this.setState({availableSkills}))
+    .catch(error => console.log('Error when fetching skills.'));
   }
 
-  // fetchUserProfile() {
-  //   UserService.get()
-  //   .then(response => {
-  //     this.setState({userSkills: response.habilidades, neighborhoodCurrentId:response.bairro_id});
-  //     this.fetchSkills();
-  //   });
-  // }
+  fetchUserProfile() {
+    // EventService.get()
+    // UserService.get()
+    // .then(response => {
+    //   this.setState({addedSkills: response.habilidades});
+    //   this.fetchSkills();
+    // })
+    // .catch(error => console.log('Error when fetching user profile data.'))
+  }
 
   // Handles
   onNeighborhoodSelectHandle(neighborhood) {
@@ -77,7 +83,6 @@ export default class ViewPagerPage extends Component {
 
   // Pages handles
   nextPage() {
-    // console.log(this.state.eventData);
     this.refs.viewPager.setPage(this.currentPage+1);
   }
   onPageChange(event) {
@@ -98,6 +103,10 @@ export default class ViewPagerPage extends Component {
   renderDotIndicator() {
     return <PagerDotIndicator pageCount={4} />;
     // return <PagerTitleIndicator titles={['Início', 'Habilidades', 'Material', 'Interesses']} />;
+  }
+
+  onChangeSkillsHandle(addedSkills, availableSkills) {
+    this.setState({addedSkills, availableSkills});
   }
 
   render() {
@@ -195,9 +204,12 @@ export default class ViewPagerPage extends Component {
             </TextInput>
           </View>
           <View style={styles.page}>
-
-            <ItemDistributionList available={this.state.availableSkills} />
-
+            <Text style={styles.inputLabel}>Para tornar este fluxo possível, pessoas com as quais habilidades devem fazer parte?</Text>
+            <ItemDistributionList
+              available={this.state.availableSkills}
+              added={this.state.addedSkills}
+              onAddedItemsChanged={(available, added) => this.onChangeSkillsHandle(available, added)}
+            />
           </View>
           <View style={styles.page}>
             <Text>page three</Text>
@@ -218,15 +230,23 @@ export default class ViewPagerPage extends Component {
 let heightCorrection = Platform.OS === 'ios' ? 118 : 126;
 const styles = StyleSheet.create({
   container: {
-
     height: Dimensions.get('window').height - heightCorrection,
+
   },
   indicatorViewPager: {
     height: Dimensions.get('window').height - 120,
   },
   page: {
     backgroundColor: "#F5F5F5",
-  }
+    paddingHorizontal: 10,
+    paddingTop: 2,
+  },
+  inputLabel: {
+    marginTop: 10,
+    marginBottom: 4,
+    marginLeft: 12,
+    color: '#757575',
+  },
 });
 
 

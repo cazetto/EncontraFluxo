@@ -25,7 +25,17 @@ export default class ItemDistributionList extends Component {
     addedItems: [],
   }
 
+  constructor(props) {
+    super(props);
+  }
+
   componentWillReceiveProps(nextProps) {
+
+    console.log('___________________');
+    console.log('nextProps',nextProps);
+
+
+
     let availableItems = nextProps.available
     .filter(skill => {
       var add = true;
@@ -46,15 +56,15 @@ export default class ItemDistributionList extends Component {
     });
     this.setState({addedItems, availableItems});
     // let itemsToUpdate = addedItems.map(({id}) => ({id}));
-    this.addedItemsChanged(addedItems);
+    this.addedItemsChanged(addedItems, availableItems);
   }
 
   onRemoveItemHandle(item) {
     const availableItems = update(this.state.availableItems, {$push: [item]})
     const addedItems = this.state.addedItems.filter(current => current.id != item.id);
-    this.setState({addedItems, availableItems});
+    this.setState({availableItems, addedItems});
 
-    this.addedItemsChanged(addedItems);
+    this.addedItemsChanged(addedItems, availableItems);
   }
 
   renderAddedItems() {
@@ -70,10 +80,6 @@ export default class ItemDistributionList extends Component {
     });
   }
 
-  addedItemsChanged(addedItems) {
-    this.props.onAddedItemsChanged(addedItems);
-  }
-
   componentDidMount() {
     let timeout = setTimeout(() => {
       console.log(timeout);
@@ -86,6 +92,10 @@ export default class ItemDistributionList extends Component {
       });
 
     }, 0);
+  }
+
+  addedItemsChanged(added, available) {
+    this.props.onAddedItemsChanged(added, available);
   }
 
   render() {

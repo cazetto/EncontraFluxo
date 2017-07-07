@@ -26,7 +26,7 @@ const App = props => (
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/flux/create" component={FluxCreate} />
-        <Route exact path="/" render={() => <Redirect to="/skills"/>  }/>
+        <Route exact path="/" render={() => <Redirect to="/flux/create"/>  }/>
       </View>
     </NativeRouter>
   </View>
