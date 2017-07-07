@@ -33,7 +33,7 @@ export default class ViewPagerPage extends Component {
       bairro_id: null,
       dt_evento: null,
       descricao: null,
-      habilidades: [],
+      habilidades: [ {id: 24, nome: "Analista de Sistema"} ],
       interesses: [],
     },
   }
@@ -62,14 +62,12 @@ export default class ViewPagerPage extends Component {
     .catch(error => console.log('Error when fetching skills.'));
   }
 
-  fetchUserProfile() {
+  fetchFlux() {
     // EventService.get()
-    // UserService.get()
     // .then(response => {
     //   this.setState({addedSkills: response.habilidades});
-    //   this.fetchSkills();
     // })
-    // .catch(error => console.log('Error when fetching user profile data.'))
+    // .catch(error => console.log('Error when fetching event data.'))
   }
 
   // Handles
@@ -106,14 +104,16 @@ export default class ViewPagerPage extends Component {
   }
 
   onChangeSkillsHandle(addedSkills, availableSkills) {
-    this.setState({addedSkills, availableSkills});
+    let habilidades = this.state.eventData.habilidades.slice();
+    addedSkills.forEach(addedSkill => {
+      let has = habilidades.some(habilidade => habilidade.id === addedSkill.id);
+      if(!has) habilidades.push(addedSkill);
+    });
+    let eventData = update(this.state.eventData, {$merge: {habilidades}});
+    this.setState({addedSkills, availableSkills, eventData});
   }
 
   render() {
-    // today
-    let minDate = moment().format('DD-MM-YYYY');
-    let maxDate = moment().add(1, 'year').calendar();
-
     return (
       <View style={styles.container}>
         <IndicatorViewPager
@@ -157,8 +157,8 @@ export default class ViewPagerPage extends Component {
               placeholder="DATA"
               locale="pt-br"
               format="DD/MM/YYYY"
-              minDate={minDate}
-              maxDate={maxDate}
+              minDate={ moment().format('DD-MM-YYYY') }
+              maxDate={ moment().add(1, 'year').calendar() }
               confirmBtnText="Confirmar"
               cancelBtnText="Cancelar"
               customStyles={{
@@ -248,8 +248,6 @@ const styles = StyleSheet.create({
     color: '#757575',
   },
 });
-
-
 
 const pageOneStyles = StyleSheet.create({
   container: {

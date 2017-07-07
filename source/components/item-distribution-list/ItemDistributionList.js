@@ -30,12 +30,6 @@ export default class ItemDistributionList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
-    console.log('___________________');
-    console.log('nextProps',nextProps);
-
-
-
     let availableItems = nextProps.available
     .filter(skill => {
       var add = true;
@@ -82,7 +76,6 @@ export default class ItemDistributionList extends Component {
 
   componentDidMount() {
     let timeout = setTimeout(() => {
-      console.log(timeout);
       clearTimeout(timeout);
       this.refs.list.measure( (fx, fy, width, height, px, py) => {
         let marginBottom = 50;
@@ -90,7 +83,6 @@ export default class ItemDistributionList extends Component {
         let listHeight = (Dimensions.get('window').height - (py + marginBottom)) - androidCorrection;
         this.setState({listHeight});
       });
-
     }, 0);
   }
 
