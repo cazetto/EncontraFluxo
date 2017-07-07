@@ -4,7 +4,8 @@ import {
   StyleSheet,
   TextInput,
   Text,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -114,10 +115,10 @@ export default class Dashboard extends Component {
   }
 }
 
-const inputMargin = 10;
+let heightCorrection = Platform.OS === 'ios' ? 70 : 75;
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 70,
+    height: Dimensions.get('window').height - heightCorrection,
   },
   tabContainer: {
     flex: 1,

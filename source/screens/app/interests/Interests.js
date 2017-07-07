@@ -8,6 +8,7 @@ import {
   Icon,
   Switch,
   Dimensions,
+  Platform,
 } from 'react-native';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
@@ -102,9 +103,10 @@ export default class Interests extends Component {
   }
 }
 
+let heightCorrection = Platform.OS === 'ios' ? 70 : 75;
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 70,
+    height: Dimensions.get('window').height - heightCorrection,
   },
   listHeader: {
     paddingHorizontal: 14,

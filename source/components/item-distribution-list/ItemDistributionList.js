@@ -8,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 
 // Other vendors imports
@@ -24,12 +25,17 @@ export default class ItemDistributionList extends Component {
     addedItems: [],
   }
 
-  componentWillMount() {
-  }
-
   componentWillReceiveProps(nextProps) {
-    console.log('ItemDistributionList:componentWillReceiveProps', );
-    this.setState({availableItems: nextProps.available, addedItems: nextProps.added});
+    let availableItems = nextProps.available
+    .filter(skill => {
+      var add = true;
+      for (var i = 0; i < nextProps.added.length; i++) {
+        add = nextProps.added[i].id != skill.id;
+        if(!add) break;
+      }
+      return add;
+    });
+    this.setState({availableItems, addedItems: nextProps.added});
   }
 
   onSelectItemHandle(item) {
@@ -44,8 +50,10 @@ export default class ItemDistributionList extends Component {
   }
 
   onRemoveItemHandle(item) {
+    const availableItems = update(this.state.availableItems, {$push: [item]})
     const addedItems = this.state.addedItems.filter(current => current.id != item.id);
-    this.setState({addedItems});
+    this.setState({addedItems, availableItems});
+
     this.addedItemsChanged(addedItems);
   }
 
@@ -66,14 +74,29 @@ export default class ItemDistributionList extends Component {
     this.props.onAddedItemsChanged(addedItems);
   }
 
+  componentDidMount() {
+    let timeout = setTimeout(() => {
+      console.log(timeout);
+      clearTimeout(timeout);
+      this.refs.list.measure( (fx, fy, width, height, px, py) => {
+        let marginBottom = 50;
+        let androidCorrection = Platform.OS === 'android' ? 30 : 0;
+        let listHeight = (Dimensions.get('window').height - (py + marginBottom)) - androidCorrection;
+        this.setState({listHeight});
+      });
+
+    }, 0);
+  }
+
   render() {
-    console.log('ItemDistributionList----this.state.availableItemsthis.state.availableItems',this.state.availableItems);
     return (
       <View style={styles.container}>
         <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.availableItems} onSelect={this.onSelectItemHandle.bind(this)} hideSelectedText></Select>
-        <ScrollView style={styles.list}>
-          {this.renderAddedItems()}
-        </ScrollView>
+        <View ref="list" collapsable={false}>
+          <ScrollView style={[styles.list, {height: this.state.listHeight}]}>
+            {this.renderAddedItems()}
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -81,29 +104,24 @@ export default class ItemDistributionList extends Component {
 
 const styles = StyleSheet.create({
   container: {
-
   },
   list: {
-    marginTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#ECEFF1',
+    marginTop: 4,
   },
   listItem: {
     paddingVertical: 14,
     paddingLeft: 10,
-    borderWidth: 1,
-    borderTopWidth: 0,
-    borderColor: '#ECEFF1',
+    marginBottom: 2,
     backgroundColor: '#FAFAFA',
   },
   itemRemoveIconWrapper: {
     position: 'absolute',
-    right: 20,
+    right: 11,
     marginTop: 10,
   },
   itemRemoveIcon: {
     marginTop: 3,
-    fontSize: 20,
+    fontSize: 22,
     color: '#b71c1c'
   }
 });

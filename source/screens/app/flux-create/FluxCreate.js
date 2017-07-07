@@ -1,5 +1,5 @@
-import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 import React, {Component} from 'react';
+import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity, Platform} from 'react-native';
 import {IndicatorViewPager, ViewPager, PagerTitleIndicator, PagerDotIndicator, PagerTabIndicator} from 'rn-viewpager';
 
 import DatePicker from 'react-native-datepicker';
@@ -215,10 +215,11 @@ export default class ViewPagerPage extends Component {
   }
 }
 
+let heightCorrection = Platform.OS === 'ios' ? 118 : 126;
 const styles = StyleSheet.create({
   container: {
 
-    height: Dimensions.get('window').height - 74,
+    height: Dimensions.get('window').height - heightCorrection,
   },
   indicatorViewPager: {
     height: Dimensions.get('window').height - 120,

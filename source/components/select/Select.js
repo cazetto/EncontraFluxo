@@ -17,7 +17,7 @@ export default class Select extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(!nextProps.options) return;
-    
+
 
     let options = nextProps.options.map(option => {
       return option.nome || '';
@@ -49,6 +49,7 @@ export default class Select extends Component {
             value={this.props.hideSelectedText ? '' : this.state.selected}
             dropdownTextHighlightStyle={{backgroundColor:'red'}}
             dropdownTextStyle={{backgroundColor:'red'}}
+            underlineColorAndroid="transparent"
             style={styles.input}
             ></TextInput>
           <Icon name={this.state.selected ? 'check' : 'chevron-small-down'} style={[styles.selectIcon, this.state.selected && styles.selectIconChecked]}/>

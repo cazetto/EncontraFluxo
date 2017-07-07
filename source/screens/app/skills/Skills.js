@@ -8,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  Dimensions
+  Dimensions,
+  Platform,
 } from 'react-native';
 
 // Other vendors imports
@@ -76,15 +77,13 @@ export default class Skills extends Component {
   }
 
   onChangeSkillsHandle(userSkills) {
-    console.log('AEEEEEEEEE - addedSkills', userSkills);
     UserService.update({
       habilidades: userSkills,
     })
     .then(response => {
-      console.log('adasdadasdasdasdasd-----adasd--- ', response);
-      this.setState({userSkills});
+      console.log('onChangeSkillsHandle:UserService:response', response);
     })
-    .catch(error => {});
+    .catch(error => console.log('Error when update skills in user profile.'))
   }
 
   render() {
@@ -94,7 +93,6 @@ export default class Skills extends Component {
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
           <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} defaultSelectedId={this.state.neighborhoodCurrentId} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
-          {console.log('this.state.availableSkills',this.state.availableSkills)}
           <ItemDistributionList
             available={this.state.availableSkills}
             added={this.state.userSkills}
@@ -111,17 +109,16 @@ export default class Skills extends Component {
   }
 
 }
-const inputMargin = 10;
+
+let heightCorrection = Platform.OS === 'ios' ? 118 : 130;
 const styles = StyleSheet.create({
 
   container: {
-
   },
 
   control: {
     height: Dimensions.get('window').height - 118,
-    marginLeft: inputMargin,
-    marginRight: inputMargin,
+    marginHorizontal: 10,
   },
 
   inputLabel: {
