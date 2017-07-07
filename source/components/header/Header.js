@@ -9,12 +9,11 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const headerRoutesConfig = {
-  '': { title: '' },
-  'dashboard': { title: 'DASHBOARD' },
-  'skills': { title: 'COMPLETE SEU PERFIL' },
-  'interests': { title: 'COMPLETE SEU PERFIL' },
-  'create': { title: 'CRIE UM FLUXO' },
-  'flux': { title: 'FLUXO' }
+  '/': { title: '' },
+  '/dashboard': { title: 'DASHBOARD' },
+  '/skills': { title: 'COMPLETE SEU PERFIL' },
+  '/interests': { title: 'COMPLETE SEU PERFIL' },
+  '/flux/create': { title: 'CRIANDO UM FLUXO' }
 }
 
 class Header extends Component {
@@ -34,8 +33,11 @@ class Header extends Component {
   }
 
   render() {
+
+    console.log(this.props.location);
+
     // implementar regex
-    const title = headerRoutesConfig[this.props.location.pathname.split('/')[1]].title || ' ';
+    const title = headerRoutesConfig[this.props.location.pathname] ? headerRoutesConfig[this.props.location.pathname].title : ' ';
 
     return (
       <View style={styles.container}>
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#3E2723',
     padding: 10,
-    marginTop: 21,
+    marginTop: Platform.OS === 'ios' ? 21 : 0,
   },
   leftColumn: {
     flex: 1,

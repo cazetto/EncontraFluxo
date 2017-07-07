@@ -1,4 +1,6 @@
+// React imports
 import React, { Component } from 'react';
+// React Native imports
 import {
   View,
   ScrollView,
@@ -6,137 +8,117 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  Dimensions
+  Dimensions,
+  Platform,
 } from 'react-native';
 
-import ModalDropdown from 'react-native-modal-dropdown';
+// Other vendors imports
+import update from 'immutability-helper';
 import Icon from 'react-native-vector-icons/Entypo';
 
+// Custom components imports
+import Select from '../../../components/select/Select';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
+import ItemDistributionList from '../../../components/item-distribution-list/ItemDistributionList';
 
-import neighborhoods from '../../../static/neighborhoods';
+// Services imports
+import NeighborhoodService from '../../../services/NeighborhoodService';
+import SkillService from '../../../services/SkillService';
+import UserService from '../../../services/UserService';
 
 export default class Skills extends Component {
+  state = {
+    availableSkills: [],
+    userSkills: [],
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      skill: '',
-      skills: [],
-      neighborhood: null,
-    };
-
-    this.neighborhoods = neighborhoods;
+    neighborhoods: [],
+    neighborhoodCurrentId: null,
   }
 
-  addSkillHandle() {
-    if(this.state.skill === '') return;
+  componentWillMount() {
+    this.fetchNeighborhoods();
 
-    let skills = this.state.skills.slice();
-
-    skills.push({title: this.state.skill});
-
-    this.setState(Object.assign({}, this.state, {
-      skills,
-      skill: '',
-    }));
+    var immediateID = setImmediate(() => {
+      clearImmediate(immediateID);
+      // Authenticated services calls goes here
+      this.fetchUserProfile();
+    });
   }
-
-  removeSkillHandle() {
-    console.log('Remove Skill');
-  }
-
-  renderSkills() {
-    return this.state.skills.map((skill, index) => {
-      return (
-        <View style={styles.listItem} key={index}>
-          <Text>{skill.title}</Text>
-          <TouchableOpacity onPress={() => { this.removeSkillHandle(); }} style={styles.itemRemoveIconWrapper}>
-            <Icon name="minus" style={styles.itemRemoveIcon}/>
-          </TouchableOpacity>
-        </View>
-      );
+  // FETCHES
+  fetchNeighborhoods() {
+    NeighborhoodService.find()
+    .then(response => {
+      let neighborhoods = response.objects;
+      this.setState({neighborhoods});
     });
   }
 
-  onSelectNeighborhoodHandle(index) {
-    this.setState({
-      neighborhood: this.neighborhoods[index]
-    });
+  fetchSkills() {
+    SkillService.find()
+    .then(({objects:availableSkills}) => this.setState({availableSkills}))
+    .catch(error => console.log('Error when fetching skills.'));
+  }
+
+  fetchUserProfile() {
+    UserService.get()
+    .then(response => {
+      this.setState({userSkills: response.habilidades, neighborhoodCurrentId:response.bairro_id});
+      this.fetchSkills();
+    })
+    .catch(error => console.log('Error when fetching user profile data.'))
+  }
+
+  // HANDLES
+  onNeighborhoodSelectHandle(neighborhood) {
+    let { id:bairro_id } = neighborhood;
+    UserService.update({bairro_id})
+    .then(response => {})
+    .catch(error => {});
+  }
+
+  onChangeSkillsHandle(userSkills) {
+    UserService.update({
+      habilidades: userSkills,
+    })
+    .then(response => {
+      console.log('onChangeSkillsHandle:UserService:response', response);
+    })
+    .catch(error => console.log('Error when update skills in user profile.'))
   }
 
   render() {
-    
     return (
       <View style={styles.container}>
-
         <View style={styles.control}>
-
           <Text style={styles.inputLabel}>Local onde você mora:</Text>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.neighborhoods}
-            onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
-            dropdownStyle={styles.selectNeighborhoodModal}
-            >
-            <View>
-              <TextInput
-                editable={false}
-                placeholder="SELECIONE O BAIRRO"
-                value={this.state.neighborhood}
-                style={styles.input}
-                ></TextInput>
-              <Icon name={this.state.neighborhood ? 'check' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
-            </View>
-          </ModalDropdown>
-
+          <Select placeholder="SELECIONE O BAIRRO" options={this.state.neighborhoods} defaultSelectedId={this.state.neighborhoodCurrentId} onSelect={this.onNeighborhoodSelectHandle.bind(this)}></Select>
           <Text style={styles.inputLabel}>Suas habilidades:</Text>
-          <View style={styles.selectNeighborhood}>
-            <View>
-              <TextInput
-                placeholder="ADICIONE UMA HABILIDADE"
-                onChangeText={ skill => {
-                  this.setState(Object.assign({}, this.state, {
-                    skill
-                  }));
-                }}
-                value={this.state.skill}
-                style={styles.input}
-                ></TextInput>
-
-              <TouchableOpacity style={styles.addSkillTouchable} onPress={() => { this.addSkillHandle(); }}>
-                <Icon name="plus" style={styles.addSkillIcon}/>
-              </TouchableOpacity>
-            </View>
-          </View>
-
+          <ItemDistributionList
+            available={this.state.availableSkills}
+            added={this.state.userSkills}
+            onAddedItemsChanged={added => this.onChangeSkillsHandle(added)}
+          />
         </View>
-
-        <ScrollView style={styles.list}>
-          {this.renderSkills()}
-        </ScrollView>
-
         <TouchableRedirectorWrapper path="/interests" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CONTINUAR</Text>
           </View>
         } />
-
-
       </View>
     );
   }
 
 }
-const inputMargin = 10;
+
+let heightCorrection = Platform.OS === 'ios' ? 118 : 130;
 const styles = StyleSheet.create({
 
   container: {
-    height: Dimensions.get('window').height - 70,
   },
 
   control: {
-    marginLeft: inputMargin,
-    marginRight: inputMargin,
+    height: Dimensions.get('window').height - 118,
+    marginHorizontal: 10,
   },
 
   inputLabel: {
@@ -151,27 +133,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#FAFAFA',
     color: '#616161',
-  },
-  selectNeighborhood: {
-
-  },
-  selectNeighborhoodIcon: {
-    position: 'absolute',
-    right: 0,
-    fontSize: 35,
-    width: 44,
-    textAlign: 'center',
-    color: '#BF360C',
-    backgroundColor: 'transparent',
-  },
-  selectNeighborhoodIconChecked: {
-    color: '#BF360C',
-    fontSize: 20,
-    color: '#8BC34A',
-    marginTop: 7,
-  },
-  selectNeighborhoodModal: {
-    width: Dimensions.get('window').width - inputMargin * 2,
   },
 
   addSkillTouchable: {

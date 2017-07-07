@@ -26,19 +26,20 @@ const App = props => (
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/flux/create" component={FluxCreate} />
-        <PrivateRoute exact path="/flux/congrats" component={FluxCongrats} />
-        <PrivateRoute exact path="/flux/:id" component={FluxPreview} />
-
-        <Route exact path="/" render={() => <Redirect to="/dashboard"/>  }/>
+        <Route exact path="/" render={() => <Redirect to="/skills"/>  }/>
       </View>
     </NativeRouter>
   </View>
 );
 
+{/* <PrivateRoute exact path="/flux/congrats" component={FluxCongrats} />
+<PrivateRoute exact path="/flux/:id" component={FluxPreview} /> */}
+
 {/* <Route exact path="/" render={() =>
   props.location.state && props.location.state.fromSignup ?
     <Redirect to="/skills"/> :
     <Redirect to="/dashboard"/> }/> */}
+
 
 export default SideMenuHOC( withRouter (App) );
 

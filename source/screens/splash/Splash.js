@@ -5,13 +5,11 @@ import { Redirect, withRouter } from 'react-router-native';
 
 import TimerMixin from 'react-timer-mixin';
 
-const IS_AUTHENTICATED = false;
+import { getSavedUser, removeSavedUser } from '../../utils/AuthUtils';
 
-const checkAuthentication = () => {
-  return new Promise((resolve, reject) => {
-    resolve(IS_AUTHENTICATED);
-  });
-}
+import APIService from '../../services/APIService';
+import UserService from '../../services/UserService';
+import { APPLICATION_API_CONFIG } from '../../services/config';
 
 export default class Splash extends Component {
 
@@ -26,21 +24,24 @@ export default class Splash extends Component {
   }
 
   componentWillMount() {
-    checkAuthentication()
-    .then(isAuthenticated => {
-      this.setState({redirectionRoute: isAuthenticated ? '/app' : '/auth/login'});
+    // removeSavedUser();
+    getSavedUser()
+    .then(response => {
+      console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
+      APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
+      UserService.id = response.id;
+      this.setState({redirectionRoute: '/app'});
+    })
+    .catch(error => {
+      this.setState({redirectionRoute: '/auth/login'});
     });
   }
 
   componentDidMount() {
-    // Try adding more than one second... rs! It's my life!
-    // const WAIT = 0;
-    // this.timer = TimerMixin.setTimeout(() => {
-    //   console.log('waaaaat');
-    //   this.setState({redirectionTimeoutCompleted: true});
-    // }, WAIT);
-
-    this.setState({redirectionTimeoutCompleted: true});
+    const WAIT = 0;
+    this.timer = TimerMixin.setTimeout(() => {
+      this.setState({redirectionTimeoutCompleted: true});
+    }, WAIT);
   }
 
   componentWillUnmount() {

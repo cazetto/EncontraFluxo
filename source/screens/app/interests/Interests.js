@@ -8,62 +8,75 @@ import {
   Icon,
   Switch,
   Dimensions,
+  Platform,
 } from 'react-native';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+import UserService from '../../../services/UserService';
+import InterestService from '../../../services/InterestService';
+
 export default class Interests extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      interests: [
-        {title: 'Festa Junina', active: false},
-        {title: 'Aulas de espanhol', active: false},
-        {title: 'Aulas de pilates', active: false},
-        {title: 'Festa da cidade', active: false},
-        {title: 'Artes e pintura', active: false},
-        {title: 'Plantar arvores', active: false},
-        {title: 'Festa Junina', active: false},
-        {title: 'Aulas de espanhol', active: false},
-        {title: 'Aulas de pilates', active: false},
-        {title: 'Festa da cidade', active: false},
-        {title: 'Artes e pintura', active: false},
-        {title: 'Plantar arvores', active: false},
-        {title: 'Festa Junina', active: false},
-        {title: 'Aulas de espanhol', active: false},
-        {title: 'Aulas de pilates', active: false},
-        {title: 'Festa da cidade', active: false},
-        {title: 'Artes e pintura', active: false},
-        {title: 'Plantar arvores', active: false},
-        {title: 'Festa Junina', active: false},
-        {title: 'Aulas de espanhol', active: false},
-        {title: 'Aulas de pilates', active: false},
-        {title: 'Festa da cidade', active: false},
-        {title: 'Artes e pintura', active: false},
-        {title: 'Ultimo', active: false},
-      ],
-    };
+  state = {
+    interests: [],
+  };
+
+  componentWillMount() {
+    this.fetchInterests();
+  }
+
+  fetchInterests() {
+    InterestService.find()
+    .then(({objects:interests}) => {
+      this.setState({interests});
+      this.fetchUserProfile();
+    })
+    .catch(error => {});
+  }
+
+  fetchUserProfile() {
+    UserService.get()
+    .then(({interesses:userInterests}) => {
+      var interests = this.state.interests.map(interest => {
+        interest.selected = userInterests.some(userInterest => interest.id == userInterest.id);
+        return interest;
+      });
+      this.setState({interests});
+    })
+    .catch(error => {});
   }
 
   removeInterest() {
-    console.log('remove');
   }
 
   selectItem(index, value) {
-    let interests = this.state.interests;
-    let current = interests[index].active = value;
+    console.log(value);
+    let interests = this.state.interests.slice();
+    let current = interests[index].selected = value;
     this.setState({interests});
+
+    let userInterests = interests.filter(interest => {
+      return interest.selected;
+    });
+
+    UserService.update({interesses: userInterests})
+    .then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+      console.log(error);
+    });
   }
 
   renderInterests() {
     return this.state.interests.map((interest, index) => {
       return (
         <View style={styles.listItem} key={index}>
-          <Text style={styles.title}>{interest.title}</Text>
+          <Text style={styles.title}>{interest.nome}</Text>
           <Switch
             onValueChange={value => this.selectItem(index, value)}
-            value={ this.state.interests[index].active } />
+            value={ interest.selected } />
         </View>
       );
     });
@@ -90,9 +103,10 @@ export default class Interests extends Component {
   }
 }
 
+let heightCorrection = Platform.OS === 'ios' ? 70 : 75;
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 70,
+    height: Dimensions.get('window').height - heightCorrection,
   },
   listHeader: {
     paddingHorizontal: 14,

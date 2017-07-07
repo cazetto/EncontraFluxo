@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-native';
 import update from 'immutability-helper';
 import _ from 'lodash';
 import Toast from 'react-native-easy-toast';
+import { CheckBox } from 'react-native-elements';
 
 // Custom components
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
@@ -16,57 +17,54 @@ import TouchableRedirectorWrapper from '../../../components/touchable-redirector
 // Shared styles
 import styles from '../styles';
 
+// Utils imports
+import { saveUser } from '../../../utils/AuthUtils';
+
 // Services import
-// import User from '../../api/User';
+import UserService from '../../../services/UserService';
+import AuthService from '../../../services/AuthService';
+import APIService from '../../../services/APIService';
+import { APPLICATION_API_CONFIG } from '../../../services/config';
 
 export default class Login extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      credentials: {
-        username: 'cazetto.andre@gmail.com',
-        password: 'andrewelight',
+      data: {
+        username: 'andre@welight.co',
+        password: '123',
+        // username: 'cazetto.andre@gmail.com',
+        // password: '123456',
         // username: '',
         // password: '',
       },
+      keepMeLoggedIn: true,
       isFetching: false,
       loginComplete: false,
     };
   }
 
-  componentWillMount() {
-    // User.tryLastLogin()
-    // .then(() => this.loginSuccess())
-    // .catch(() => {});
-  }
-
-  componentDidMount() {
-    // Temp
-    this.loginSuccess();
-  }
-
   login() {
     this.setState({isFetching: true});
-    this.loginSuccess(2000);
-    // User.doLogin(this.state.credentials)
-    // .then(response => {this.loginSuccess(1000)})
-    // .catch(error => {this.loginFail()});
+    AuthService.login(this.state.data)
+    .then(response => this.loginSuccess(response))
+    .catch(error => this.loginFail(error));
   }
 
-  loginSuccess(wait) {
-    if(wait < 2000) wait = 2000;
-    if(!wait) this.setState({loginComplete: true, isFetching: false});
-    else {
-      this.refs.toast.show('Login efetuado!');
-      this.setState({isFetching: false});
+  loginSuccess(response) {
+    console.log('--------------------------------');
+    console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
+    APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
 
-      const delay = setTimeout(() => {
-        clearTimeout(delay);
-        this.setState({loginComplete: true});
+    this.state.keepMeLoggedIn && saveUser(response);
+    UserService.id = response.id;
+    this.refs.toast.show('Login efetuado!');
 
-      }, wait);
-    }
+    const delay = setTimeout(() => {
+      clearTimeout(delay);
+      this.setState({loginComplete: true});
+    }, 1000);
   }
 
   loginFail() {
@@ -74,11 +72,11 @@ export default class Login extends Component {
     this.refs.toast.show('Dados incorretos!');
   }
 
-  delayedChangeCredentials(field) {
+  delayedChangeState(object, field) {
     return (
       _.debounce(value => {
-        let credentials = update(this.state.credentials, {$merge: {[field]:value}});
-        this.setState({credentials});
+        let data = update(this.state[object], {$merge: {[field]:value}});
+        this.setState({data});
       }, 100)
     );
   }
@@ -101,10 +99,10 @@ export default class Login extends Component {
     );
   }
 
-  renderRegisterButton() {
+  renderSignupButton() {
     return !this.state.isFetching ? (
       <TouchableRedirectorWrapper path="/auth/signup" content={
-        <View style={[styles.touchable, styles.registerButtonColor]}>
+        <View style={[styles.touchable, styles.signupButtonColor]}>
           <Text style={styles.buttonText}>Cadastrar</Text>
         </View>
       } />
@@ -130,11 +128,13 @@ export default class Login extends Component {
           <View style={styles.textInputWrapper}>
             <TextInput
               placeholder="E-mail"
-              defaultValue={this.state.credentials.username}
-              onChangeText={this.delayedChangeCredentials('username')}
+              defaultValue={this.state.data.username}
+              onChangeText={this.delayedChangeState('data', 'username')}
               keyboardType="email-address"
-              selectTextOnFocus
               underlineColorAndroid="transparent"
+              selectTextOnFocus
+              autoCorrect={false}
+              autoCapitalize="none"
               style={styles.textInput}
             />
           </View>
@@ -142,19 +142,31 @@ export default class Login extends Component {
           <View style={styles.textInputWrapper}>
             <TextInput
               placeholder="Senha"
-              defaultValue={this.state.credentials.password}
-              onChangeText={this.delayedChangeCredentials('password')}
+              defaultValue={this.state.data.password}
+              onChangeText={this.delayedChangeState('data', 'password')}
               secureTextEntry
               selectTextOnFocus
               underlineColorAndroid="transparent"
               style={styles.textInput}
             />
           </View>
+
+          <View style={styles.keepMeLoggedInWrapper}>
+            <CheckBox
+              left
+              iconLeft
+              title="Manter logado"
+              checked={this.state.keepMeLoggedIn}
+              onPress={() => this.setState({keepMeLoggedIn:!this.state.keepMeLoggedIn})}
+              style={styles.keepMeLoggedIn}
+            />
+          </View>
+
         </View>
 
         <View style={styles.actions}>
           {this.renderLoginButton()}
-          {this.renderRegisterButton()}
+          {this.renderSignupButton()}
           {this.renderForgotPasswordButton()}
         </View>
 
