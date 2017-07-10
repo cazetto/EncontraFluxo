@@ -19,6 +19,7 @@ import NeighborhoodService from '../../../services/NeighborhoodService';
 import SkillService from '../../../services/SkillService';
 import UserService from '../../../services/UserService';
 import MaterialService from '../../../services/MaterialService';
+import InterestService from '../../../services/InterestService';
 
 export default class ViewPagerPage extends Component {
   state = {
@@ -27,6 +28,9 @@ export default class ViewPagerPage extends Component {
 
     availableSkills: [],
     addedSkills: [],
+
+    availableInterests: [],
+    addedInterests: [],
 
     availableMaterials: [
       {id: 1, nome: "Material Estático 1"},
@@ -38,6 +42,8 @@ export default class ViewPagerPage extends Component {
       {id: 7, nome: "Material Estático 7"},
     ],
     addedMaterials: [],
+
+    nextButtonLabel: 'CONTINUAR',
 
     eventData: {
       nome: null,
@@ -53,13 +59,15 @@ export default class ViewPagerPage extends Component {
 
   constructor(props) {
     super(props);
+    this.nextButtonLabels = {1: 'CONTINUAR', 0: 'CONTINUAR', 2: 'CONTINUAR', 3: 'FINALIZAR', 4: 'SHOW!' };
+    this.currentPage = 0;
   }
 
   componentWillMount() {
-    this.currentPage = 0;
     this.fetchNeighborhoods();
     this.fetchSkills();
-    this.fetchMaterials();
+    // this.fetchMaterials();
+    this.fetchInterests();
   }
 
   // Fetches
@@ -79,10 +87,18 @@ export default class ViewPagerPage extends Component {
   fetchMaterials() {
     MaterialService.find()
     .then(response => {
-      console.log('____________ fetchMaterials', response);
+      // console.log('fetchMaterials', response);
     });
     // .then(({objects:availableMaterials}) => this.setState({availableMaterials}))
     // .catch(error => console.log('Error when fetching materials.'));
+  }
+
+  fetchInterests() {
+    InterestService.find()
+    .then(({objects:availableInterests}) => {
+      this.setState({availableInterests});
+    })
+    .catch(error => {});
   }
 
   fetchFlux() {
@@ -102,14 +118,6 @@ export default class ViewPagerPage extends Component {
     this.setState({ eventData: update(this.state.eventData, {$merge: {dt_evento:date}}) })
   }
 
-  // Pages handles
-  nextPage() {
-    this.refs.viewPager.setPage(this.currentPage+1);
-  }
-  onPageChange(event) {
-    this.currentPage = event.position;
-  }
-
   // Input changes
   delayedChangeTextInput(field) {
     return (
@@ -118,12 +126,6 @@ export default class ViewPagerPage extends Component {
         this.setState({eventData});
       }, 100)
     );
-  }
-
-  // Renderes
-  renderDotIndicator() {
-    return <PagerDotIndicator pageCount={4} />;
-    // return <PagerTitleIndicator titles={['Início', 'Habilidades', 'Material', 'Interesses']} />;
   }
 
   onChangeSkillsHandle(addedSkills, availableSkills) {
@@ -146,11 +148,42 @@ export default class ViewPagerPage extends Component {
     this.setState({addedMaterials, availableMaterials, eventData});
   }
 
+  onChangeInterestsHandle(addedInterests, availableInterests) {
+    let interesses = this.state.eventData.interesses.slice();
+    addedInterests.forEach(addedInterest => {
+      let has = interesses.some(interest => interest.id === addedInterest.id);
+      if(!has) interesses.push(addedInterest);
+    });
+    let eventData = update(this.state.eventData, {$merge: {interesses}});
+    this.setState({addedInterests, availableInterests, eventData});
+  }
+
+  next() {
+    if(this.currentPage === 4) {
+      console.log('FINALIZAR');
+    } else {
+      this.refs.viewPager.setPage(this.currentPage+1);
+    }
+  }
+
+  onPageChange({position}) {
+    this.currentPage = position;
+
+    this.setState({nextButtonLabel: this.nextButtonLabels[position]})
+    console.log(position);
+  }
+
+  // Renderes
+  renderDotIndicator() {
+    return <PagerDotIndicator pageCount={5} />;
+    // return <PagerTitleIndicator titles={['Início', 'Habilidades', 'Material', 'Interesses']} />;
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <IndicatorViewPager
-          initialPage={2}
+          // initialPage={3}
           ref="viewPager"
           style={styles.indicatorViewPager}
           indicator={this.renderDotIndicator()}
@@ -205,11 +238,8 @@ export default class ViewPagerPage extends Component {
                   height: 36,
                   padding: 10,
                   marginVertical: 2,
-                  marginHorizontal: 4,
                   backgroundColor: '#FAFAFA',
-                  borderColor: '#EEEEEE',
-                  borderWidth: 1,
-                  borderRadius: 2,
+                  borderWidth: 0,
                   alignItems: 'flex-start',
                 },
                 placeholderText: {
@@ -245,7 +275,6 @@ export default class ViewPagerPage extends Component {
             />
           </View>
           <View style={styles.page}>
-
             <Text style={styles.inputLabel}>É necessário algum material para que este fluxo aconteça? (opcional)</Text>
             <ItemDistributionList
               placeholder="ADICIONE UM MATERIAL"
@@ -253,20 +282,26 @@ export default class ViewPagerPage extends Component {
               added={this.state.addedMaterials}
               onAddedItemsChanged={(available, added) => this.onChangeMaterialsHandle(available, added)}
             />
-
-
-
-
+          </View>
+          <View style={styles.page}>
+            <Text style={styles.inputLabel}>Você pretende reunir pessoas com quais interesses?</Text>
+            <ItemDistributionList
+              placeholder="ADICIONE UM INTERESSE"
+              available={this.state.availableInterests}
+              added={this.state.addedInterests}
+              onAddedItemsChanged={(available, added) => this.onChangeInterestsHandle(available, added)}
+            />
           </View>
 
           <View style={styles.page}>
-            <Text>Pessoas</Text>
+            <Text>FINALIZAR</Text>
           </View>
+
         </IndicatorViewPager>
 
-        <TouchableOpacity onPress={() => {this.nextPage()}}>
+        <TouchableOpacity onPress={() => {this.next()}}>
           <View style={pageOneStyles.btnActionDone}>
-            <Text style={pageOneStyles.btnActionDoneText}>CONTINUAR</Text>
+            <Text style={pageOneStyles.btnActionDoneText}>{this.state.nextButtonLabel}</Text>
           </View>
         </TouchableOpacity>
 
@@ -311,20 +346,16 @@ const pageOneStyles = StyleSheet.create({
   },
 
   datePicker: {
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width - 20,
   },
 
   input: {
     height: 36,
     padding: 10,
     marginVertical: 2,
-    marginHorizontal: 4,
     fontSize: 16,
     color: '#616161',
     backgroundColor: '#FAFAFA',
-    borderColor: '#EEEEEE',
-    borderWidth: 1,
-    borderRadius: 2,
   },
   address: {
     height: 54,
