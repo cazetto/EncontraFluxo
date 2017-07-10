@@ -93,7 +93,7 @@ export default class ItemDistributionList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.availableItems} onSelect={this.onSelectItemHandle.bind(this)} hideSelectedText></Select>
+        <Select placeholder={ this.props.placeholder || 'ADICIONE UMA HABILIDADE' } options={this.state.availableItems} onSelect={this.onSelectItemHandle.bind(this)} hideSelectedText></Select>
         <View ref="list" collapsable={false}>
           <ScrollView style={[styles.list, {height: this.state.listHeight}]}>
             {this.renderAddedItems()}

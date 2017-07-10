@@ -31,6 +31,9 @@ export default class Skills extends Component {
     availableSkills: [],
     userSkills: [],
 
+    availableSkills: [],
+    userSkills: [],
+
     neighborhoods: [],
     neighborhoodCurrentId: null,
   }

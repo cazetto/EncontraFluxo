@@ -18,6 +18,7 @@ moment.locale('pt-BR');
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import SkillService from '../../../services/SkillService';
 import UserService from '../../../services/UserService';
+import MaterialService from '../../../services/MaterialService';
 
 export default class ViewPagerPage extends Component {
   state = {
@@ -27,14 +28,26 @@ export default class ViewPagerPage extends Component {
     availableSkills: [],
     addedSkills: [],
 
+    availableMaterials: [
+      {id: 1, nome: "Material Estático 1"},
+      {id: 2, nome: "Material Estático 2"},
+      {id: 3, nome: "Material Estático 3"},
+      {id: 4, nome: "Material Estático 4"},
+      {id: 5, nome: "Material Estático 5"},
+      {id: 6, nome: "Material Estático 6"},
+      {id: 7, nome: "Material Estático 7"},
+    ],
+    addedMaterials: [],
+
     eventData: {
       nome: null,
       endereco: null,
       bairro_id: null,
       dt_evento: null,
       descricao: null,
-      habilidades: [ {id: 24, nome: "Analista de Sistema"} ],
+      habilidades: [],
       interesses: [],
+      materiais: [],
     },
   }
 
@@ -46,6 +59,7 @@ export default class ViewPagerPage extends Component {
     this.currentPage = 0;
     this.fetchNeighborhoods();
     this.fetchSkills();
+    this.fetchMaterials();
   }
 
   // Fetches
@@ -60,6 +74,15 @@ export default class ViewPagerPage extends Component {
     SkillService.find()
     .then(({objects:availableSkills}) => this.setState({availableSkills}))
     .catch(error => console.log('Error when fetching skills.'));
+  }
+
+  fetchMaterials() {
+    MaterialService.find()
+    .then(response => {
+      console.log('____________ fetchMaterials', response);
+    });
+    // .then(({objects:availableMaterials}) => this.setState({availableMaterials}))
+    // .catch(error => console.log('Error when fetching materials.'));
   }
 
   fetchFlux() {
@@ -113,11 +136,21 @@ export default class ViewPagerPage extends Component {
     this.setState({addedSkills, availableSkills, eventData});
   }
 
+  onChangeMaterialsHandle(addedMaterials, availableMaterials) {
+    let materiais = this.state.eventData.materiais.slice();
+    addedMaterials.forEach(addedMaterial => {
+      let has = materiais.some(material => material.id === addedMaterial.id);
+      if(!has) materiais.push(addedMaterial);
+    });
+    let eventData = update(this.state.eventData, {$merge: {materiais}});
+    this.setState({addedMaterials, availableMaterials, eventData});
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <IndicatorViewPager
-          initialPage={1}
+          initialPage={2}
           ref="viewPager"
           style={styles.indicatorViewPager}
           indicator={this.renderDotIndicator()}
@@ -212,7 +245,22 @@ export default class ViewPagerPage extends Component {
             />
           </View>
           <View style={styles.page}>
-            <Text>page three</Text>
+
+            <Text style={styles.inputLabel}>É necessário algum material para que este fluxo aconteça? (opcional)</Text>
+            <ItemDistributionList
+              placeholder="ADICIONE UM MATERIAL"
+              available={this.state.availableMaterials}
+              added={this.state.addedMaterials}
+              onAddedItemsChanged={(available, added) => this.onChangeMaterialsHandle(available, added)}
+            />
+
+
+
+
+          </View>
+
+          <View style={styles.page}>
+            <Text>Pessoas</Text>
           </View>
         </IndicatorViewPager>
 
