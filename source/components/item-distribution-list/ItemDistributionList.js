@@ -25,6 +25,10 @@ export default class ItemDistributionList extends Component {
     addedItems: [],
   }
 
+  constructor(props) {
+    super(props);
+  }
+
   componentWillReceiveProps(nextProps) {
     let availableItems = nextProps.available
     .filter(skill => {
@@ -46,15 +50,15 @@ export default class ItemDistributionList extends Component {
     });
     this.setState({addedItems, availableItems});
     // let itemsToUpdate = addedItems.map(({id}) => ({id}));
-    this.addedItemsChanged(addedItems);
+    this.addedItemsChanged(addedItems, availableItems);
   }
 
   onRemoveItemHandle(item) {
     const availableItems = update(this.state.availableItems, {$push: [item]})
     const addedItems = this.state.addedItems.filter(current => current.id != item.id);
-    this.setState({addedItems, availableItems});
+    this.setState({availableItems, addedItems});
 
-    this.addedItemsChanged(addedItems);
+    this.addedItemsChanged(addedItems, availableItems);
   }
 
   renderAddedItems() {
@@ -70,28 +74,26 @@ export default class ItemDistributionList extends Component {
     });
   }
 
-  addedItemsChanged(addedItems) {
-    this.props.onAddedItemsChanged(addedItems);
-  }
-
   componentDidMount() {
     let timeout = setTimeout(() => {
-      console.log(timeout);
       clearTimeout(timeout);
       this.refs.list.measure( (fx, fy, width, height, px, py) => {
-        let marginBottom = 50;
+        let marginBottom = 52;
         let androidCorrection = Platform.OS === 'android' ? 30 : 0;
         let listHeight = (Dimensions.get('window').height - (py + marginBottom)) - androidCorrection;
         this.setState({listHeight});
       });
-
     }, 0);
+  }
+
+  addedItemsChanged(added, available) {
+    this.props.onAddedItemsChanged(added, available);
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Select placeholder="ADICIONE UMA HABILIDADE" options={this.state.availableItems} onSelect={this.onSelectItemHandle.bind(this)} hideSelectedText></Select>
+        <Select placeholder={ this.props.placeholder || 'ADICIONE UMA HABILIDADE' } options={this.state.availableItems} onSelect={this.onSelectItemHandle.bind(this)} hideSelectedText></Select>
         <View ref="list" collapsable={false}>
           <ScrollView style={[styles.list, {height: this.state.listHeight}]}>
             {this.renderAddedItems()}

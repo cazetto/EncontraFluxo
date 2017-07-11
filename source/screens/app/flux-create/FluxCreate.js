@@ -18,6 +18,8 @@ moment.locale('pt-BR');
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import SkillService from '../../../services/SkillService';
 import UserService from '../../../services/UserService';
+import MaterialService from '../../../services/MaterialService';
+import InterestService from '../../../services/InterestService';
 
 export default class ViewPagerPage extends Component {
   state = {
@@ -25,6 +27,23 @@ export default class ViewPagerPage extends Component {
     neighborhood: null,
 
     availableSkills: [],
+    addedSkills: [],
+
+    availableInterests: [],
+    addedInterests: [],
+
+    availableMaterials: [
+      {id: 1, nome: "Material Estático 1"},
+      {id: 2, nome: "Material Estático 2"},
+      {id: 3, nome: "Material Estático 3"},
+      {id: 4, nome: "Material Estático 4"},
+      {id: 5, nome: "Material Estático 5"},
+      {id: 6, nome: "Material Estático 6"},
+      {id: 7, nome: "Material Estático 7"},
+    ],
+    addedMaterials: [],
+
+    nextButtonLabel: 'CONTINUAR',
 
     eventData: {
       nome: null,
@@ -34,14 +53,21 @@ export default class ViewPagerPage extends Component {
       descricao: null,
       habilidades: [],
       interesses: [],
+      materiais: [],
     },
   }
 
-  componentWillMount() {
-    console.log('componentWillMount');
+  constructor(props) {
+    super(props);
+    this.nextButtonLabels = {1: 'CONTINUAR', 0: 'CONTINUAR', 2: 'CONTINUAR', 3: 'FINALIZAR', 4: 'SHOW!' };
     this.currentPage = 0;
+  }
+
+  componentWillMount() {
     this.fetchNeighborhoods();
     this.fetchSkills();
+    // this.fetchMaterials();
+    this.fetchInterests();
   }
 
   // Fetches
@@ -54,17 +80,34 @@ export default class ViewPagerPage extends Component {
 
   fetchSkills() {
     SkillService.find()
-    .then(response => this.setState({availableSkills: response.objects}))
-    .catch(error => console.log('Error on fetch skills:', error));
+    .then(({objects:availableSkills}) => this.setState({availableSkills}))
+    .catch(error => console.log('Error when fetching skills.'));
   }
 
-  // fetchUserProfile() {
-  //   UserService.get()
-  //   .then(response => {
-  //     this.setState({userSkills: response.habilidades, neighborhoodCurrentId:response.bairro_id});
-  //     this.fetchSkills();
-  //   });
-  // }
+  fetchMaterials() {
+    MaterialService.find()
+    .then(response => {
+      // console.log('fetchMaterials', response);
+    });
+    // .then(({objects:availableMaterials}) => this.setState({availableMaterials}))
+    // .catch(error => console.log('Error when fetching materials.'));
+  }
+
+  fetchInterests() {
+    InterestService.find()
+    .then(({objects:availableInterests}) => {
+      this.setState({availableInterests});
+    })
+    .catch(error => {});
+  }
+
+  fetchFlux() {
+    // EventService.get()
+    // .then(response => {
+    //   this.setState({addedSkills: response.habilidades});
+    // })
+    // .catch(error => console.log('Error when fetching event data.'))
+  }
 
   // Handles
   onNeighborhoodSelectHandle(neighborhood) {
@@ -73,15 +116,6 @@ export default class ViewPagerPage extends Component {
   }
   onChangeDateHandle(date) {
     this.setState({ eventData: update(this.state.eventData, {$merge: {dt_evento:date}}) })
-  }
-
-  // Pages handles
-  nextPage() {
-    // console.log(this.state.eventData);
-    this.refs.viewPager.setPage(this.currentPage+1);
-  }
-  onPageChange(event) {
-    this.currentPage = event.position;
   }
 
   // Input changes
@@ -94,21 +128,62 @@ export default class ViewPagerPage extends Component {
     );
   }
 
+  onChangeSkillsHandle(addedSkills, availableSkills) {
+    let habilidades = this.state.eventData.habilidades.slice();
+    addedSkills.forEach(addedSkill => {
+      let has = habilidades.some(habilidade => habilidade.id === addedSkill.id);
+      if(!has) habilidades.push(addedSkill);
+    });
+    let eventData = update(this.state.eventData, {$merge: {habilidades}});
+    this.setState({addedSkills, availableSkills, eventData});
+  }
+
+  onChangeMaterialsHandle(addedMaterials, availableMaterials) {
+    let materiais = this.state.eventData.materiais.slice();
+    addedMaterials.forEach(addedMaterial => {
+      let has = materiais.some(material => material.id === addedMaterial.id);
+      if(!has) materiais.push(addedMaterial);
+    });
+    let eventData = update(this.state.eventData, {$merge: {materiais}});
+    this.setState({addedMaterials, availableMaterials, eventData});
+  }
+
+  onChangeInterestsHandle(addedInterests, availableInterests) {
+    let interesses = this.state.eventData.interesses.slice();
+    addedInterests.forEach(addedInterest => {
+      let has = interesses.some(interest => interest.id === addedInterest.id);
+      if(!has) interesses.push(addedInterest);
+    });
+    let eventData = update(this.state.eventData, {$merge: {interesses}});
+    this.setState({addedInterests, availableInterests, eventData});
+  }
+
+  next() {
+    if(this.currentPage === 4) {
+      console.log('FINALIZAR');
+    } else {
+      this.refs.viewPager.setPage(this.currentPage+1);
+    }
+  }
+
+  onPageChange({position}) {
+    this.currentPage = position;
+
+    this.setState({nextButtonLabel: this.nextButtonLabels[position]})
+    console.log(position);
+  }
+
   // Renderes
   renderDotIndicator() {
-    return <PagerDotIndicator pageCount={4} />;
+    return <PagerDotIndicator pageCount={5} />;
     // return <PagerTitleIndicator titles={['Início', 'Habilidades', 'Material', 'Interesses']} />;
   }
 
   render() {
-    // today
-    let minDate = moment().format('DD-MM-YYYY');
-    let maxDate = moment().add(1, 'year').calendar();
-
     return (
       <View style={styles.container}>
         <IndicatorViewPager
-          initialPage={1}
+          // initialPage={3}
           ref="viewPager"
           style={styles.indicatorViewPager}
           indicator={this.renderDotIndicator()}
@@ -148,8 +223,8 @@ export default class ViewPagerPage extends Component {
               placeholder="DATA"
               locale="pt-br"
               format="DD/MM/YYYY"
-              minDate={minDate}
-              maxDate={maxDate}
+              minDate={ moment().format('DD-MM-YYYY') }
+              maxDate={ moment().add(1, 'year').calendar() }
               confirmBtnText="Confirmar"
               cancelBtnText="Cancelar"
               customStyles={{
@@ -163,11 +238,8 @@ export default class ViewPagerPage extends Component {
                   height: 36,
                   padding: 10,
                   marginVertical: 2,
-                  marginHorizontal: 4,
                   backgroundColor: '#FAFAFA',
-                  borderColor: '#EEEEEE',
-                  borderWidth: 1,
-                  borderRadius: 2,
+                  borderWidth: 0,
                   alignItems: 'flex-start',
                 },
                 placeholderText: {
@@ -195,18 +267,41 @@ export default class ViewPagerPage extends Component {
             </TextInput>
           </View>
           <View style={styles.page}>
-
-            <ItemDistributionList available={this.state.availableSkills} />
-
+            <Text style={styles.inputLabel}>Para tornar este fluxo possível, pessoas com as quais habilidades devem fazer parte?</Text>
+            <ItemDistributionList
+              available={this.state.availableSkills}
+              added={this.state.addedSkills}
+              onAddedItemsChanged={(available, added) => this.onChangeSkillsHandle(available, added)}
+            />
           </View>
           <View style={styles.page}>
-            <Text>page three</Text>
+            <Text style={styles.inputLabel}>É necessário algum material para que este fluxo aconteça? (opcional)</Text>
+            <ItemDistributionList
+              placeholder="ADICIONE UM MATERIAL"
+              available={this.state.availableMaterials}
+              added={this.state.addedMaterials}
+              onAddedItemsChanged={(available, added) => this.onChangeMaterialsHandle(available, added)}
+            />
           </View>
+          <View style={styles.page}>
+            <Text style={styles.inputLabel}>Você pretende reunir pessoas com quais interesses?</Text>
+            <ItemDistributionList
+              placeholder="ADICIONE UM INTERESSE"
+              available={this.state.availableInterests}
+              added={this.state.addedInterests}
+              onAddedItemsChanged={(available, added) => this.onChangeInterestsHandle(available, added)}
+            />
+          </View>
+
+          <View style={styles.page}>
+            <Text>FINALIZAR</Text>
+          </View>
+
         </IndicatorViewPager>
 
-        <TouchableOpacity onPress={() => {this.nextPage()}}>
+        <TouchableOpacity onPress={() => {this.next()}}>
           <View style={pageOneStyles.btnActionDone}>
-            <Text style={pageOneStyles.btnActionDoneText}>CONTINUAR</Text>
+            <Text style={pageOneStyles.btnActionDoneText}>{this.state.nextButtonLabel}</Text>
           </View>
         </TouchableOpacity>
 
@@ -218,18 +313,24 @@ export default class ViewPagerPage extends Component {
 let heightCorrection = Platform.OS === 'ios' ? 118 : 126;
 const styles = StyleSheet.create({
   container: {
-
     height: Dimensions.get('window').height - heightCorrection,
+
   },
   indicatorViewPager: {
     height: Dimensions.get('window').height - 120,
   },
   page: {
     backgroundColor: "#F5F5F5",
-  }
+    paddingHorizontal: 10,
+    paddingTop: 2,
+  },
+  inputLabel: {
+    marginTop: 10,
+    marginBottom: 4,
+    marginLeft: 12,
+    color: '#757575',
+  },
 });
-
-
 
 const pageOneStyles = StyleSheet.create({
   container: {
@@ -245,20 +346,16 @@ const pageOneStyles = StyleSheet.create({
   },
 
   datePicker: {
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width - 20,
   },
 
   input: {
     height: 36,
     padding: 10,
     marginVertical: 2,
-    marginHorizontal: 4,
     fontSize: 16,
     color: '#616161',
     backgroundColor: '#FAFAFA',
-    borderColor: '#EEEEEE',
-    borderWidth: 1,
-    borderRadius: 2,
   },
   address: {
     height: 54,

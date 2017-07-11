@@ -11,8 +11,12 @@ import Skills from './screens/app/skills/Skills';
 import Events from './screens/app/events/Events';
 import Dashboard from './screens/app/dashboard/Dashboard';
 import FluxPreview from './screens/app/flux-preview/FluxPreview';
-import FluxCongrats from './screens/app/flux-congrats/FluxCongrats';
-import FluxCreate from './screens/app/flux-create/FluxCreate';
+
+import FluxCreateStep1 from './screens/app/flux-create/FluxCreateStep1';
+import FluxCreateStep2 from './screens/app/flux-create/FluxCreateStep2';
+import FluxCreateStep3 from './screens/app/flux-create/FluxCreateStep3';
+import FluxCreateStep4 from './screens/app/flux-create/FluxCreateStep4';
+import FluxCreateStep5 from './screens/app/flux-create/FluxCreateStep5';
 
 import { withRouter } from 'react-router';
 
@@ -25,8 +29,15 @@ const App = props => (
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/flux/create" component={FluxCreate} />
-        <Route exact path="/" render={() => <Redirect to="/skills"/>  }/>
+
+        <PrivateRoute exact path="/flux-create-step-1" component={FluxCreateStep1} />
+        <PrivateRoute exact path="/flux-create-step-2" component={FluxCreateStep2} />
+        <PrivateRoute exact path="/flux-create-step-3" component={FluxCreateStep3} />
+        <PrivateRoute exact path="/flux-create-step-4" component={FluxCreateStep4} />
+        <PrivateRoute exact path="/flux-create-step-5" component={FluxCreateStep5} />
+
+        <Route exact path="/" render={() => <Redirect to="/flux-create-step-1"/>  }/>
+
       </View>
     </NativeRouter>
   </View>
