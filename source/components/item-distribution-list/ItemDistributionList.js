@@ -78,7 +78,7 @@ export default class ItemDistributionList extends Component {
     let timeout = setTimeout(() => {
       clearTimeout(timeout);
       this.refs.list.measure( (fx, fy, width, height, px, py) => {
-        let marginBottom = 50;
+        let marginBottom = 52;
         let androidCorrection = Platform.OS === 'android' ? 30 : 0;
         let listHeight = (Dimensions.get('window').height - (py + marginBottom)) - androidCorrection;
         this.setState({listHeight});
