@@ -48,7 +48,7 @@ export default class FluxCreateStep2 extends Component {
   }
 
   onChangeSkillsHandle(addedSkills, availableSkills) {
-    let habilidades = addedSkills.map(current => current.id);
+    let habilidades = addedSkills.map(current => ({id: current.id}));
     let eventData = update(this.state.eventData, {$merge: {habilidades}});
     this.setState({addedSkills, availableSkills, eventData});
   }

@@ -17,6 +17,7 @@ import styles from './styles';
 // Services imports
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import EventService from '../../../services/EventService';
+import UserService from '../../../services/UserService';
 
 export default class FluxCreateStep1 extends Component {
   state = {
@@ -38,6 +39,7 @@ export default class FluxCreateStep1 extends Component {
 
   componentWillMount() {
     this.fetchNeighborhoods();
+    EventService.data.usuario_id =  UserService.id;
   }
 
   // Fetches

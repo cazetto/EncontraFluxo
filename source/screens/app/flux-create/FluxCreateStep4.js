@@ -50,7 +50,7 @@ export default class FluxCreateStep4 extends Component {
   }
 
   onChangeInterestsHandle(addedInterests, availableInterests) {
-    let interesses = addedInterests.map(current => current.id);
+    let interesses = addedInterests.map(current => ({id: current.id}));
     let eventData = update(this.state.eventData, {$merge: {interesses}});
     this.setState({addedInterests, availableInterests, eventData});
   }

@@ -49,7 +49,7 @@ export default class FluxCreateStep3 extends Component {
   }
 
   onChangeMaterialsHandle(addedMaterials, availableMaterials) {
-    let materiais = addedMaterials.map(current => current.id);
+    let materiais = addedMaterials.map(current => ({id: current.id}));
     let eventData = update(this.state.eventData, {$merge: {materiais}});
     this.setState({addedMaterials, availableMaterials, eventData});
   }
