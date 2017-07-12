@@ -21,10 +21,6 @@ import OpenedTab from './tabs/OpenedTab';
 import InFluxTab from './tabs/InFluxTab';
 import HappeningTab from './tabs/HappeningTab';
 
-// const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
-// const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
-// const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;
-
 export default class Dashboard extends Component {
 
   constructor(props) {
@@ -105,7 +101,7 @@ export default class Dashboard extends Component {
           onRequestChangeTab={this.handleChangeTab}
         />
 
-        <TouchableRedirectorWrapper path="/flux/create" content={
+        <TouchableRedirectorWrapper path="/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
           </View>

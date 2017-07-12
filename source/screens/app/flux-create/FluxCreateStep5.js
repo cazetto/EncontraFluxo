@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
-import {StyleSheet, View, Text, Image, Dimensions} from 'react-native';
+import {StyleSheet, View, Text, Image, Dimensions, ActivityIndicator} from 'react-native';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
 import EventService from '../../../services/EventService';
+import UserService from '../../../services/UserService';
 
 import balloonBlue from '../../../assets/images/events/balloons/balloon1.png';
 import balloonGreen from '../../../assets/images/events/balloons/balloon2.png';
@@ -15,18 +16,40 @@ import balloonOrange from '../../../assets/images/events/balloons/balloon5.png';
 
 export default class FluxCreateStep5 extends Component {
   state = {
+    userName: '',
+    savingFlux: true,
   }
   componentWillMount() {
-    EventService.save()
-    .then(response => {
-      console.log(response);
+    this.getUserInfo();
+    this.saveFlux();
+  }
+
+  getUserInfo() {
+    UserService.get()
+    .then(({nome:userName}) => this.setState({userName}))
+    .catch(error => {
+      console.log('Error retrieving user info:', error);
     });
   }
+
+  saveFlux() {
+    EventService.save()
+    .then(response => {
+      this.setState({savingFlux: false});
+    })
+    .catch(error => {
+      console.log('Error creating/updating flux:', error);
+      this.setState({savingFlux: false});
+    });
+  }
+
   render() {
     return (
+      this.state.savingFlux ?
+      <ActivityIndicator /> :
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.congratsText}>IRADO (NOME), VOCÊ CRIOU UM FLUXO!</Text>
+          <Text style={styles.congratsText}>IRADO, { this.state.userName.toUpperCase() }, VOCÊ CRIOU UM FLUXO!</Text>
           <View style={styles.balloons}>
             <Image resizeMode="contain" style={[styles.balloon, styles.balloonGreen]} source={balloonGreen} />
             <Image resizeMode="contain" style={[styles.balloon, styles.balloonOrange]} source={balloonOrange} />
@@ -35,8 +58,6 @@ export default class FluxCreateStep5 extends Component {
             <Image resizeMode="contain" style={[styles.balloon, styles.balloonYellow]} source={balloonYellow} />
           </View>
           <Text style={styles.instructionText}>Agora divulgue nas redes sociais, convide seus amigos para baixar o app e entrar com você neste fluxo!</Text>
-
-
         </View>
         <TouchableRedirectorWrapper path="/dashboard" content={
           <View style={styles.btnActionDone}>
@@ -53,33 +74,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECEFF1',
   },
   content: {
-
-    height: Dimensions.get('window').height - 120,
+    height: Dimensions.get('window').height - 119,
   },
   balloon: {
     position: 'absolute',
     width: 80,
     height: 120,
   },
-
   congratsText: {
     marginTop: 50,
     fontSize: 14,
     fontWeight: 'bold',
     color: '#37474F',
     textAlign: 'center',
+    paddingHorizontal: '20%',
   },
-
   instructionText: {
     position: 'absolute',
-    bottom: 140,
+    bottom: '25%',
     fontSize: 12,
-    padding: 20,
+    paddingHorizontal: '10%',
     fontWeight: 'bold',
     color: '#37474F',
     textAlign: 'center',
   },
-
   balloons: {
     position: 'absolute',
     width: 160,
@@ -87,7 +105,6 @@ const styles = StyleSheet.create({
     marginTop: (Dimensions.get('window').height / 2) - 150,
     marginLeft: (Dimensions.get('window').width / 2) - 86,
   },
-
   balloonBlue: {
     marginLeft: 40,
     marginTop: 20,
@@ -109,7 +126,6 @@ const styles = StyleSheet.create({
     marginLeft: 70,
     marginTop: 0,
   },
-
   btnActionDone: {
     backgroundColor: '#A1887F',
     padding: 8,
