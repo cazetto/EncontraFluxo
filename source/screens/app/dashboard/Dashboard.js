@@ -8,12 +8,12 @@ import {
   Platform
 } from 'react-native';
 
+import update from 'immutability-helper';
+
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
-
-import neighborhoods from '../../../static/neighborhoods';
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
@@ -21,13 +21,16 @@ import OpenedTab from './tabs/OpenedTab';
 import InFluxTab from './tabs/InFluxTab';
 import HappeningTab from './tabs/HappeningTab';
 
+import NeighborhoodService from '../../../services/NeighborhoodService';
+import EventService from '../../../services/EventService';
+
 export default class Dashboard extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       neighborhood: null,
-
+      neighborhoods: [],
       index: 0,
       routes: [
         { key: '1', title: 'Aberto' },
@@ -35,12 +38,38 @@ export default class Dashboard extends Component {
         { key: '3', title: 'Acontecendo' },
       ],
     };
-    this.neighborhoods = neighborhoods;
+  }
+
+  componentWillMount() {
+    this.fetchNeighborhoods();
+    this.fetchEvents();
+  }
+
+  fetchNeighborhoods() {
+    NeighborhoodService.find()
+    .then( ({objects}) => {
+      let neighborhoods = objects.map(neighborhood => neighborhood.nome);
+      this.setState({neighborhoods});
+    })
+    .catch(error => {
+      console.log('Error when fetch neighborhoods:', error);
+    });
+  }
+
+  fetchEvents() {
+    EventService.find()
+    .then( ({objects:events}) => {
+      let routes = this.state.routes.map(route => update(route, {$merge: {events}}));
+      this.setState({routes});
+    })
+    .catch(error => {
+      console.log('Error when fetch events:', error);
+    });
   }
 
   onSelectNeighborhoodHandle(index) {
     this.setState({
-      neighborhood: this.neighborhoods[index]
+      neighborhood: this.state.neighborhoods[index]
     });
   }
 
@@ -78,7 +107,7 @@ export default class Dashboard extends Component {
       <View style={styles.container}>
         <View style={styles.control}>
           <Text style={styles.inputLabel}>Filtrar fluxos por bairro:</Text>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.neighborhoods}
+          <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods}
             onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
             dropdownStyle={styles.selectNeighborhoodModal}
             >

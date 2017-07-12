@@ -5,36 +5,67 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import TouchableRedirectorWrapper from '../touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
-export default FluxListItem = props => {
-  return (
-    <View style={styles.container}>
+import NeighborhoodService from '../../services/NeighborhoodService';
 
-      <View style={styles.leftColumn}>
-        <View style={styles.header}>
-          <View style={[styles.bullet, {backgroundColor: props.color}]}></View>
-          <Text style={styles.title}>TÍTULO DO FLUXO</Text>
-        </View>
-        <Text style={styles.neighborhood}>Bairro: Nova Iguaçu</Text>
-        <View>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore facilis nesciunt ducimus itaque dignissimos repellendus, nobis cum debitis maxime consequuntur incidunt repudiandae culpa tempora fuga sit sint, nulla possimus adipisci.
-          </Text>
+import moment from 'moment';
 
+export default class FluxListItem extends Component {
+
+  componentWillMount() {
+    let { color } = this.props;
+    let { nome:name, descricao:description, bairro_id:neighborhoodId, colaboradores:people, dt_evento:date } = this.props.data;
+
+    console.log('AQUI this.props.data', this.props.data);
+
+    this.setState({
+      color,
+      name,
+      description,
+      people,
+      date: moment(date).format('DD/MM/YYYY'),
+    });
+
+
+    this.fetchNeighborhood(neighborhoodId);
+  }
+
+  fetchNeighborhood(id) {
+    if(!id) return;
+    NeighborhoodService.get(id)
+    .then(response => this.setState({neighborhood: response.nome}))
+    .catch(error => console.log('Error on fetch neighborhood:', error));
+  }
+
+  render() {
+    let { color, name, description, neighborhood, people, date } = this.state;
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.leftColumn}>
+          <View style={styles.header}>
+            <View style={[styles.bullet, {backgroundColor: color}]}></View>
+            <Text style={styles.title}>{name}</Text>
+          </View>
+          <Text style={styles.neighborhood}>Bairro: {neighborhood}</Text>
+          <View>
+            <Text style={styles.description}>
+              {description}
+            </Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.peopleCount}>{people.length} pessoas contectadas </Text>
+            <Text style={styles.createdAt}>Data: {date}</Text>
+          </View>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.peopleCount}>32 pessoas contectadas</Text>
-          <Text style={styles.createdAt}>Data: 01/07/2017</Text>
+        <View style={styles.rightColumn}>
+          <TouchableRedirectorWrapper path="/flux/1" content={
+            <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color}]}/>
+          } />
         </View>
       </View>
+    );
 
-      <View style={styles.rightColumn}>
-        <TouchableRedirectorWrapper path="/flux/1" content={
-          <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color: props.color}]}/>
-        } />
-      </View>
-
-    </View>
-  );
+  }
 }
 
 const styles = StyleSheet.create({
