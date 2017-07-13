@@ -29,6 +29,7 @@ const App = props => (
         <PrivateRoute exact path="/interests" component={Interests} />
         <PrivateRoute exact path="/events" component={Events} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/flux-preview/:id" component={FluxPreview} />
 
         <PrivateRoute exact path="/flux-create-step-1" component={FluxCreateStep1} />
         <PrivateRoute exact path="/flux-create-step-2" component={FluxCreateStep2} />
@@ -36,7 +37,7 @@ const App = props => (
         <PrivateRoute exact path="/flux-create-step-4" component={FluxCreateStep4} />
         <PrivateRoute exact path="/flux-create-step-5" component={FluxCreateStep5} />
 
-        <Route exact path="/" render={() => <Redirect to="/dashboard"/>  }/>
+        <Route exact path="/" render={() => <Redirect to="/flux-preview/4"/>  }/>
 
       </View>
     </NativeRouter>

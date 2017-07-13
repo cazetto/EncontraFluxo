@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Text,
-  Dimensions,
-  Platform
-} from 'react-native';
+import { View, StyleSheet, TextInput, Text, Dimensions, Platform } from 'react-native';
 
 import update from 'immutability-helper';
 
@@ -50,6 +43,7 @@ export default class Dashboard extends Component {
     .then( ({objects}) => {
       let neighborhoods = objects.map(neighborhood => neighborhood.nome);
       this.setState({neighborhoods});
+      this.fetchEvents();
     })
     .catch(error => {
       console.log('Error when fetch neighborhoods:', error);

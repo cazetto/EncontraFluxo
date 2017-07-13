@@ -13,11 +13,10 @@ export default class FluxListItem extends Component {
 
   componentWillMount() {
     let { color } = this.props;
-    let { nome:name, descricao:description, bairro_id:neighborhoodId, colaboradores:people, dt_evento:date } = this.props.data;
-
-    console.log('AQUI this.props.data', this.props.data);
+    let { id, nome:name, descricao:description, bairro_id:neighborhoodId, colaboradores:people, dt_evento:date } = this.props.data;
 
     this.setState({
+      id,
       color,
       name,
       description,
@@ -25,20 +24,19 @@ export default class FluxListItem extends Component {
       date: moment(date).format('DD/MM/YYYY'),
     });
 
-
     this.fetchNeighborhood(neighborhoodId);
   }
 
   fetchNeighborhood(id) {
     if(!id) return;
+
     NeighborhoodService.get(id)
     .then(response => this.setState({neighborhood: response.nome}))
     .catch(error => console.log('Error on fetch neighborhood:', error));
   }
 
   render() {
-    let { color, name, description, neighborhood, people, date } = this.state;
-
+    let { id, color, name, description, neighborhood, people, date } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>
@@ -58,7 +56,7 @@ export default class FluxListItem extends Component {
           </View>
         </View>
         <View style={styles.rightColumn}>
-          <TouchableRedirectorWrapper path="/flux/1" content={
+          <TouchableRedirectorWrapper path={`/flux-preview/${id}`} content={
             <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color}]}/>
           } />
         </View>

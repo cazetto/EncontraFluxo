@@ -7,6 +7,9 @@ const EventService = {
   find(data) {
     return this.resource.objects.find(data);
   },
+  get(id) {
+    return this.resource.objects.get(id);
+  },
   save() {
     return this.data.id ?
     this.resource.objects.update(this.data.id, this.data) :
