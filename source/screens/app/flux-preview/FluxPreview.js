@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
 
 import moment from 'moment';
 
@@ -92,18 +92,31 @@ export default class FluxPreview extends Component {
       fetchingEvent || fetchingUser || fetchingNeighborhood ?
       <ActivityIndicator style={styles.activityIndicator} /> :
       <View style={styles.container}>
+
         <View style={styles.content}>
-          <Text style={[styles.info]}>Nome: {name}</Text>
-          <Text style={[styles.info]}>Criador: {user}</Text>
-          <Text style={[styles.info]}>Bairro: {neighborhood}</Text>
-          <Text style={[styles.info]}>Local: {address}</Text>
-          <Text style={[styles.info]}>Data: {moment(date).format('DD/MM/YYYY')}</Text>
-          <Text style={[styles.info]}>{people && people.length || 0} PESSOAS NO FLUXO</Text>
-          <Text style={[styles.info]}>Descrição: {description}</Text>
-          <Text style={[styles.info]}>Habilidades: {this.renderList(this.state.skills)}</Text>
-          <Text style={[styles.info]}>Materiais: {this.renderList(this.state.materials)}</Text>
+          <ScrollView>
+            <View style={styles.group}>
+              <Text style={[styles.info]}>Nome: {name}</Text>
+              <Text style={[styles.info]}>Criador: {user}</Text>
+              <Text style={[styles.info]}>Bairro: {neighborhood}</Text>
+              <Text style={[styles.info]}>Local: {address}</Text>
+              <Text style={[styles.info]}>Data: {moment(date).format('DD/MM/YYYY')}</Text>
+            </View>
+            <View style={styles.group}>
+              <Text style={[styles.info]}>{people && people.length || 0} PESSOAS NO FLUXO</Text>
+            </View>
+            <View style={styles.group}>
+              <Text style={[styles.info]}>Descrição: {description}</Text>
+            </View>
+            <View style={styles.group}>
+              <Text style={[styles.info]}>Habilidades: {this.renderList(this.state.skills)}</Text>
+            </View>
+            <View style={styles.group}>
+              <Text style={[styles.info]}>Materiais: {this.renderList(this.state.materials)}</Text>
+            </View>
+          </ScrollView>
         </View>
-        <TouchableRedirectorWrapper path="/create" content={
+        <TouchableRedirectorWrapper path={`/flux-join/${id}`} state={this.state} content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>ENTRAR NESSE FLUXO</Text>
           </View>
@@ -116,17 +129,17 @@ export default class FluxPreview extends Component {
 const styles = StyleSheet.create({
   container: {
     height: Dimensions.get('window').height - 70,
+    backgroundColor: '#ECEFF1',
   },
   content: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#ECEFF1',
   },
   info: {
     color: '#424242',
   },
   group: {
-    
+    marginBottom: 10,
   },
   activityIndicator: {
     marginTop: 20,

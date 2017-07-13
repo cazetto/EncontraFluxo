@@ -18,6 +18,7 @@ const headerRoutesConfig = {
   '/flux-create-step-3': { title: 'INFORME OS MATERIAIS' },
   '/flux-create-step-4': { title: 'INFORME OS INTERESSES' },
   '/flux-create-step-5': { title: 'PARABÉNS' },
+  '/flux-preview': { title: 'VISUALIZAR' },
 }
 
 class Header extends Component {
