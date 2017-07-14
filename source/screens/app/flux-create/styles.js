@@ -33,7 +33,7 @@ export default styles = StyleSheet.create({
     color: '#757575',
   },
   btnActionDone: {
-    backgroundColor: '#A1887F',
+    backgroundColor: '#455A64',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,

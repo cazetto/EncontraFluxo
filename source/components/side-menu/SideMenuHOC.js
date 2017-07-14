@@ -28,11 +28,13 @@ class SideMenuComposed extends Component {
   }
 
   render() {
+    let menu = Menu();
+
     return (
       <SideMenu
         isOpen={this.state.isOpen}
         onChange={this.onSideMenuChange.bind(this)}
-        menu={Menu}>
+        menu={menu}>
         <Composed toggleSideMenu={this.toggleSideMenu.bind(this)} />
       </SideMenu>
     )

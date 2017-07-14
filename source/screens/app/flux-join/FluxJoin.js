@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     flex:1,
   },
   btnActionDone: {
-    backgroundColor: '#A1887F',
+    backgroundColor: '#455A64',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,

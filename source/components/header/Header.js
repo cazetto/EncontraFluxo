@@ -68,7 +68,7 @@ export default withRouter(Header);
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#3E2723',
+    backgroundColor: '#263238',
     padding: 10,
     marginTop: Platform.OS === 'ios' ? 21 : 0,
   },

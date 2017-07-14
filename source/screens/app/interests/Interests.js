@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     color: '#757575',
   },
   btnActionDone: {
-    backgroundColor: '#EF6C00',
+    backgroundColor: '#455A64',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,
