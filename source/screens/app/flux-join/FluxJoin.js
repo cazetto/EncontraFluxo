@@ -68,16 +68,19 @@ export default class FluxPreview extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <View style={styles.group}>
-            <Text style={styles.info}>POSSO CONTRIBUIR COMO?</Text>
-            {this.renderSkills()}
-          </View>
-          <View style={styles.group}>
-            <Text style={styles.info}>CONSIGO ARRANJAR/DOAR:</Text>
-            {this.renderMaterials()}
-          </View>
+          <ScrollView>
+            <View style={styles.group}>
+              <Text style={styles.info}>POSSO CONTRIBUIR COMO?</Text>
+              {this.renderSkills()}
+            </View>
+            <View style={styles.group}>
+              <Text style={styles.info}>CONSIGO ARRANJAR/DOAR:</Text>
+              {this.renderMaterials()}
+            </View>
+          </ScrollView>
+          <Text>Ao entrar neste fluxo eu permito que <Text style={styles.userName}>{user}</Text> entre em contato comigo por email.</Text>
         </View>
-        <TouchableRedirectorWrapper path={`/flux-join/${id}`} content={
+        <TouchableRedirectorWrapper path={'/flux-congrats'} content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CONFIRMAR</Text>
           </View>
@@ -107,6 +110,9 @@ const styles = StyleSheet.create({
   },
   checkBoxContainer: {
 
+  },
+  userName: {
+    fontWeight: 'bold',
   },
   checkBox: {
     marginTop: 12,

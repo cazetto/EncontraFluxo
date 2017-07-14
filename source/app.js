@@ -12,6 +12,7 @@ import Events from './screens/app/events/Events';
 import Dashboard from './screens/app/dashboard/Dashboard';
 import FluxPreview from './screens/app/flux-preview/FluxPreview';
 import FluxJoin from './screens/app/flux-join/FluxJoin';
+import FluxCongrats from './screens/app/flux-congrats/FluxCongrats';
 
 import FluxCreateStep1 from './screens/app/flux-create/FluxCreateStep1';
 import FluxCreateStep2 from './screens/app/flux-create/FluxCreateStep2';
@@ -32,7 +33,7 @@ const App = props => (
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/flux-preview/:id" component={FluxPreview} />
         <PrivateRoute exact path="/flux-join/:id" component={FluxJoin} />
-
+        <PrivateRoute exact path="/flux-congrats" component={FluxCongrats} />
         <PrivateRoute exact path="/flux-create-step-1" component={FluxCreateStep1} />
         <PrivateRoute exact path="/flux-create-step-2" component={FluxCreateStep2} />
         <PrivateRoute exact path="/flux-create-step-3" component={FluxCreateStep3} />
@@ -40,14 +41,10 @@ const App = props => (
         <PrivateRoute exact path="/flux-create-step-5" component={FluxCreateStep5} />
 
         <Route exact path="/" render={() => <Redirect to="/flux-preview/4"/>  }/>
-
       </View>
     </NativeRouter>
   </View>
 );
-
-{/* <PrivateRoute exact path="/flux/congrats" component={FluxCongrats} />
-<PrivateRoute exact path="/flux/:id" component={FluxPreview} /> */}
 
 {/* <Route exact path="/" render={() =>
   props.location.state && props.location.state.fromSignup ?
