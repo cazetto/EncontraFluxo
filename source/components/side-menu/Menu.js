@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import UserService from '../../services/UserService';
 
+import TouchableRedirectorWrapper from '../touchable-redirector-wrapper/TouchableRedirectorWrapper';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -43,24 +45,32 @@ export default Menu = () => {
       <Text style={styles.userName}>{UserService.user.nome}</Text>
       <View style={styles.list}>
 
-        <TouchableOpacity style={styles.listItem}>
-          <Text style={styles.listItemText}> > Dashboard</Text>
-        </TouchableOpacity>
+        <TouchableRedirectorWrapper path="/dashboard" content={
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}> > Dashboard</Text>
+          </View>
+        } />
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.listItem}>
-          <Text style={styles.listItemText}> > Perfil</Text>
-        </TouchableOpacity>
+        <TouchableRedirectorWrapper path="/skills" content={
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}> > Habilidades</Text>
+          </View>
+        } />
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.listItem}>
-          <Text style={styles.listItemText}> > Dashboard</Text>
-        </TouchableOpacity>
+        <TouchableRedirectorWrapper path="/interests" content={
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}> > Interesses</Text>
+          </View>
+        } />
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.listItem}>
-          <Text style={styles.listItemText}> > Criar Fluxo</Text>
-        </TouchableOpacity>
+        <TouchableRedirectorWrapper path="/flux-create-step-1" content={
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}> > Criar Fluxo</Text>
+          </View>
+        } />
         <View style={styles.divider} />
 
         <TouchableOpacity style={styles.listItem}>

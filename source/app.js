@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { NativeRouter, Route, Redirect } from 'react-router-native';
 
 import PrivateRoute from './components/private-route/PrivateRoute';
-import SideMenuHOC from './components/side-menu/SideMenuHOC';
+
+// import SideMenuHOC from './components/side-menu/SideMenuHOC';
 import Header from './components/header/Header';
+
+import { SideMenu, List, ListItem } from 'react-native-elements';
+
+import Menu from './components/side-menu/Menu';
 
 import Interests from './screens/app/interests/Interests';
 import Skills from './screens/app/skills/Skills';
@@ -22,29 +27,59 @@ import FluxCreateStep5 from './screens/app/flux-create/FluxCreateStep5';
 
 import { withRouter } from 'react-router';
 
-const App = props => (
-  <View style={styles.app}>
-    <NativeRouter>
-      <View>
-        <Header toggleSideMenu={props.toggleSideMenu} />
-        <PrivateRoute exact path="/skills" component={Skills} />
-        <PrivateRoute exact path="/interests" component={Interests} />
-        <PrivateRoute exact path="/events" component={Events} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/flux-preview/:id" component={FluxPreview} />
-        <PrivateRoute exact path="/flux-join/:id" component={FluxJoin} />
-        <PrivateRoute exact path="/flux-congrats" component={FluxCongrats} />
-        <PrivateRoute exact path="/flux-create-step-1" component={FluxCreateStep1} />
-        <PrivateRoute exact path="/flux-create-step-2" component={FluxCreateStep2} />
-        <PrivateRoute exact path="/flux-create-step-3" component={FluxCreateStep3} />
-        <PrivateRoute exact path="/flux-create-step-4" component={FluxCreateStep4} />
-        <PrivateRoute exact path="/flux-create-step-5" component={FluxCreateStep5} />
+class App extends Component {
 
-        <Route exact path="/" render={() => <Redirect to="/flux-preview/4"/>  }/>
+  state = {
+    isOpen: false,
+  }
+
+  onSideMenuChange(isOpen) {
+    this.setState({
+      isOpen: isOpen,
+    });
+  }
+
+  toggleSideMenu() {
+    this.setState({
+      isOpen: !this.state.isOpen,
+    });
+  }
+
+  render() {
+    let menu = Menu();
+    return (
+      <View style={styles.app}>
+        <NativeRouter>
+
+          <SideMenu
+            isOpen={this.state.isOpen}
+            onChange={this.onSideMenuChange.bind(this)}
+            menu={menu}>
+
+            <View style={styles.app}>
+              <Header toggleSideMenu={() => {this.toggleSideMenu()}} />
+              <PrivateRoute exact path="/skills" component={Skills} />
+              <PrivateRoute exact path="/interests" component={Interests} />
+              <PrivateRoute exact path="/events" component={Events} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/flux-preview/:id" component={FluxPreview} />
+              <PrivateRoute exact path="/flux-join/:id" component={FluxJoin} />
+              <PrivateRoute exact path="/flux-congrats" component={FluxCongrats} />
+              <PrivateRoute exact path="/flux-create-step-1" component={FluxCreateStep1} />
+              <PrivateRoute exact path="/flux-create-step-2" component={FluxCreateStep2} />
+              <PrivateRoute exact path="/flux-create-step-3" component={FluxCreateStep3} />
+              <PrivateRoute exact path="/flux-create-step-4" component={FluxCreateStep4} />
+              <PrivateRoute exact path="/flux-create-step-5" component={FluxCreateStep5} />
+              <Route exact path="/" render={() => <Redirect to="/dashboard"/>  }/>
+            </View>
+
+          </SideMenu>
+
+        </NativeRouter>
       </View>
-    </NativeRouter>
-  </View>
-);
+    );
+  }
+}
 
 {/* <Route exact path="/" render={() =>
   props.location.state && props.location.state.fromSignup ?
@@ -52,11 +87,13 @@ const App = props => (
     <Redirect to="/dashboard"/> }/> */}
 
 
-export default SideMenuHOC( withRouter (App) );
+// export default SideMenuHOC( withRouter (App) );
+
+export default App;
 
 const styles = StyleSheet.create({
   app: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#FAFAFA',
     height: '100%',
   },
 });
