@@ -29,18 +29,9 @@ const styles = StyleSheet.create({
 });
 
 const AppNavigation = props => {
-
-  toggleSideMenu = () => {
-    props.toggleSideMenu();
-
-    console.log('AppNavigation:toggleSideMenu');
-    console.log(props);
-
-  }
-
   return (
     <View style={styles.container}>
-      <Header toggleSideMenu={() => {toggleSideMenu()}} />
+      <Header {...props} />
       <PrivateRoute exact path="/skills" component={Skills} />
       <PrivateRoute exact path="/interests" component={Interests} />
       <PrivateRoute exact path="/events" component={Events} />
@@ -57,6 +48,8 @@ const AppNavigation = props => {
     </View>
   );
 }
+
+// toggleSideMenu={() => {props.toggleSideMenu()}}
 
 {/* <Route exact path="/" render={() =>
   props.location.state && props.location.state.fromSignup ?

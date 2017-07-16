@@ -31,29 +31,17 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-
     this.lastLocation = null;
   }
 
-  openDrawer() {
-    this.props.toggleSideMenu();
-
-    console.log('openDrawer', this.props);
-  }
-
   render() {
-    console.log(this.props.location);
-    
-    if(this.lastLocation != this.props.location.pathname) this.props.toggleSideMenu();
-    this.lastLocation = this.props.location.pathname;
-
     // implementar regex
     const title = headerRoutesConfig[this.props.location.pathname] ? headerRoutesConfig[this.props.location.pathname].title : ' ';
 
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>
-          <TouchableOpacity onPress={()=>{this.openDrawer()}}>
+          <TouchableOpacity onPress={()=>{this.props.toggleSideMenu()}}>
             <Icon name="menu" style={styles.menuIcon} />
           </TouchableOpacity>
         </View>

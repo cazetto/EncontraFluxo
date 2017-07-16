@@ -14,6 +14,10 @@ class SideMenuComposed extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.close();
+  }
+
   onSideMenuChange(isOpen) {
     this.setState({
       isOpen: isOpen,

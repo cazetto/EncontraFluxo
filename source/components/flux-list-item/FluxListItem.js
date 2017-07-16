@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -9,7 +9,7 @@ import NeighborhoodService from '../../services/NeighborhoodService';
 
 import moment from 'moment';
 
-export default class FluxListItem extends Component {
+export default class FluxListItem extends PureComponent {
 
   componentWillMount() {
     let { color } = this.props;
