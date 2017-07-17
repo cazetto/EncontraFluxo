@@ -151,6 +151,7 @@ export default class Login extends Component {
 
           <View style={styles.keepMeLoggedInWrapper}>
             <CheckBox
+              checkedColor='#546E7A'
               left
               iconLeft
               title="Manter logado"
