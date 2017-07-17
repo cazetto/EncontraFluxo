@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   listItemText: {
     color: '#455A64',
-    fontSize: 18,
+    fontSize: 15,
   },
   divider: {
     borderBottomWidth: 1,
