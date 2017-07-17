@@ -365,7 +365,7 @@ const pageOneStyles = StyleSheet.create({
   },
 
   btnActionDone: {
-    backgroundColor: '#A1887F',
+    backgroundColor: '#455A64',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,

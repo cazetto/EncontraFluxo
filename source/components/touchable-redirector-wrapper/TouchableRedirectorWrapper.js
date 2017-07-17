@@ -10,8 +10,8 @@ class TouchableRedirectorWrapper extends Component {
   }
 
   pressHandle() {
-    const { history, path } = this.props
-    history.push(path);
+    const { history, path, state } = this.props;
+    history.push(path, state);
   }
 
   render() {

@@ -57,11 +57,10 @@ export default class SignupComponent extends Component {
     // NÃO ESTÁ RETORNANDO O TOKEN DA API!!!
     console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
     APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
-
     this.state.keepMeLoggedIn && saveUser(response);
     UserService.id = response.id;
+    UserService.user = response;
     this.refs.toast.show('Cadastrado!');
-
     const delay = setTimeout(() => {
       clearTimeout(delay);
       this.setState({signupComplete: true});
@@ -134,7 +133,7 @@ export default class SignupComponent extends Component {
 
   render() {
     return (
-      this.state.signupComplete ? <Redirect to={{ pathname: '/app', state: { fromSignup: true } }}/> :
+      this.state.signupComplete ? <Redirect to="/app/skills" /> :
       <View style={styles.content}>
         <View style={[styles.textInputs]}>
           <View style={styles.textInputWrapper}>

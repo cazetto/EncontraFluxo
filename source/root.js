@@ -8,9 +8,9 @@ import Splash from './screens/splash/Splash';
 import Authentication from './auth';
 import App from './app';
 
-const Root = () => (
+export default Root = () => (
   <NativeRouter>
-    <View style={styles.content}>
+    <View style={styles.container}>
       <Route exact path="/" component={Splash} />
       <Route path="/auth" component={Authentication} />
       <PrivateRoute path="/app" component={App} />
@@ -18,10 +18,8 @@ const Root = () => (
   </NativeRouter>
 );
 
-export default Root;
-
 const styles = StyleSheet.create({
-  content: {
+  container: {
     flex: 1,
     width: null,
     height: null,

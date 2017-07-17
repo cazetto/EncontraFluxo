@@ -27,11 +27,11 @@ export default class Splash extends Component {
     // removeSavedUser();
     getSavedUser()
     .then(response => {
-      console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
+      // console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       UserService.id = response.id;
-      console.log('USERID', response.id);
-      this.setState({redirectionRoute: '/app'});
+      UserService.user = response;
+      this.setState({redirectionRoute: '/app/dashboard'});
     })
     .catch(error => {
       this.setState({redirectionRoute: '/auth/login'});

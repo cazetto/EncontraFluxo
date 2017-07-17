@@ -12,7 +12,10 @@ class SideMenuComposed extends Component {
     this.state = {
       isOpen: false,
     }
-    this.toggleSideMenu = this.toggleSideMenu.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.close();
   }
 
   onSideMenuChange(isOpen) {
@@ -27,12 +30,20 @@ class SideMenuComposed extends Component {
     });
   }
 
+  close() {
+    this.setState({
+      isOpen: false
+    })
+  }
+
   render() {
+    let menu = Menu();
+
     return (
       <SideMenu
         isOpen={this.state.isOpen}
         onChange={this.onSideMenuChange.bind(this)}
-        menu={Menu}>
+        menu={menu}>
         <Composed toggleSideMenu={this.toggleSideMenu.bind(this)} />
       </SideMenu>
     )

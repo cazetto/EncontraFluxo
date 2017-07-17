@@ -13,7 +13,12 @@ const headerRoutesConfig = {
   '/dashboard': { title: 'DASHBOARD' },
   '/skills': { title: 'COMPLETE SEU PERFIL' },
   '/interests': { title: 'COMPLETE SEU PERFIL' },
-  '/flux/create': { title: 'CRIANDO UM FLUXO' }
+  '/flux-create-step-1': { title: 'CRIANDO UM FLUXO' },
+  '/flux-create-step-2': { title: 'INFORME AS HABILIDADES' },
+  '/flux-create-step-3': { title: 'INFORME OS MATERIAIS' },
+  '/flux-create-step-4': { title: 'INFORME OS INTERESSES' },
+  '/flux-create-step-5': { title: 'PARABÉNS' },
+  '/flux-preview': { title: 'VISUALIZAR' },
 }
 
 class Header extends Component {
@@ -26,23 +31,17 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  openDrawer() {
-    this.props.toggleSideMenu();
+    this.lastLocation = null;
   }
 
   render() {
-
-    console.log(this.props.location);
-
     // implementar regex
     const title = headerRoutesConfig[this.props.location.pathname] ? headerRoutesConfig[this.props.location.pathname].title : ' ';
 
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>
-          <TouchableOpacity onPress={()=>{this.openDrawer()}}>
+          <TouchableOpacity onPress={()=>{this.props.toggleSideMenu()}}>
             <Icon name="menu" style={styles.menuIcon} />
           </TouchableOpacity>
         </View>
@@ -63,7 +62,7 @@ export default withRouter(Header);
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#3E2723',
+    backgroundColor: '#263238',
     padding: 10,
     marginTop: Platform.OS === 'ios' ? 21 : 0,
   },

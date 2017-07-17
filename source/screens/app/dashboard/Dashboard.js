@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Text,
-  Dimensions,
-  Platform
-} from 'react-native';
+import { View, StyleSheet, TextInput, Text, Dimensions, Platform } from 'react-native';
+
+import update from 'immutability-helper';
 
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
-
-import neighborhoods from '../../../static/neighborhoods';
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
@@ -21,9 +14,8 @@ import OpenedTab from './tabs/OpenedTab';
 import InFluxTab from './tabs/InFluxTab';
 import HappeningTab from './tabs/HappeningTab';
 
-// const Opened = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#FDD835' } ]} />;
-// const InFlux = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#7CB342' } ]} />;
-// const Happening = () => <View style={[ styles.container, { borderTopWidth: 1, borderColor: '#1E88E5' } ]} />;
+import NeighborhoodService from '../../../services/NeighborhoodService';
+import EventService from '../../../services/EventService';
 
 export default class Dashboard extends Component {
 
@@ -31,7 +23,7 @@ export default class Dashboard extends Component {
     super(props);
     this.state = {
       neighborhood: null,
-
+      neighborhoods: [],
       index: 0,
       routes: [
         { key: '1', title: 'Aberto' },
@@ -39,12 +31,39 @@ export default class Dashboard extends Component {
         { key: '3', title: 'Acontecendo' },
       ],
     };
-    this.neighborhoods = neighborhoods;
+  }
+
+  componentWillMount() {
+    this.fetchNeighborhoods();
+    this.fetchEvents();
+  }
+
+  fetchNeighborhoods() {
+    NeighborhoodService.find()
+    .then( ({objects}) => {
+      let neighborhoods = objects.map(neighborhood => neighborhood.nome);
+      this.setState({neighborhoods});
+      this.fetchEvents();
+    })
+    .catch(error => {
+      console.log('Error when fetch neighborhoods:', error);
+    });
+  }
+
+  fetchEvents() {
+    EventService.find()
+    .then( ({objects:events}) => {
+      let routes = this.state.routes.map(route => update(route, {$merge: {events}}));
+      this.setState({routes});
+    })
+    .catch(error => {
+      console.log('Error when fetch events:', error);
+    });
   }
 
   onSelectNeighborhoodHandle(index) {
     this.setState({
-      neighborhood: this.neighborhoods[index]
+      neighborhood: this.state.neighborhoods[index]
     });
   }
 
@@ -82,7 +101,7 @@ export default class Dashboard extends Component {
       <View style={styles.container}>
         <View style={styles.control}>
           <Text style={styles.inputLabel}>Filtrar fluxos por bairro:</Text>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.neighborhoods}
+          <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods}
             onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
             dropdownStyle={styles.selectNeighborhoodModal}
             >
@@ -105,7 +124,7 @@ export default class Dashboard extends Component {
           onRequestChangeTab={this.handleChangeTab}
         />
 
-        <TouchableRedirectorWrapper path="/flux/create" content={
+        <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
           </View>
@@ -163,7 +182,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   btnActionDone: {
-    backgroundColor: '#A1887F',
+    backgroundColor: '#455A64',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,

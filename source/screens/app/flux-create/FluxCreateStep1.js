@@ -80,7 +80,7 @@ export default class FluxCreateStep1 extends Component {
 
     return (
       this.state.goNextScreen ?
-      <Redirect to="/flux-create-step-2" /> :
+      <Redirect to="/app/flux-create-step-2" /> :
       <View style={styles.container}>
         <View style={styles.page}>
           <TextInput
