@@ -27,23 +27,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = props => {
-  return (
-    <View style={styles.container}>
-      <Header {...props} />
-      <PrivateRoute path="/app/skills" component={Skills} />
-      <PrivateRoute path="/app/interests" component={Interests} />
-      <PrivateRoute path="/app/dashboard" component={Dashboard} />
-      <PrivateRoute path="/app/flux-preview/:id" component={FluxPreview} />
-      <PrivateRoute path="/app/flux-join/:id" component={FluxJoin} />
-      <PrivateRoute path="/app/flux-congrats" component={FluxCongrats} />
-      <PrivateRoute path="/app/flux-create-step-1" component={FluxCreateStep1} />
-      <PrivateRoute path="/app/flux-create-step-2" component={FluxCreateStep2} />
-      <PrivateRoute path="/app/flux-create-step-3" component={FluxCreateStep3} />
-      <PrivateRoute path="/app/flux-create-step-4" component={FluxCreateStep4} />
-      <PrivateRoute path="/app/flux-create-step-5" component={FluxCreateStep5} />
-    </View>
-  );
-}
+const App = props => (
+  <View style={styles.container}>
+    <Header {...props} />
+    <PrivateRoute path="/app/skills" component={Skills} />
+    <PrivateRoute path="/app/interests" component={Interests} />
+    <PrivateRoute path="/app/dashboard" component={Dashboard} />
+    <PrivateRoute path="/app/flux-preview/:id" component={FluxPreview} />
+    <PrivateRoute path="/app/flux-join/:id" component={FluxJoin} />
+    <PrivateRoute path="/app/flux-congrats" component={FluxCongrats} />
+    <PrivateRoute path="/app/flux-create-step-1" component={FluxCreateStep1} />
+    <PrivateRoute path="/app/flux-create-step-2" component={FluxCreateStep2} />
+    <PrivateRoute path="/app/flux-create-step-3" component={FluxCreateStep3} />
+    <PrivateRoute path="/app/flux-create-step-4" component={FluxCreateStep4} />
+    <PrivateRoute path="/app/flux-create-step-5" component={FluxCreateStep5} />
+  </View>
+);
 
 export default SideMenuHOC(App);

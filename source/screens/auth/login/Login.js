@@ -119,7 +119,7 @@ export default class Login extends Component {
 
   render() {
     return (
-      this.state.loginComplete ? <Redirect to="/app" /> :
+      this.state.loginComplete ? <Redirect to="/app/dashboard" /> :
       <View style={styles.content}>
 
         <View style={[styles.textInputs]}>

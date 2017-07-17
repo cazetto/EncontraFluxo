@@ -14,7 +14,7 @@ import { APPLICATION_API_CONFIG } from './services/config';
 
 APIService.init(APPLICATION_API_CONFIG.name, APPLICATION_API_CONFIG.url);
 
-export default () => (
+export default Auth = () => (
   <Image source={backgroundImage} style={styles.backgroundImage}>
     <Route path="/auth/login" component={Login} />
     <Route path="/auth/logout" component={Logout} />

@@ -7,7 +7,6 @@ import { View, Text } from 'react-native';
 // Other vendors imports
 import { Redirect } from 'react-router-native';
 
-
 // Utils imports
 import { removeSavedUser } from '../../../utils/AuthUtils';
 
@@ -26,10 +25,7 @@ export default class Logout extends Component {
 
   render() {
     return (
-      <View>
-        <Text>LOGOUT</Text>
-        <Redirect to="/auth/login" />
-      </View>
+      <Redirect to="/auth/login" />
     );
   }
 }
