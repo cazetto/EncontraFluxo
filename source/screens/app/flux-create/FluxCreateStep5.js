@@ -59,7 +59,7 @@ export default class FluxCreateStep5 extends Component {
           </View>
           <Text style={styles.instructionText}>Agora divulgue nas redes sociais, convide seus amigos para baixar o app e entrar com você neste fluxo!</Text>
         </View>
-        <TouchableRedirectorWrapper path="/dashboard" content={
+        <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>SHOW!</Text>
           </View>

@@ -31,7 +31,7 @@ export default class Splash extends Component {
       APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       UserService.id = response.id;
       UserService.user = response;
-      this.setState({redirectionRoute: '/app'});
+      this.setState({redirectionRoute: '/app/dashboard'});
     })
     .catch(error => {
       this.setState({redirectionRoute: '/auth/login'});

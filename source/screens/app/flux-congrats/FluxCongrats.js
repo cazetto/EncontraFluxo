@@ -45,7 +45,7 @@ export default class FluxCongrats extends Component {
           </View>
           <Text style={styles.instructionText}>Agora é só ficar ligado e aguardar este fluxo encontrar todas as pessoas que ele precisa acontecer.</Text>
         </View>
-        <TouchableRedirectorWrapper path="/dashboard" content={
+        <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>SHOW!</Text>
           </View>

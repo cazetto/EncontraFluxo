@@ -63,7 +63,7 @@ export default class FluxCreateStep3 extends Component {
   render() {
     return (
       this.state.isComplete ?
-      <Redirect to="/flux-create-step-4" /> :
+      <Redirect to="/app/flux-create-step-4" /> :
       <View style={styles.container}>
 
         <View style={styles.page}>

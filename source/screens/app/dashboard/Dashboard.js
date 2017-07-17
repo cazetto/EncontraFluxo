@@ -124,7 +124,7 @@ export default class Dashboard extends Component {
           onRequestChangeTab={this.handleChangeTab}
         />
 
-        <TouchableRedirectorWrapper path="/flux-create-step-1" content={
+        <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
           </View>

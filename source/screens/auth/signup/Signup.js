@@ -133,7 +133,7 @@ export default class SignupComponent extends Component {
 
   render() {
     return (
-      this.state.signupComplete ? <Redirect to={{ pathname: '/app', state: { fromSignup: true } }}/> :
+      this.state.signupComplete ? <Redirect to="/app/skills" /> :
       <View style={styles.content}>
         <View style={[styles.textInputs]}>
           <View style={styles.textInputWrapper}>

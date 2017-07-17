@@ -40,42 +40,45 @@ const styles = StyleSheet.create({
 });
 
 export default Menu = () => {
+  let userName = UserService.user ? UserService.user.nome : '';
   return (
     <View style={styles.container}>
-      <Text style={styles.userName}>{UserService.user.nome}</Text>
+      <Text style={styles.userName}>{userName}</Text>
       <View style={styles.list}>
 
-        <TouchableRedirectorWrapper path="/dashboard" content={
+        <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.listItem}>
             <Text style={styles.listItemText}> > Dashboard</Text>
           </View>
         } />
         <View style={styles.divider} />
 
-        <TouchableRedirectorWrapper path="/skills" content={
+        <TouchableRedirectorWrapper path="/app/skills" content={
           <View style={styles.listItem}>
             <Text style={styles.listItemText}> > Habilidades</Text>
           </View>
         } />
         <View style={styles.divider} />
 
-        <TouchableRedirectorWrapper path="/interests" content={
+        <TouchableRedirectorWrapper path="/app/interests" content={
           <View style={styles.listItem}>
             <Text style={styles.listItemText}> > Interesses</Text>
           </View>
         } />
         <View style={styles.divider} />
 
-        <TouchableRedirectorWrapper path="/flux-create-step-1" content={
+        <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.listItem}>
             <Text style={styles.listItemText}> > Criar Fluxo</Text>
           </View>
         } />
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.listItem}>
-          <Text style={styles.listItemText}> > Sair</Text>
-        </TouchableOpacity>
+        <TouchableRedirectorWrapper path="/auth/logout" content={
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}> > Sair</Text>
+          </View>
+        } />
         <View style={styles.divider} />
 
       </View>
