@@ -56,7 +56,7 @@ export default class FluxListItem extends PureComponent {
           </View>
         </View>
         <View style={styles.rightColumn}>
-          <TouchableRedirectorWrapper path={`/flux-preview/${id}`} content={
+          <TouchableRedirectorWrapper path={`/app/flux-preview/${id}`} content={
             <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color}]}/>
           } />
         </View>

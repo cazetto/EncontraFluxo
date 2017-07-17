@@ -116,7 +116,7 @@ export default class FluxPreview extends Component {
             </View>
           </ScrollView>
         </View>
-        <TouchableRedirectorWrapper path={`/flux-join/${id}`} state={this.state} content={
+        <TouchableRedirectorWrapper path={`/app/flux-join/${id}`} state={this.state} content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>ENTRAR NESSE FLUXO</Text>
           </View>
