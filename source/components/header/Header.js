@@ -9,16 +9,16 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const headerRoutesConfig = {
-  '/': { title: '' },
-  '/dashboard': { title: 'DASHBOARD' },
-  '/skills': { title: 'COMPLETE SEU PERFIL' },
-  '/interests': { title: 'COMPLETE SEU PERFIL' },
-  '/flux-create-step-1': { title: 'CRIANDO UM FLUXO' },
-  '/flux-create-step-2': { title: 'INFORME AS HABILIDADES' },
-  '/flux-create-step-3': { title: 'INFORME OS MATERIAIS' },
-  '/flux-create-step-4': { title: 'INFORME OS INTERESSES' },
-  '/flux-create-step-5': { title: 'PARABÉNS' },
-  '/flux-preview': { title: 'VISUALIZAR' },
+  '/app/': { title: '' },
+  '/app/dashboard': { title: 'DASHBOARD' },
+  '/app/skills': { title: 'COMPLETE SEU PERFIL' },
+  '/app/interests': { title: 'COMPLETE SEU PERFIL' },
+  '/app/flux-create-step-1': { title: 'CRIANDO UM FLUXO' },
+  '/app/flux-create-step-2': { title: 'INFORME AS HABILIDADES' },
+  '/app/flux-create-step-3': { title: 'INFORME OS MATERIAIS' },
+  '/app/flux-create-step-4': { title: 'INFORME OS INTERESSES' },
+  '/app/flux-create-step-5': { title: 'PARABÉNS' },
+  '/app/flux-preview': { title: 'VISUALIZAR' },
 }
 
 class Header extends Component {
