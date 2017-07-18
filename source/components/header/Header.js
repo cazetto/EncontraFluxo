@@ -18,7 +18,8 @@ const headerRoutesConfig = {
   '/app/flux-create-step-3': { title: 'INFORME OS MATERIAIS' },
   '/app/flux-create-step-4': { title: 'INFORME OS INTERESSES' },
   '/app/flux-create-step-5': { title: 'PARABÉNS' },
-  '/app/flux-preview': { title: 'VISUALIZAR' },
+  '/app/flux-preview': { title: 'VISUALIZAR FLUXO' },
+  '/app/flux-join': { title: 'COLABORAR COM ESTE FLUXO' },
 }
 
 class Header extends Component {
@@ -35,8 +36,14 @@ class Header extends Component {
   }
 
   render() {
-    // implementar regex
-    const title = headerRoutesConfig[this.props.location.pathname] ? headerRoutesConfig[this.props.location.pathname].title : ' ';
+    let pathname = this.props.location.pathname;
+
+    let key =
+    (/app\/flux-preview\/*/).exec(pathname) ? '/app/flux-preview' :
+    (/app\/flux-join\/*/).exec(pathname) ? '/app/flux-join' :
+    pathname;
+
+    const title = headerRoutesConfig[key] ? headerRoutesConfig[key].title : ' ';
 
     return (
       <View style={styles.container}>

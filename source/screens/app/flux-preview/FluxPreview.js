@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 import moment from 'moment';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
+import ModalConfirm from '../../../components/modal-confirm/ModalConfirm';
 
 import EventService from '../../../services/EventService';
 import UserService from '../../../services/UserService';
@@ -17,6 +18,8 @@ export default class FluxPreview extends Component {
     fetchingEvent: true,
     fetchingUser: true,
     fetchingNeighborhood: true,
+
+    deleteModalIsVisible: false,
   }
 
   componentWillMount() {
@@ -27,10 +30,9 @@ export default class FluxPreview extends Component {
   fetchEvent(id) {
     EventService.get(id)
     .then(response => {
-      console.log(response);
       let {
         id,
-        usuario_id: userId,
+        usuario_id: eventUserId,
         bairro_id: neighborhoodId,
         nome:name,
         colaboradores:people,
@@ -42,9 +44,9 @@ export default class FluxPreview extends Component {
         materiais:materials,
       } = response;
 
-      this.setState({fetchingEvent:false, id, name, people, description, date, address, skills, interests, interests, materials});
+      this.setState({fetchingEvent:false, id, eventUserId, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
 
-      this.fetchUser(userId);
+      this.fetchUser(eventUserId);
       this.fetchNeighborhood(neighborhoodId);
 
     })
@@ -56,8 +58,9 @@ export default class FluxPreview extends Component {
   fetchUser(id) {
     UserService.get(id)
     .then(response => {
-      let { nome:user } = response;
-      this.setState({fetchingUser:false, user});
+      console.log('UserService.get:response:', response);
+      let { id:userId, nome:user } = response;
+      this.setState({fetchingUser:false, user, userId});
     })
     .catch(error => {
       console.log('Error when fetch event', error);
@@ -81,12 +84,25 @@ export default class FluxPreview extends Component {
     `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
   }
 
+  delete() {
+    this.setState({ deleteModalIsVisible: false });
+    EventService.delete(this.state.id)
+    .then(response => {
+      console.log('EventService.delete:response', response);
+    })
+    .catch(error => {
+      console.log('EventService.catch:error', error);
+    })
+  }
+
   render() {
 
     let {
       fetchingEvent, fetchingUser, fetchingNeighborhood,
-      id, name, people, description, date, address, skills, interests, materials, user, neighborhood
+      id, eventUserId, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood
     } = this.state;
+
+    let isOwner = eventUserId === userId;
 
     return (
       fetchingEvent || fetchingUser || fetchingNeighborhood ?
@@ -115,12 +131,40 @@ export default class FluxPreview extends Component {
               <Text style={[styles.info]}>Materiais: {this.renderList(this.state.materials)}</Text>
             </View>
           </ScrollView>
+
+          <ModalConfirm
+            isVisible={this.state.deleteModalIsVisible}
+            text="Tem certeza que deseja excluir este fluxo?"
+            confirmText="Excluir"
+            cancelText="Cancelar"
+            confirm={() => {this.delete()}}
+            cancel={() => {this.setState({deleteModalIsVisible:false})}}
+          />
         </View>
-        <TouchableRedirectorWrapper path={`/app/flux-join/${id}`} state={this.state} content={
-          <View style={styles.btnActionDone}>
-            <Text style={styles.btnActionDoneText}>ENTRAR NESSE FLUXO</Text>
+        {
+          isOwner
+          ?
+          <View style={styles.doubleBtns}>
+            <View style={styles.btnHalfLeft}>
+              <TouchableRedirectorWrapper path={`/app/flux-create-step-1/${id}/edit`} state={{editable: this.state}} content={
+                <View style={styles.btnActionDone}>
+                  <Text style={styles.btnHalfText}>EDITAR</Text>
+                </View>
+              } />
+            </View>
+            <TouchableOpacity onPress={() => { this.setState({deleteModalIsVisible: true}) }} style={styles.btnHalfRight}>
+              <View style={styles.btnActionDone}>
+                <Text style={styles.btnHalfText}>EXCLUIR</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        } />
+          :
+          <TouchableRedirectorWrapper path={`/app/flux-join/${id}`} state={this.state} content={
+            <View style={styles.btnActionDone}>
+              <Text style={styles.btnActionDoneText}>ENTRAR NESSE FLUXO</Text>
+            </View>
+          } />
+        }
       </View>
     );
   }
@@ -156,5 +200,31 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 15,
     padding: 4
+  },
+
+  doubleBtns: {
+    flexDirection: 'row',
+  },
+  btnHalfText: {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize: 15,
+    padding: 1,
+  },
+  btnHalfLeft: {
+    flex: 1,
+    backgroundColor: '#455A64',
+    marginRight: 1,
+    marginLeft: 2,
+    marginBottom: 3,
+    borderBottomLeftRadius: 4,
+  },
+  btnHalfRight: {
+    flex: 1,
+    backgroundColor: '#455A64',
+    marginLeft: 1,
+    marginRight: 2,
+    marginBottom: 3,
+    borderBottomRightRadius: 4,
   }
 });

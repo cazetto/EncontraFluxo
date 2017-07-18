@@ -29,6 +29,17 @@ export default class FluxCreateStep2 extends Component {
 
   componentWillMount() {
     this.fetchSkills();
+    // let editState = this.props.location.state;
+    // if(editState.editable) {
+    //   let { editable } = editState;
+    //   this.editable = editState;
+    //   let editableSkills = editable.skills.map(skill => skill.id);
+    //   let eventData = {
+    //     addedSkills: editableSkills,
+    //     habilidades: editableSkills
+    //   }
+    //   this.setState({eventData});
+    // }
   }
 
   fetchSkills() {

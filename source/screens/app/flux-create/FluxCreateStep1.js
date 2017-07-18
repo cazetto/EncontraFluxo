@@ -31,6 +31,8 @@ export default class FluxCreateStep1 extends Component {
       descricao: null,
     },
     goNextScreen: false,
+
+    editing: false,
   }
 
   constructor(props) {
@@ -40,6 +42,24 @@ export default class FluxCreateStep1 extends Component {
   componentWillMount() {
     this.fetchNeighborhoods();
     EventService.data.usuario_id =  UserService.id;
+
+    // EDIT STATE
+    let editState = this.props.location.state;
+    if(editState) {
+      let { editable } = editState;
+      this.editable = editable;
+      let eventData = {
+        nome: editable.name,
+        endereco: editable.address,
+        bairro_id: editable.neighborhoodId,
+        dt_evento: moment(editable.date).format('DD-MM-YYYY'),
+        descricao: editable.description,
+      }
+
+      this.setState({eventData});
+    }
+
+    console.log('blablablabla', this.props.location.state);
   }
 
   // Fetches
@@ -80,7 +100,10 @@ export default class FluxCreateStep1 extends Component {
 
     return (
       this.state.goNextScreen ?
-      <Redirect to="/app/flux-create-step-2" /> :
+      <Redirect to={{
+        pathname:"/app/flux-create-step-2",
+        state: {editable: this.editable}
+      }} /> :
       <View style={styles.container}>
         <View style={styles.page}>
           <TextInput

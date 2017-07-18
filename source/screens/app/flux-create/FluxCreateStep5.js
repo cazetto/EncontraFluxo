@@ -35,6 +35,7 @@ export default class FluxCreateStep5 extends Component {
   saveFlux() {
     EventService.save()
     .then(response => {
+      EventService.data = {};
       this.setState({savingFlux: false});
     })
     .catch(error => {

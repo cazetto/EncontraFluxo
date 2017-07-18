@@ -92,7 +92,7 @@ export default class Interests extends Component {
           {this.renderInterests()}
         </ScrollView>
 
-        <TouchableRedirectorWrapper path="/dashboard" content={
+        <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>FINALIZAR</Text>
           </View>

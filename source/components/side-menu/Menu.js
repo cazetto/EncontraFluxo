@@ -48,21 +48,14 @@ export default Menu = () => {
 
         <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Dashboard</Text>
+            <Text style={styles.listItemText}> > Fluxos</Text>
           </View>
         } />
         <View style={styles.divider} />
 
         <TouchableRedirectorWrapper path="/app/skills" content={
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Habilidades</Text>
-          </View>
-        } />
-        <View style={styles.divider} />
-
-        <TouchableRedirectorWrapper path="/app/interests" content={
-          <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Interesses</Text>
+            <Text style={styles.listItemText}> > Editar Perfil</Text>
           </View>
         } />
         <View style={styles.divider} />

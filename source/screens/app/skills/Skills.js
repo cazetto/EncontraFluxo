@@ -102,7 +102,7 @@ export default class Skills extends Component {
             onAddedItemsChanged={added => this.onChangeSkillsHandle(added)}
           />
         </View>
-        <TouchableRedirectorWrapper path="/interests" content={
+        <TouchableRedirectorWrapper path="/app/interests" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CONTINUAR</Text>
           </View>
