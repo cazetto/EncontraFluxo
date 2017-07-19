@@ -12,9 +12,6 @@ import TouchableRedirectorWrapper from '../../../components/touchable-redirector
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
 import Tab from './Tab';
-// import OpenedTab from './Tab';
-// import InFluxTab from './Tab';
-// import HappeningTab from './Tab';
 
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import EventService from '../../../services/EventService';
@@ -142,6 +139,7 @@ export default class Dashboard extends Component {
                 placeholder="SELECIONE O BAIRRO"
                 value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood.nome}`}
                 style={styles.input}
+                underlineColorAndroid="transparent"
                 ></TextInput>
 
               <TouchableOpacity onPress={() => {this.clearNeighborhood()}} disabled={!this.state.neighborhood} style={styles.selectNeighborhoodButton}>

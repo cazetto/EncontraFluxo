@@ -113,14 +113,13 @@ export default class Skills extends Component {
 
 }
 
-let heightCorrection = Platform.OS === 'ios' ? 118 : 130;
 const styles = StyleSheet.create({
 
   container: {
   },
 
   control: {
-    height: Dimensions.get('window').height - 118,
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 118 : 125),
     marginHorizontal: 10,
   },
 

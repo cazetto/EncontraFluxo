@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, ActivityIndicator, TouchableOpacity, Dimensions, Platform } from 'react-native';
 import { Redirect } from 'react-router-native';
 
 import moment from 'moment';
@@ -176,7 +176,7 @@ export default class FluxPreview extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 70,
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 70 : 74),
     backgroundColor: '#ECEFF1',
   },
   content: {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   activityIndicator: {
-    marginTop: 20,
+    marginTop: '50%',
   },
   btnActionDone: {
     backgroundColor: '#455A64',

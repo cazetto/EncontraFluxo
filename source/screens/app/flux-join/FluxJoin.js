@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, ActivityIndicator, Dimensions, Platform } from 'react-native';
 
 import { CheckBox } from 'react-native-elements';
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   activityIndicator: {
-    marginTop: 20,
+    marginTop: '50%',
   },
   checkBoxContainer: {
 

@@ -3,7 +3,6 @@ import { Redirect } from 'react-router';
 import {StyleSheet, View, Text, Image, Dimensions, ActivityIndicator} from 'react-native';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
-
 import UserService from '../../../services/UserService';
 
 import balloonBlue from '../../../assets/images/events/balloons/balloon1.png';
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   activityIndicator: {
-    marginTop: 10,
+    marginTop: '50%',
   },
   balloons: {
     position: 'absolute',
