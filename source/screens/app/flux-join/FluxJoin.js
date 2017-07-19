@@ -80,7 +80,7 @@ export default class FluxPreview extends Component {
           </ScrollView>
           <Text>Ao entrar neste fluxo eu permito que <Text style={styles.userName}>{user}</Text> entre em contato comigo por email.</Text>
         </View>
-        <TouchableRedirectorWrapper path={'/flux-congrats'} content={
+        <TouchableRedirectorWrapper path={'/app/flux-congrats'} content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CONFIRMAR</Text>
           </View>

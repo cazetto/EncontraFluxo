@@ -28,14 +28,19 @@ export default class FluxCreateStep4 extends Component {
   }
 
   componentWillMount() {
+    let editState = this.props.location.state;
+    if(editState.editable) {
+      let { editable } = editState;
+      this.editable = editable;
+      let editableInterests = editable.interests.map(({id}) => ({id}));
+      this.setState({eventData:{interesses:editableInterests}, addedInterests:editable.interests});
+    }
     this.fetchInterests();
   }
 
   fetchInterests() {
     InterestService.find()
-    .then(({objects:availableInterests}) => {
-      this.setState({availableInterests});
-    })
+    .then(({objects:availableInterests}) => this.setState({availableInterests}))
     .catch(error => {});
   }
 
@@ -57,7 +62,6 @@ export default class FluxCreateStep4 extends Component {
 
   next() {
     EventService.data = update(EventService.data, {$merge: this.state.eventData});
-    console.log(EventService.data);
     this.setState({isComplete: true});
   }
 
@@ -66,7 +70,11 @@ export default class FluxCreateStep4 extends Component {
 
     return (
       this.state.isComplete ?
-      <Redirect to="/app/flux-create-step-5" /> :
+      <Redirect to={{
+        pathname:"/app/flux-create-step-5",
+        state: {editable: this.editable}
+      }} /> :
+
       <View style={styles.container}>
 
         <View style={styles.page}>

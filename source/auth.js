@@ -7,7 +7,7 @@ import Logout from './screens/auth/logout/Logout';
 import Signup from './screens/auth/signup/Signup.js';
 import Forgot from './screens/auth/forgot/Forgot.js';
 
-import backgroundImage from './assets/images/authentication/background.jpg';
+import logoImage from './assets/images/logo.png';
 
 import APIService from './services/APIService';
 import { APPLICATION_API_CONFIG } from './services/config';
@@ -15,19 +15,27 @@ import { APPLICATION_API_CONFIG } from './services/config';
 APIService.init(APPLICATION_API_CONFIG.name, APPLICATION_API_CONFIG.url);
 
 export default Auth = () => (
-  <Image source={backgroundImage} style={styles.backgroundImage}>
+  <View style={styles.container}>
+    <Image source={logoImage} style={styles.logo} />
     <Route path="/auth/login" component={Login} />
     <Route path="/auth/logout" component={Logout} />
     <Route path="/auth/signup" component={Signup} />
     <Route path="/auth/forgot" component={Forgot} />
-  </Image>
+  </View>
 );
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  container: {
     flex: 1,
-    width: null,
-    height: null,
-    resizeMode: 'cover',
+    backgroundColor: '#455A64',
+  },
+  logo: {
+    width: '100%',
+    height: '12%',
+    marginTop: '20%',
+    marginBottom: '20%',
+    resizeMode: 'contain',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

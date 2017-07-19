@@ -34,7 +34,7 @@ export default class SignupComponent extends Component {
       data: {
         bairro_id: 1,
         nome: 'André Pesci Cazetto',
-        email: 'cazetto.andre@gmail.com',
+        email: (Math.random()* 1000) + 'user@gmail.com',
         senha: '123456',
         habilidades: [],
         interesses: [],
@@ -47,46 +47,40 @@ export default class SignupComponent extends Component {
   signup() {
     this.setState({isFetching: true});
     AuthService.signup(this.state.data)
-    .then(response => {
-      this.signupSuccess(response);
-    })
-    .catch(error => {this.signupFail(error)});
+    .then(response => this.signupSuccess())
+    .catch(error => this.signupFail());
   }
 
-  signupSuccess(response) {
-    // NÃO ESTÁ RETORNANDO O TOKEN DA API!!!
+  signupSuccess() {
+    this.login();
+  }
+
+  signupFail() {
+    this.setState({isFetching: false});
+    this.refs.toast.show('Dados incorretos!');
+  }
+
+  login() {
+    this.setState({isFetching: true});
+    AuthService.login({
+      username: this.state.data.email,
+      password: this.state.data.senha
+    })
+    .then(response => this.loginSuccess(response))
+    .catch(error => this.loginFail(error));
+  }
+
+  loginSuccess(response) {
     console.log(APPLICATION_API_CONFIG.name, response.username, response.api_key);
     APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
     this.state.keepMeLoggedIn && saveUser(response);
     UserService.id = response.id;
     UserService.user = response;
-    this.refs.toast.show('Cadastrado!');
+    this.refs.toast.show('Cadastro/Login efetuado!');
     const delay = setTimeout(() => {
       clearTimeout(delay);
       this.setState({signupComplete: true});
     }, 1000);
-  }
-
-  signupFail(error) {
-    this.setState({isFetching: false});
-    this.refs.toast.show('Dados incorretos!');
-  }
-
-  loginSuccess(wait) {
-    this.refs.toast.show('Login efetuado!');
-    if(!wait) this.goToNextScreen();
-    else {
-      const delay = setTimeout(() => {
-        clearTimeout(delay);
-        this.goToNextScreen();
-      }, wait);
-    }
-  }
-
-  goToNextScreen() {
-    this.setState({isFetching: false});
-    // PCProductSearch, Coupons, Dashboard, Ongs, Impact, FAQ, Comparator
-    // this.props.navigation.navigate('Comparator');
   }
 
   loginFail() {
@@ -172,6 +166,7 @@ export default class SignupComponent extends Component {
           </View>
           <View style={styles.keepMeLoggedInWrapper}>
             <CheckBox
+              checkedColor='#546E7A'
               left
               iconLeft
               title="Manter logado"
@@ -189,9 +184,9 @@ export default class SignupComponent extends Component {
 
         <Toast
           ref="toast"
-          style={{backgroundColor:'#d32f2f'}}
+          style={styles.toast}
           position='top'
-          positionValue={155}
+          positionValue={-40}
           fadeInDuration={750}
           fadeOutDuration={2000}
           opacity={0.8}

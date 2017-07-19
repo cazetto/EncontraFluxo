@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import { Route, Redirect } from 'react-router-native';
+import { Route } from 'react-router-native';
 
 import SideMenuHOC from './components/side-menu/SideMenuHOC';
 import Header from './components/header/Header';
@@ -36,11 +36,11 @@ const App = props => (
     <PrivateRoute path="/app/flux-preview/:id" component={FluxPreview} />
     <PrivateRoute path="/app/flux-join/:id" component={FluxJoin} />
     <PrivateRoute path="/app/flux-congrats" component={FluxCongrats} />
-    <PrivateRoute path="/app/flux-create-step-1" component={FluxCreateStep1} />
-    <PrivateRoute path="/app/flux-create-step-2" component={FluxCreateStep2} />
-    <PrivateRoute path="/app/flux-create-step-3" component={FluxCreateStep3} />
-    <PrivateRoute path="/app/flux-create-step-4" component={FluxCreateStep4} />
-    <PrivateRoute path="/app/flux-create-step-5" component={FluxCreateStep5} />
+    <PrivateRoute exact path="/app/flux-create-step-1" component={FluxCreateStep1} />
+    <PrivateRoute exact path="/app/flux-create-step-2" component={FluxCreateStep2} />
+    <PrivateRoute exact path="/app/flux-create-step-3" component={FluxCreateStep3} />
+    <PrivateRoute exact path="/app/flux-create-step-4" component={FluxCreateStep4} />
+    <PrivateRoute exact path="/app/flux-create-step-5" component={FluxCreateStep5} />
   </View>
 );
 

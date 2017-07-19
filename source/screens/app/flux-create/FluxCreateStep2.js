@@ -28,6 +28,13 @@ export default class FluxCreateStep2 extends Component {
   }
 
   componentWillMount() {
+    let editState = this.props.location.state;
+    if(editState.editable) {
+      let { editable } = editState;
+      this.editable = editable;
+      let editableSkills = editable.skills.map(({id}) => ({id}));
+      this.setState({eventData: {habilidades: editableSkills}, addedSkills: editable.skills});
+    }
     this.fetchSkills();
   }
 
@@ -59,11 +66,15 @@ export default class FluxCreateStep2 extends Component {
   }
 
   render() {
+    console.log('this.state', this.state);
     let incompleteFill = this.state.eventData.habilidades.length === 0;
 
     return (
       this.state.isComplete ?
-      <Redirect to="/app/flux-create-step-3" /> :
+      <Redirect to={{
+        pathname:"/app/flux-create-step-3",
+        state: {editable: this.editable}
+      }} /> :
       <View style={styles.container}>
 
         <View style={styles.page}>

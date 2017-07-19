@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 export default styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: null,
     height: null,
   },
@@ -54,7 +54,7 @@ export default styles = StyleSheet.create({
     marginBottom: 5,
   },
   toast: {
-    backgroundColor:'#d32f2f',
+    backgroundColor:'#263238',
   },
   keepMeLoggedIn: {
     margin: 10,

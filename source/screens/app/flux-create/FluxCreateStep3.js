@@ -29,6 +29,13 @@ export default class FluxCreateStep3 extends Component {
   }
 
   componentWillMount() {
+    let editState = this.props.location.state;
+    if(editState.editable) {
+      let { editable } = editState;
+      this.editable = editable;
+      let editableMaterials = editable.materials.map(({id}) => ({id}));
+      this.setState({eventData:{materiais: editableMaterials}, addedMaterials:editable.materials});
+    }
     this.fetchMaterials();
   }
 
@@ -63,7 +70,10 @@ export default class FluxCreateStep3 extends Component {
   render() {
     return (
       this.state.isComplete ?
-      <Redirect to="/app/flux-create-step-4" /> :
+      <Redirect to={{
+        pathname:"/app/flux-create-step-4",
+        state: {editable: this.editable}
+      }} /> :
       <View style={styles.container}>
 
         <View style={styles.page}>

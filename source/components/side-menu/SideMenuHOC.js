@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, } from 'react-native';
 
-import { SideMenu, List, ListItem } from 'react-native-elements';
+import { SideMenu } from 'react-native-elements';
 
 import Menu from './Menu';
 
