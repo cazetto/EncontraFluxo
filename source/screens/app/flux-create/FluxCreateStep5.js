@@ -20,6 +20,15 @@ export default class FluxCreateStep5 extends Component {
     savingFlux: true,
   }
   componentWillMount() {
+
+    let editState = this.props.location.state;
+    if(editState.editable) {
+      let { editable } = editState;
+      this.editable = editable;
+
+      EventService.data.id = this.editable.id;
+    }
+
     this.getUserInfo();
     this.saveFlux();
   }
@@ -50,7 +59,7 @@ export default class FluxCreateStep5 extends Component {
       <ActivityIndicator /> :
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.congratsText}>IRADO, { this.state.userName.toUpperCase() }, VOCÊ CRIOU UM FLUXO!</Text>
+          <Text style={styles.congratsText}>IRADO, { this.state.userName.toUpperCase() }, { this.editable ? 'VOCÊ EDITOU SEU FLUXO!' : 'VOCÊ CRIOU UM FLUXO!'}</Text>
           <View style={styles.balloons}>
             <Image resizeMode="contain" style={[styles.balloon, styles.balloonGreen]} source={balloonGreen} />
             <Image resizeMode="contain" style={[styles.balloon, styles.balloonOrange]} source={balloonOrange} />

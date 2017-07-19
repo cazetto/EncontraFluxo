@@ -29,12 +29,34 @@ export default class FluxCreateStep3 extends Component {
   }
 
   componentWillMount() {
+
+    let editState = this.props.location.state;
+    if(editState.editable) {
+      let { editable } = editState;
+      this.editable = editable;
+      let editableMaterials = editable.materials.map(material => material.id);
+      let eventData = {
+        materiais: editableMaterials
+      }
+      this.setState({eventData});
+    }
+
+
     this.fetchMaterials();
   }
 
   fetchMaterials() {
     MaterialService.find()
-    .then(({objects:availableMaterials}) => this.setState({availableMaterials}))
+    .then(({objects:availableMaterials}) => {
+
+      if(this.editable) {
+        this.setState({availableMaterials, addedMaterials: this.editable.materials});
+      }
+      else {
+        this.setState({availableMaterials})
+      }
+
+    })
     .catch(error => console.log('Error when fetching materials.'));
   }
 
@@ -63,7 +85,10 @@ export default class FluxCreateStep3 extends Component {
   render() {
     return (
       this.state.isComplete ?
-      <Redirect to="/app/flux-create-step-4" /> :
+      <Redirect to={{
+        pathname:"/app/flux-create-step-4",
+        state: {editable: this.editable}
+      }} /> :
       <View style={styles.container}>
 
         <View style={styles.page}>

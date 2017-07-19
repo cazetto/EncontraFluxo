@@ -28,13 +28,33 @@ export default class FluxCreateStep4 extends Component {
   }
 
   componentWillMount() {
+
+    let editState = this.props.location.state;
+    if(editState.editable) {
+      let { editable } = editState;
+      this.editable = editable;
+      let editableInterests = editable.interests.map(interest => interest.id);
+      let eventData = {
+        interesses: editableInterests
+      }
+      this.setState({eventData});
+    }
+
+
     this.fetchInterests();
   }
 
   fetchInterests() {
     InterestService.find()
     .then(({objects:availableInterests}) => {
-      this.setState({availableInterests});
+
+      if(this.editable) {
+        this.setState({availableInterests, addedInterests: this.editable.interests});
+      }
+      else {
+        this.setState({availableInterests});
+      }
+
     })
     .catch(error => {});
   }
@@ -66,7 +86,11 @@ export default class FluxCreateStep4 extends Component {
 
     return (
       this.state.isComplete ?
-      <Redirect to="/app/flux-create-step-5" /> :
+      <Redirect to={{
+        pathname:"/app/flux-create-step-5",
+        state: {editable: this.editable}
+      }} /> :
+
       <View style={styles.container}>
 
         <View style={styles.page}>
