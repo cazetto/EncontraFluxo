@@ -5,6 +5,8 @@ import UserService from '../../services/UserService';
 
 import TouchableRedirectorWrapper from '../touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+import Icon from 'react-native-vector-icons/Entypo';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -13,9 +15,9 @@ const styles = StyleSheet.create({
     width: '110%',
   },
   userName: {
-    padding: 14,
+    padding: 16,
     height: 50,
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'left',
     backgroundColor: '#263238',
     color: '#ECEFF1',
@@ -31,10 +33,15 @@ const styles = StyleSheet.create({
   listItemText: {
     color: '#455A64',
     fontSize: 15,
+    fontWeight: '600',
   },
   divider: {
     borderBottomWidth: 1,
     borderColor: '#CFD8DC',
+  },
+  icon: {
+    fontSize: 14,
+
   }
 
 });
@@ -48,28 +55,28 @@ export default Menu = () => {
 
         <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Fluxos</Text>
+            <Text style={styles.listItemText}> <Icon name="database" style={styles.icon}/>  Fluxos</Text>
           </View>
         } />
         <View style={styles.divider} />
 
         <TouchableRedirectorWrapper path="/app/skills" content={
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Editar Perfil</Text>
+            <Text style={styles.listItemText}> <Icon name="round-brush" style={styles.icon}/>  Editar Perfil</Text>
           </View>
         } />
         <View style={styles.divider} />
 
         <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Criar Fluxo</Text>
+            <Text style={styles.listItemText}> <Icon name="blackboard" style={styles.icon}/>  Criar Fluxo</Text>
           </View>
         } />
         <View style={styles.divider} />
 
         <TouchableRedirectorWrapper path="/auth/logout" content={
           <View style={styles.listItem}>
-            <Text style={styles.listItemText}> > Sair</Text>
+            <Text style={styles.listItemText}> <Icon name="back" style={styles.icon}/>  Sair</Text>
           </View>
         } />
         <View style={styles.divider} />
