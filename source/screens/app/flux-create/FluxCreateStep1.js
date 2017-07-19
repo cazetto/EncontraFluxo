@@ -117,14 +117,13 @@ export default class FluxCreateStep1 extends Component {
             underlineColorAndroid="transparent">
           </TextInput>
           <TextInput
-            placeholder="ONDE SERÁ REALIZADO"
+            placeholder="LOCAL: Descreva onde ocorrerá o evento e se possivel informe uma referência."
             style={[styles.input, styles.address]}
             defaultValue={this.state.eventData.endereco}
             onChangeText={this.delayedChangeTextInput('endereco')}
             autoCorrect={false}
             multiline={true}
             keyboardType="default"
-            autoCapitalize="none"
             underlineColorAndroid="transparent">
           </TextInput>
           <Select

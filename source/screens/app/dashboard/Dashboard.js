@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TextInput, Text, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Dimensions, Platform, TouchableOpacity } from 'react-native';
 
 import update from 'immutability-helper';
+import moment from 'moment';
 
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -10,12 +11,14 @@ import TouchableRedirectorWrapper from '../../../components/touchable-redirector
 
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-import OpenedTab from './tabs/OpenedTab';
-import InFluxTab from './tabs/InFluxTab';
-import HappeningTab from './tabs/HappeningTab';
+import Tab from './Tab';
+// import OpenedTab from './Tab';
+// import InFluxTab from './Tab';
+// import HappeningTab from './Tab';
 
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import EventService from '../../../services/EventService';
+import UserService from '../../../services/UserService';
 
 export default class Dashboard extends Component {
 
@@ -36,24 +39,31 @@ export default class Dashboard extends Component {
   componentWillMount() {
     this.fetchNeighborhoods();
     this.fetchEvents();
+
+    this.filters = [
+      this.filterOpened,
+      this.filterInFlux,
+      this.filterHappening,
+    ];
   }
 
   fetchNeighborhoods() {
     NeighborhoodService.find()
-    .then( ({objects}) => {
-      let neighborhoods = objects.map(neighborhood => neighborhood.nome);
+    .then(({objects}) => {
+      let neighborhoods = objects.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
       this.setState({neighborhoods});
-      this.fetchEvents();
     })
-    .catch(error => {
-      console.log('Error when fetch neighborhoods:', error);
-    });
+    .catch(error => console.log('Error when fetch neighborhoods:', error));
   }
 
-  fetchEvents() {
-    EventService.find()
-    .then( ({objects:events}) => {
-      let routes = this.state.routes.map(route => update(route, {$merge: {events}}));
+  fetchEvents(data) {
+    EventService.find(data)
+    .then( ({objects}) => {
+      let events = objects.sort((a, b) => moment(a.dt_evento).diff(moment(b.dt_evento), 'days'));
+      let routes = this.state.routes.map((route, index) => {
+        let filterd = events.filter(this.filters[index]);
+        return update(route, { $merge: { events:filterd } });
+      });
       this.setState({routes});
     })
     .catch(error => {
@@ -61,10 +71,31 @@ export default class Dashboard extends Component {
     });
   }
 
+  filterOpened({dt_evento:date}) {
+    // Retorna os fluxos que não expiraram a data
+    return moment(date).diff(moment(), 'days') > 0;
+  }
+
+  filterInFlux({usuario_id:creatorId}) {
+    // Retorna os fluxos o usuário logado criou, (fazer exibir nesta lista também os que ele está participando)
+    // Necessita recurso da API
+    return creatorId === UserService.id;
+  }
+
+  filterHappening(event) {
+    // Devera retornar todos os fluxos que conquistaram o numero de habilidades, materiais
+    // Necessita recurso da API
+    return true;
+  }
+
   onSelectNeighborhoodHandle(index) {
-    this.setState({
-      neighborhood: this.state.neighborhoods[index]
-    });
+    this.setState({neighborhood: this.state.neighborhoods[index]});
+    this.fetchEvents({bairro_id: this.state.neighborhoods[index].id});
+  }
+
+  clearNeighborhood() {
+    this.setState({neighborhood: null});
+    this.fetchEvents();
   }
 
   handleChangeTab = index => this.setState({ index });
@@ -90,9 +121,9 @@ export default class Dashboard extends Component {
     {...props} />
 
   renderScene = SceneMap({
-    '1': OpenedTab,
-    '2': InFluxTab,
-    '3': HappeningTab,
+    '1': Tab,
+    '2': Tab,
+    '3': Tab,
   });
 
   render() {
@@ -101,7 +132,7 @@ export default class Dashboard extends Component {
       <View style={styles.container}>
         <View style={styles.control}>
           <Text style={styles.inputLabel}>Filtrar fluxos por bairro:</Text>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods}
+          <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods.map(neighborhood => neighborhood.nome)}
             onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
             dropdownStyle={styles.selectNeighborhoodModal}
             >
@@ -109,13 +140,19 @@ export default class Dashboard extends Component {
               <TextInput
                 editable={false}
                 placeholder="SELECIONE O BAIRRO"
-                value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood}`}
+                value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood.nome}`}
                 style={styles.input}
                 ></TextInput>
-              <Icon name={this.state.neighborhood ? 'check' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
+
+              <TouchableOpacity onPress={() => {this.clearNeighborhood()}} disabled={!this.state.neighborhood} style={styles.selectNeighborhoodButton}>
+                <Icon name={this.state.neighborhood ? 'cross' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
+              </TouchableOpacity>
+
             </View>
           </ModalDropdown>
         </View>
+
+
         <TabViewAnimated
           style={styles.tabContainer}
           navigationState={this.state}
@@ -162,9 +199,12 @@ const styles = StyleSheet.create({
   selectNeighborhood: {
 
   },
-  selectNeighborhoodIcon: {
+  selectNeighborhoodButton: {
     position: 'absolute',
     right: 0,
+  },
+  selectNeighborhoodIcon: {
+
     fontSize: 35,
     width: 44,
     textAlign: 'center',
@@ -173,8 +213,7 @@ const styles = StyleSheet.create({
   },
   selectNeighborhoodIconChecked: {
     color: '#BF360C',
-    fontSize: 20,
-    color: '#8BC34A',
+    fontSize: 22,
     marginTop: 7,
   },
   selectNeighborhoodModal: {
