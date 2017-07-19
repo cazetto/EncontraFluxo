@@ -32,28 +32,15 @@ export default class FluxCreateStep2 extends Component {
     if(editState.editable) {
       let { editable } = editState;
       this.editable = editable;
-      let editableSkills = editable.skills.map(skill => skill.id);
-      let eventData = {
-        habilidades: editableSkills
-      }
-      this.setState({eventData});
+      let editableSkills = editable.skills.map(({id}) => ({id}));
+      this.setState({eventData: {habilidades: editableSkills}, addedSkills: editable.skills});
     }
-
     this.fetchSkills();
   }
 
   fetchSkills() {
     SkillService.find()
-    .then(({objects:availableSkills}) => {
-
-      if(this.editable) {
-        this.setState({availableSkills, addedSkills: this.editable.skills});
-      }
-      else {
-        this.setState({availableSkills});
-      }
-
-    })
+    .then(({objects:availableSkills}) => this.setState({availableSkills}))
     .catch(error => console.log('Error when fetching skills.'));
   }
 
@@ -79,6 +66,7 @@ export default class FluxCreateStep2 extends Component {
   }
 
   render() {
+    console.log('this.state', this.state);
     let incompleteFill = this.state.eventData.habilidades.length === 0;
 
     return (

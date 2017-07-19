@@ -29,34 +29,19 @@ export default class FluxCreateStep3 extends Component {
   }
 
   componentWillMount() {
-
     let editState = this.props.location.state;
     if(editState.editable) {
       let { editable } = editState;
       this.editable = editable;
-      let editableMaterials = editable.materials.map(material => material.id);
-      let eventData = {
-        materiais: editableMaterials
-      }
-      this.setState({eventData});
+      let editableMaterials = editable.materials.map(({id}) => ({id}));
+      this.setState({eventData:{materiais: editableMaterials}, addedMaterials:editable.materials});
     }
-
-
     this.fetchMaterials();
   }
 
   fetchMaterials() {
     MaterialService.find()
-    .then(({objects:availableMaterials}) => {
-
-      if(this.editable) {
-        this.setState({availableMaterials, addedMaterials: this.editable.materials});
-      }
-      else {
-        this.setState({availableMaterials})
-      }
-
-    })
+    .then(({objects:availableMaterials}) => this.setState({availableMaterials}))
     .catch(error => console.log('Error when fetching materials.'));
   }
 

@@ -45,12 +45,37 @@ export default class FluxCreateStep5 extends Component {
     EventService.save()
     .then(response => {
       EventService.data = {};
-      this.setState({savingFlux: false});
+      this.setState({savingFlux: false, success:response});
     })
     .catch(error => {
       console.log('Error creating/updating flux:', error);
-      this.setState({savingFlux: false});
+      this.setState({savingFlux: false, error});
     });
+  }
+
+  renderSuccess() {
+    return (
+      <View style={styles.content}>
+        <Text style={styles.congratsText}>IRADO, { this.state.userName.toUpperCase() }, { this.editable ? 'VOCÊ EDITOU SEU FLUXO!' : 'VOCÊ CRIOU UM FLUXO!'}</Text>
+        <View style={styles.balloons}>
+          <Image resizeMode="contain" style={[styles.balloon, styles.balloonGreen]} source={balloonGreen} />
+          <Image resizeMode="contain" style={[styles.balloon, styles.balloonOrange]} source={balloonOrange} />
+          <Image resizeMode="contain" style={[styles.balloon, styles.balloonBlue]} source={balloonBlue} />
+          <Image resizeMode="contain" style={[styles.balloon, styles.balloonPink]} source={balloonPink} />
+          <Image resizeMode="contain" style={[styles.balloon, styles.balloonYellow]} source={balloonYellow} />
+        </View>
+        <Text style={styles.instructionText}>Agora divulgue nas redes sociais, convide seus amigos para baixar o app e entrar com você neste fluxo!</Text>
+      </View>
+    );
+  }
+
+  renderError() {
+    return (
+      <View style={styles.content}>
+        <Text style={styles.congratsText}>{ this.state.userName.toUpperCase() }, { this.editable ? 'HOUVE UM ERRO AO EDITAR SEU FLUXO!' : 'HOUVE UM ERRO AO CRIAR O FLUXO!'}</Text>
+        <Text style={styles.instructionText}>Entre em contato com o administrador do sistema informando o erro: { this.state.error }</Text>
+      </View>
+    );
   }
 
   render() {
@@ -58,17 +83,8 @@ export default class FluxCreateStep5 extends Component {
       this.state.savingFlux ?
       <ActivityIndicator /> :
       <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.congratsText}>IRADO, { this.state.userName.toUpperCase() }, { this.editable ? 'VOCÊ EDITOU SEU FLUXO!' : 'VOCÊ CRIOU UM FLUXO!'}</Text>
-          <View style={styles.balloons}>
-            <Image resizeMode="contain" style={[styles.balloon, styles.balloonGreen]} source={balloonGreen} />
-            <Image resizeMode="contain" style={[styles.balloon, styles.balloonOrange]} source={balloonOrange} />
-            <Image resizeMode="contain" style={[styles.balloon, styles.balloonBlue]} source={balloonBlue} />
-            <Image resizeMode="contain" style={[styles.balloon, styles.balloonPink]} source={balloonPink} />
-            <Image resizeMode="contain" style={[styles.balloon, styles.balloonYellow]} source={balloonYellow} />
-          </View>
-          <Text style={styles.instructionText}>Agora divulgue nas redes sociais, convide seus amigos para baixar o app e entrar com você neste fluxo!</Text>
-        </View>
+        {this.state.success && this.renderSuccess()}
+        {this.state.error && this.renderError()}
         <TouchableRedirectorWrapper path="/app/dashboard" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>SHOW!</Text>

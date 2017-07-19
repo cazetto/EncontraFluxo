@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Redirect } from 'react-router-native';
 
 import moment from 'moment';
 
@@ -89,9 +90,11 @@ export default class FluxPreview extends Component {
     EventService.delete(this.state.id)
     .then(response => {
       console.log('EventService.delete:response', response);
+      this.setState({redirectURI: '/app/dashboard'})
     })
     .catch(error => {
       console.log('EventService.catch:error', error);
+      this.setState({redirectURI: '/app/dashboard'})
     })
   }
 
@@ -107,8 +110,9 @@ export default class FluxPreview extends Component {
     return (
       fetchingEvent || fetchingUser || fetchingNeighborhood ?
       <ActivityIndicator style={styles.activityIndicator} /> :
+      this.state.redirectURI ?
+      <Redirect to={this.state.redirectURI} /> :
       <View style={styles.container}>
-
         <View style={styles.content}>
           <ScrollView>
             <View style={styles.group}>
@@ -146,7 +150,7 @@ export default class FluxPreview extends Component {
           ?
           <View style={styles.doubleBtns}>
             <View style={styles.btnHalfLeft}>
-              <TouchableRedirectorWrapper path={`/app/flux-create-step-1/${id}/edit`} state={{editable: this.state}} content={
+              <TouchableRedirectorWrapper path={`/app/flux-create-step-1`} state={{editable: this.state}} content={
                 <View style={styles.btnActionDone}>
                   <Text style={styles.btnHalfText}>EDITAR</Text>
                 </View>

@@ -17,7 +17,7 @@ const headerRoutesConfig = {
   '/app/flux-create-step-2': { title: 'INFORME AS HABILIDADES' },
   '/app/flux-create-step-3': { title: 'INFORME OS MATERIAIS' },
   '/app/flux-create-step-4': { title: 'INFORME OS INTERESSES' },
-  '/app/flux-create-step-5': { title: 'PARABÉNS' },
+  '/app/flux-create-step-5': { title: 'CRIANDO UM FLUXO' },
   '/app/flux-preview': { title: 'VISUALIZAR FLUXO' },
   '/app/flux-join': { title: 'COLABORAR COM ESTE FLUXO' },
 }
