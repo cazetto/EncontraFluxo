@@ -2,7 +2,7 @@ import {StyleSheet, Dimensions, Platform} from 'react-native';
 
 export default styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 118 : 126),
+    flex: 1,
   },
   page: {
     backgroundColor: "#F5F5F5",
@@ -21,7 +21,7 @@ export default styles = StyleSheet.create({
     height: 83,
   },
   description: {
-    height: Dimensions.get('window').height -346,
+    height: Dimensions.get('window').height -325,
   },
   datePicker: {
     width: Dimensions.get('window').width - 20,

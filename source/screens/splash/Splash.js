@@ -33,7 +33,7 @@ export default class Splash extends Component {
       APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       UserService.id = response.id;
       UserService.user = response;
-      this.setState({redirectionRoute: '/app/dashboard'});
+      this.setState({redirectionRoute: '/app/flux-congrats'});
     })
     .catch(error => {
       this.setState({redirectionRoute: '/auth/login'});

@@ -164,7 +164,7 @@ export default class FluxPreview extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 70 : 74),
+    flex: 1,
     backgroundColor: '#ECEFF1',
   },
   content: {

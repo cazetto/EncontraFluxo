@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECEFF1',
   },
   content: {
-    height: Dimensions.get('window').height - 119,
+    height: Dimensions.get('window').height - 104,
   },
   balloon: {
     position: 'absolute',
