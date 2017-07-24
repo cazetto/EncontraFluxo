@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const headerRoutesConfig = {
   '/app/': { title: '' },
-  '/app/dashboard': { title: 'DASHBOARD' },
+  '/app/dashboard': { title: 'FLUXOS' },
   '/app/skills': { title: 'COMPLETE SEU PERFIL' },
   '/app/interests': { title: 'COMPLETE SEU PERFIL' },
   '/app/flux-create-step-1': { title: 'CRIANDO UM FLUXO' },
