@@ -9,6 +9,7 @@ const APIService = {
     );
   },
   authorize(name, username, apikey) {
+    console.log('apikey', apikey);
     const service = this.services[name];
     api.Tastypie.Provider.add(
       new api.Tastypie.Provider({ name: service.name, url: service.url, username, apikey })

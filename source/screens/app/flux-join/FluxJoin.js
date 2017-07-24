@@ -33,6 +33,7 @@ export default class FluxPreview extends Component {
   renderSkills() {
     return this.state.skills.map((skill, index) => {
       return <CheckBox
+        key={index}
         checkedColor='#546E7A'
         iconRight
         textStyle={styles.checkBoxText}
@@ -49,6 +50,7 @@ export default class FluxPreview extends Component {
   renderMaterials() {
     return this.state.materials.map((material, index) => {
       return <CheckBox
+        key={index}
         checkedColor='#546E7A'
         iconRight
         textStyle={styles.checkBoxText}
@@ -69,14 +71,18 @@ export default class FluxPreview extends Component {
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView>
+          { !this.state.skills.length ? null :
             <View style={styles.group}>
               <Text style={styles.info}>POSSO CONTRIBUIR COMO?</Text>
               {this.renderSkills()}
             </View>
+          }
+          { !this.state.materials.length ? null :
             <View style={styles.group}>
               <Text style={styles.info}>CONSIGO ARRANJAR/DOAR:</Text>
               {this.renderMaterials()}
             </View>
+          }
           </ScrollView>
           <Text>Ao entrar neste fluxo eu permito que <Text style={styles.userName}>{user}</Text> entre em contato comigo por email.</Text>
         </View>
