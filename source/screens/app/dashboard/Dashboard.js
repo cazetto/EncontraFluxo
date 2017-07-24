@@ -28,7 +28,7 @@ export default class Dashboard extends Component {
       routes: [
         { key: '1', title: 'Aberto' },
         { key: '2', title: 'No Fluxo' },
-        { key: '3', title: 'Acontecendo' },
+        { key: '3', title: 'Rolou' },
       ],
     };
   }
