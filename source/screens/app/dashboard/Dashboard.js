@@ -109,8 +109,6 @@ export default class Dashboard extends Component {
     );
   }
 
-
-
   renderHeader = props => <TabBar
     renderLabel={this.renderLabel}
     style={{backgroundColor: '#F5F5F5', height: 44, marginTop: -7,}}
@@ -170,10 +168,9 @@ export default class Dashboard extends Component {
   }
 }
 
-let heightCorrection = Platform.OS === 'ios' ? 70 : 75;
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - heightCorrection,
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 56 : 75),
   },
   tabContainer: {
     flex: 1,
@@ -219,7 +216,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   btnActionDone: {
-    backgroundColor: '#455A64',
+    backgroundColor: '#7CB342',
     padding: 8,
     margin: 3,
     borderBottomLeftRadius: 4,
