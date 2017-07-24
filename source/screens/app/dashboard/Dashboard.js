@@ -100,7 +100,7 @@ export default class Dashboard extends Component {
   renderLabel = scene => {
     let color = ['#FBC02D', '#7CB342', '#1E88E5'][scene.index];
     const labelStyle = { textAlign: 'center', color: '#424242', backgroundColor: 'transparent' }
-    const boxStyle = { borderBottomWidth: 2, borderBottomColor: color, paddingHorizontal: 10, paddingTop: 10, paddingBottom: 4, marginBottom: 6};
+    const boxStyle = { paddingHorizontal: 10, paddingTop: 10, paddingBottom: 4, marginBottom: 6};
     let label = scene.route.title;
     return (
       <View style={boxStyle}>
@@ -109,10 +109,12 @@ export default class Dashboard extends Component {
     );
   }
 
+
+
   renderHeader = props => <TabBar
     renderLabel={this.renderLabel}
-    style={{backgroundColor: '#F5F5F5'}}
-    indicatorStyle={{backgroundColor: '#EEEEEE', height: '100%'}}
+    style={{backgroundColor: '#F5F5F5', height: 44, marginTop: -7,}}
+    indicatorStyle={{backgroundColor: '#EEEEEE',}}
     labelStyle={{color: '#424242'}}
     tabStyle={{  }}
     {...props} />
@@ -201,15 +203,14 @@ const styles = StyleSheet.create({
     right: 0,
   },
   selectNeighborhoodIcon: {
-
     fontSize: 35,
     width: 44,
     textAlign: 'center',
-    color: '#BF360C',
+    color: '#455A64',
     backgroundColor: 'transparent',
   },
   selectNeighborhoodIconChecked: {
-    color: '#BF360C',
+    color: '#455A64',
     fontSize: 22,
     marginTop: 7,
   },
