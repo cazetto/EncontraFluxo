@@ -128,7 +128,6 @@ export default class Dashboard extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.control}>
-          <Text style={styles.inputLabel}>Filtrar fluxos por bairro:</Text>
           <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods.map(neighborhood => neighborhood.nome)}
             onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
             dropdownStyle={styles.selectNeighborhoodModal}
