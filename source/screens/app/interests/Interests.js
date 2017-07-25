@@ -103,10 +103,9 @@ export default class Interests extends Component {
   }
 }
 
-let heightCorrection = Platform.OS === 'ios' ? 70 : 75;
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - heightCorrection,
+    flex: 1,
   },
   listHeader: {
     paddingHorizontal: 14,

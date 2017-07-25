@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   listItem: {
-    paddingVertical: 14,
+    paddingVertical: 10,
     paddingLeft: 10,
     marginBottom: 2,
     backgroundColor: '#FAFAFA',
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   itemRemoveIconWrapper: {
     position: 'absolute',
     right: 11,
-    marginTop: 10,
+    marginTop: 5,
   },
   itemRemoveIcon: {
     marginTop: 3,

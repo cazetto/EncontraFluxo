@@ -60,7 +60,6 @@ export default class Select extends Component {
 const inputMargin = 10;
 const styles = StyleSheet.create({
   select: {
-
   },
   selectIcon: {
     position: 'absolute',
@@ -69,19 +68,17 @@ const styles = StyleSheet.create({
     fontSize: 30,
     width: 44,
     textAlign: 'center',
-    color: '#BF360C',
+    color: '#455A64',
     backgroundColor: 'transparent',
   },
   selectIconChecked: {
-    color: '#BF360C',
+    color: '#455A64',
     fontSize: 18,
-    color: '#8BC34A',
     marginTop: 5,
   },
   selectModal: {
     width: Dimensions.get('window').width - inputMargin * 2,
   },
-
   input: {
     height: 36,
     padding: 10,
@@ -89,6 +86,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#616161',
     backgroundColor: '#FAFAFA',
-
   },
 });

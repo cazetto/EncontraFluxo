@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
-import {StyleSheet, View, Text, Image, Dimensions, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, Text, Image, ActivityIndicator, Platform, Dimensions } from 'react-native';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
@@ -13,6 +13,7 @@ import balloonPink from '../../../assets/images/events/balloons/balloon3.png';
 import balloonYellow from '../../../assets/images/events/balloons/balloon4.png';
 import balloonOrange from '../../../assets/images/events/balloons/balloon5.png';
 // import balloon6 from '../../../assets/images/events/balloons/balloon6.png';
+
 
 export default class FluxCreateStep5 extends Component {
   state = {
@@ -81,7 +82,7 @@ export default class FluxCreateStep5 extends Component {
   render() {
     return (
       this.state.savingFlux ?
-      <ActivityIndicator /> :
+      <ActivityIndicator style={styles.activityIndicator} /> :
       <View style={styles.container}>
         {this.state.success && this.renderSuccess()}
         {this.state.error && this.renderError()}
@@ -97,10 +98,14 @@ export default class FluxCreateStep5 extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#ECEFF1',
   },
   content: {
-    height: Dimensions.get('window').height - 119,
+    flex: 1,
+  },
+  activityIndicator: {
+    marginTop: '50%',
   },
   balloon: {
     position: 'absolute',

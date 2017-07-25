@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const headerRoutesConfig = {
   '/app/': { title: '' },
-  '/app/dashboard': { title: 'DASHBOARD' },
+  '/app/dashboard': { title: 'FLUXOS' },
   '/app/skills': { title: 'COMPLETE SEU PERFIL' },
   '/app/interests': { title: 'COMPLETE SEU PERFIL' },
   '/app/flux-create-step-1': { title: 'CRIANDO UM FLUXO' },
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: '#263238',
-    padding: 10,
+    padding: 4,
     marginTop: Platform.OS === 'ios' ? 21 : 0,
   },
   leftColumn: {
@@ -86,14 +86,14 @@ const styles = StyleSheet.create({
   },
 
   menuIcon: {
-    fontSize: 30,
+    fontSize: 27,
     color: '#FFF',
   },
 
   title: {
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    marginTop: 6,
+    marginTop: 5,
   }
 });

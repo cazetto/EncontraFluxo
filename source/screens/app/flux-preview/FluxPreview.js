@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, ActivityIndicator, TouchableOpacity, Dimensions, Platform } from 'react-native';
 import { Redirect } from 'react-router-native';
 
 import moment from 'moment';
@@ -7,8 +7,8 @@ import moment from 'moment';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 import ModalConfirm from '../../../components/modal-confirm/ModalConfirm';
 
-import EventService from '../../../services/EventService';
 import UserService from '../../../services/UserService';
+import EventService from '../../../services/EventService';
 import NeighborhoodService from '../../../services/NeighborhoodService';
 
 export default class FluxPreview extends Component {
@@ -17,7 +17,6 @@ export default class FluxPreview extends Component {
     id: null,
 
     fetchingEvent: true,
-    fetchingUser: true,
     fetchingNeighborhood: true,
 
     deleteModalIsVisible: false,
@@ -29,11 +28,14 @@ export default class FluxPreview extends Component {
   }
 
   fetchEvent(id) {
+    const userId = UserService.id;
+
     EventService.get(id)
     .then(response => {
+
       let {
         id,
-        usuario_id: eventUserId,
+        responsavel: { nome:eventUserName, id:eventUserId },
         bairro_id: neighborhoodId,
         nome:name,
         colaboradores:people,
@@ -45,23 +47,10 @@ export default class FluxPreview extends Component {
         materiais:materials,
       } = response;
 
-      this.setState({fetchingEvent:false, id, eventUserId, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
+      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
 
-      this.fetchUser(eventUserId);
       this.fetchNeighborhood(neighborhoodId);
 
-    })
-    .catch(error => {
-      console.log('Error when fetch event', error);
-    });
-  }
-
-  fetchUser(id) {
-    UserService.get(id)
-    .then(response => {
-      console.log('UserService.get:response:', response);
-      let { id:userId, nome:user } = response;
-      this.setState({fetchingUser:false, user, userId});
     })
     .catch(error => {
       console.log('Error when fetch event', error);
@@ -79,9 +68,15 @@ export default class FluxPreview extends Component {
     });
   }
 
-  renderList(list) {
+  renderSkills(list) {
     return list
     .reduce((accumulator, {nome}, index, array) =>
+    `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
+  }
+
+  renderMaterials(list) {
+    return list
+    .reduce((accumulator, nome, index, array) =>
     `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
   }
 
@@ -93,7 +88,7 @@ export default class FluxPreview extends Component {
       this.setState({redirectURI: '/app/dashboard'})
     })
     .catch(error => {
-      console.log('EventService.catch:error', error);
+      console.log('Error when delete event', error);
       this.setState({redirectURI: '/app/dashboard'})
     })
   }
@@ -101,14 +96,17 @@ export default class FluxPreview extends Component {
   render() {
 
     let {
-      fetchingEvent, fetchingUser, fetchingNeighborhood,
-      id, eventUserId, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood
+      fetchingEvent, fetchingNeighborhood,
+      id, eventUserId, eventUserName, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood
     } = this.state;
 
     let isOwner = eventUserId === userId;
 
+    console.log('eventUserId', eventUserId);
+    console.log('userId');
+
     return (
-      fetchingEvent || fetchingUser || fetchingNeighborhood ?
+      fetchingEvent || fetchingNeighborhood ?
       <ActivityIndicator style={styles.activityIndicator} /> :
       this.state.redirectURI ?
       <Redirect to={this.state.redirectURI} /> :
@@ -117,7 +115,7 @@ export default class FluxPreview extends Component {
           <ScrollView>
             <View style={styles.group}>
               <Text style={[styles.info]}>Nome: {name}</Text>
-              <Text style={[styles.info]}>Criador: {user}</Text>
+              <Text style={[styles.info]}>Criador: {eventUserName}</Text>
               <Text style={[styles.info]}>Bairro: {neighborhood}</Text>
               <Text style={[styles.info]}>Local: {address}</Text>
               <Text style={[styles.info]}>Data: {moment(date).format('DD/MM/YYYY')}</Text>
@@ -129,10 +127,10 @@ export default class FluxPreview extends Component {
               <Text style={[styles.info]}>Descrição: {description}</Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Habilidades: {this.renderList(this.state.skills)}</Text>
+              <Text style={[styles.info]}>Habilidades: {this.renderSkills(this.state.skills)}</Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Materiais: {this.renderList(this.state.materials)}</Text>
+              <Text style={[styles.info]}>Materiais: {this.renderMaterials(this.state.materials)}</Text>
             </View>
           </ScrollView>
 
@@ -176,7 +174,7 @@ export default class FluxPreview extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 70,
+    flex: 1,
     backgroundColor: '#ECEFF1',
   },
   content: {
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   activityIndicator: {
-    marginTop: 20,
+    marginTop: '50%',
   },
   btnActionDone: {
     backgroundColor: '#455A64',
