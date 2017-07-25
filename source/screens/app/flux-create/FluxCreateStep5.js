@@ -98,10 +98,11 @@ export default class FluxCreateStep5 extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#ECEFF1',
   },
   content: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 119 : 125),
+    flex: 1,
   },
   activityIndicator: {
     marginTop: '50%',

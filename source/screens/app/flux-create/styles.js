@@ -32,6 +32,39 @@ export default styles = StyleSheet.create({
     marginLeft: 4,
     color: '#757575',
   },
+
+  addMaterialButton: {
+    position: 'absolute',
+    marginTop: 66,
+    right: 20,
+  },
+  addMaterialIcon: {
+    fontSize: 20,
+    color: '#37474F',
+    backgroundColor: 'transparent',
+  },
+
+  materialList: {
+    height: Dimensions.get('window').height -205,
+    marginTop: 4,
+  },
+  materialListItem: {
+    padding: 10,
+    marginBottom: 2,
+    backgroundColor: '#FAFAFA',
+  },
+  materialItemRemoveIconWrapper: {
+    position: 'absolute',
+    right: 11,
+    marginTop: 5,
+  },
+  materialItemRemoveIcon: {
+    marginTop: 3,
+    fontSize: 22,
+    color: '#b71c1c'
+  },
+
+
   btnActionDone: {
     backgroundColor: '#455A64',
     padding: 8,
@@ -47,5 +80,5 @@ export default styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 15,
     padding: 4
-  }
+  },
 });

@@ -7,6 +7,7 @@ import moment from 'moment';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 import ModalConfirm from '../../../components/modal-confirm/ModalConfirm';
 
+import UserService from '../../../services/UserService';
 import EventService from '../../../services/EventService';
 import NeighborhoodService from '../../../services/NeighborhoodService';
 
@@ -27,10 +28,10 @@ export default class FluxPreview extends Component {
   }
 
   fetchEvent(id) {
+    const userId = UserService.id;
+
     EventService.get(id)
     .then(response => {
-
-      console.log('response', response);
 
       let {
         id,
@@ -46,7 +47,7 @@ export default class FluxPreview extends Component {
         materiais:materials,
       } = response;
 
-      this.setState({fetchingEvent:false, id, eventUserId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
+      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
 
       this.fetchNeighborhood(neighborhoodId);
 
@@ -67,9 +68,15 @@ export default class FluxPreview extends Component {
     });
   }
 
-  renderList(list) {
+  renderSkills(list) {
     return list
     .reduce((accumulator, {nome}, index, array) =>
+    `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
+  }
+
+  renderMaterials(list) {
+    return list
+    .reduce((accumulator, nome, index, array) =>
     `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
   }
 
@@ -95,6 +102,9 @@ export default class FluxPreview extends Component {
 
     let isOwner = eventUserId === userId;
 
+    console.log('eventUserId', eventUserId);
+    console.log('userId');
+
     return (
       fetchingEvent || fetchingNeighborhood ?
       <ActivityIndicator style={styles.activityIndicator} /> :
@@ -117,10 +127,10 @@ export default class FluxPreview extends Component {
               <Text style={[styles.info]}>Descrição: {description}</Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Habilidades: {this.renderList(this.state.skills)}</Text>
+              <Text style={[styles.info]}>Habilidades: {this.renderSkills(this.state.skills)}</Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Materiais: {this.renderList(this.state.materials)}</Text>
+              <Text style={[styles.info]}>Materiais: {this.renderMaterials(this.state.materials)}</Text>
             </View>
           </ScrollView>
 

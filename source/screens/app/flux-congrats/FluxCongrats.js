@@ -56,6 +56,7 @@ export default class FluxCongrats extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#ECEFF1',
   },
   content: {
