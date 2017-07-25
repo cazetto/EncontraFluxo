@@ -82,7 +82,7 @@ export default class FluxPreview extends Component {
 
     let data = { evento_id, habilidades, materiais };
 
-    console.log('DADOS ENVIADOS PARA COLABORAR', JSON.stringify(data) );
+
 
     EventService.join(data)
     .then(response => {
@@ -90,7 +90,9 @@ export default class FluxPreview extends Component {
     })
     .catch(error => {
       console.log('Join error:', error);
-    })
+    });
+
+    console.log('DADOS ENVIADOS PARA COLABORAR', JSON.stringify(data) );
 
   }
 
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECEFF1',
   },
   content: {
-    flex: 1,
+    // flex: 1,
     padding: 20,
   },
   info: {

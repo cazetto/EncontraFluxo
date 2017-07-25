@@ -71,7 +71,7 @@ export default class FluxCreateStep2 extends Component {
 
     return (
       this.state.isComplete ?
-      <Redirect to={{
+      <Redirect push to={{
         pathname:"/app/flux-create-step-3",
         state: {editable: this.editable}
       }} /> :

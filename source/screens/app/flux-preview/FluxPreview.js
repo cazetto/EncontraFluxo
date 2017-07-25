@@ -109,7 +109,7 @@ export default class FluxPreview extends Component {
       fetchingEvent || fetchingNeighborhood ?
       <ActivityIndicator style={styles.activityIndicator} /> :
       this.state.redirectURI ?
-      <Redirect to={this.state.redirectURI} /> :
+      <Redirect push to={this.state.redirectURI} /> :
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView>

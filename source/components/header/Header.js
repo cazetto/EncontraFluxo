@@ -36,6 +36,10 @@ class Header extends Component {
     this.lastLocation = null;
   }
 
+  back() {
+    this.props.history.goBack();
+  }
+
   render() {
     let pathname = this.props.location.pathname;
 
@@ -57,6 +61,9 @@ class Header extends Component {
           <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.rightColumn}>
+          <TouchableOpacity onPress={()=>{this.back()}}>
+            <Icon name="arrow-back" style={styles.backIcon} />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -88,6 +95,13 @@ const styles = StyleSheet.create({
 
   menuIcon: {
     fontSize: 27,
+    marginLeft: 6,
+    color: '#FFF',
+  },
+
+  backIcon: {
+    marginTop: 2,
+    fontSize: 23,
     color: '#FFF',
   },
 

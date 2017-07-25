@@ -28,6 +28,7 @@ const EventService = {
     return this.resourceHappening.objects.find(data);
   },
   join(data) {
+    // return this.resourceJoin.objects.update(data.evento_id, data);
     return this.resourceJoin.objects.create(data);
   }
 }

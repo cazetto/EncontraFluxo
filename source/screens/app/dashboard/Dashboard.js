@@ -30,13 +30,11 @@ export default class Dashboard extends Component {
   componentWillMount() {
     this.fetchNeighborhoods();
 
-    // http://104.155.190.178/api/v1/evento/23/?username=andre@welight.co&api_key=71f359d5168dac806ed87eebd33a3d72f59e79ad
-
     this.fetchOpen();
     // this.fetchInFlux();
     // this.fetchHappening();
   }
-  
+
   fetchOpen() {
     EventService.find()
     .then(({objects:events}) => {
@@ -49,11 +47,10 @@ export default class Dashboard extends Component {
   }
 
   fetchInFlux() {
-    // EventService.findInFlux()
-    EventService.find()
+    EventService.findInFlux()
     .then(({objects:events}) => {
       console.log(events);
-      // this.setState({events})
+      this.setState({events});
     })
     .catch(error => {
       console.log('Error fetching open events', error);
