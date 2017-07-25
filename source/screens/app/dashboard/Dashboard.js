@@ -9,13 +9,11 @@ import Icon from 'react-native-vector-icons/Entypo';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
-import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
-
-import Tab from './Tab';
-
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import EventService from '../../../services/EventService';
 import UserService from '../../../services/UserService';
+
+import FluxList from '../../../components/flux-list/FluxList';
 
 export default class Dashboard extends Component {
 
@@ -24,24 +22,53 @@ export default class Dashboard extends Component {
     this.state = {
       neighborhood: null,
       neighborhoods: [],
-      index: 0,
-      routes: [
-        { key: '1', title: 'Aberto' },
-        { key: '2', title: 'No Fluxo' },
-        { key: '3', title: 'Rolou' },
-      ],
+
+      events: [],
     };
   }
 
   componentWillMount() {
     this.fetchNeighborhoods();
-    this.fetchEvents();
 
-    this.filters = [
-      this.filterOpened,
-      this.filterInFlux,
-      this.filterHappening,
-    ];
+    // http://104.155.190.178/api/v1/evento/23/?username=andre@welight.co&api_key=71f359d5168dac806ed87eebd33a3d72f59e79ad
+
+    this.fetchOpen();
+    // this.fetchInFlux();
+    // this.fetchHappening();
+  }
+  
+  fetchOpen() {
+    EventService.find()
+    .then(({objects:events}) => {
+      console.log(events);
+      this.setState({events});
+    })
+    .catch(error => {
+      console.log('Error fetching open events', error);
+    })
+  }
+
+  fetchInFlux() {
+    // EventService.findInFlux()
+    EventService.find()
+    .then(({objects:events}) => {
+      console.log(events);
+      // this.setState({events})
+    })
+    .catch(error => {
+      console.log('Error fetching open events', error);
+    })
+  }
+
+  fetchHappening() {
+    EventService.findHappening()
+    .then(({objects:events}) => {
+      console.log(events);
+      this.setState({events});
+    })
+    .catch(error => {
+      console.log('Error fetching open events', error);
+    })
   }
 
   fetchNeighborhoods() {
@@ -53,75 +80,13 @@ export default class Dashboard extends Component {
     .catch(error => console.log('Error when fetch neighborhoods:', error));
   }
 
-  fetchEvents(data) {
-    EventService.find(data)
-    .then( ({objects}) => {
-      let events = objects.sort((a, b) => moment(a.dt_evento).diff(moment(b.dt_evento), 'days'));
-      let routes = this.state.routes.map((route, index) => {
-        let filterd = events.filter(this.filters[index]);
-        return update(route, { $merge: { events:filterd } });
-      });
-      this.setState({routes});
-    })
-    .catch(error => {
-      console.log('Error when fetch events:', error);
-    });
-  }
-
-  filterOpened({dt_evento:date}) {
-    // Retorna os fluxos que não expiraram a data
-    return moment(date).diff(moment(), 'days') > 0;
-  }
-
-  filterInFlux({usuario_id:creatorId}) {
-    // Retorna os fluxos o usuário logado criou, (fazer exibir nesta lista também os que ele está participando)
-    // Necessita recurso da API
-    return creatorId === UserService.id;
-  }
-
-  filterHappening(event) {
-    // Devera retornar todos os fluxos que conquistaram o numero de habilidades, materiais
-    // Necessita recurso da API
-    return true;
-  }
-
   onSelectNeighborhoodHandle(index) {
     this.setState({neighborhood: this.state.neighborhoods[index]});
-    this.fetchEvents({bairro_id: this.state.neighborhoods[index].id});
   }
 
   clearNeighborhood() {
     this.setState({neighborhood: null});
-    this.fetchEvents();
   }
-
-  handleChangeTab = index => this.setState({ index });
-
-  renderLabel = scene => {
-    let color = ['#FBC02D', '#7CB342', '#1E88E5'][scene.index];
-    const labelStyle = { textAlign: 'center', color: '#424242', backgroundColor: 'transparent' }
-    const boxStyle = { paddingHorizontal: 10, paddingTop: 10, paddingBottom: 4, marginBottom: 6};
-    let label = scene.route.title;
-    return (
-      <View style={boxStyle}>
-        <Text style={labelStyle}>{label}</Text>
-      </View>
-    );
-  }
-
-  renderHeader = props => <TabBar
-    renderLabel={this.renderLabel}
-    style={{backgroundColor: '#F5F5F5', height: 44, marginTop: -7,}}
-    indicatorStyle={{backgroundColor: '#EEEEEE',}}
-    labelStyle={{color: '#424242'}}
-    tabStyle={{  }}
-    {...props} />
-
-  renderScene = SceneMap({
-    '1': Tab,
-    '2': Tab,
-    '3': Tab,
-  });
 
   render() {
 
@@ -147,16 +112,26 @@ export default class Dashboard extends Component {
 
             </View>
           </ModalDropdown>
+
+          <View style={styles.filterBar}>
+
+            <TouchableOpacity onPress={() => { this.fetchOpen() }} style={[styles.filterBarButton, styles.filterBarButton1]}>
+              <Text style={styles.filterBarButtonText}>Aberto</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => { this.fetchInFlux() }} style={[styles.filterBarButton, styles.filterBarButton2]}>
+              <Text style={styles.filterBarButtonText}>No Fluxo</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => { this.fetchHappening() }} style={[styles.filterBarButton, styles.filterBarButton3]}>
+              <Text style={styles.filterBarButtonText}>Rolou</Text>
+            </TouchableOpacity>
+
+          </View>
+
         </View>
 
-
-        <TabViewAnimated
-          style={styles.tabContainer}
-          navigationState={this.state}
-          renderScene={this.renderScene}
-          renderHeader={this.renderHeader}
-          onRequestChangeTab={this.handleChangeTab}
-        />
+        <FluxList items={this.state.events} color="#FDD835"></FluxList>
 
         <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
@@ -172,13 +147,38 @@ const styles = StyleSheet.create({
   container: {
     height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 56 : 75),
   },
-  tabContainer: {
-    flex: 1,
-  },
+
   control: {
     // marginLeft: inputMargin,
     // marginRight: inputMargin,
   },
+
+  filterBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#ECEFF1',
+  },
+  filterBarButton: {
+    width: '33.33%',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    alignItems: 'center',
+  },
+
+  filterBarButton1: {
+    borderBottomColor: '#FBC02D',
+  },
+  filterBarButton2: {
+    borderBottomColor: '#7CB342',
+  },
+  filterBarButton3: {
+    borderBottomColor: '#1E88E5',
+  },
+
+  filterBarButtonText: {
+    color: '#37474F',
+  },
+
   inputLabel: {
     marginTop: 14,
     marginBottom: 10,

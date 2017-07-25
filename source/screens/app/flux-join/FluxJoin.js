@@ -1,83 +1,113 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, ActivityIndicator, Dimensions, Platform } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Dimensions, Platform } from 'react-native';
 
 import { CheckBox } from 'react-native-elements';
 
 import moment from 'moment';
 
+import update from 'immutability-helper';
+
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
-import JoinService from '../../../services/JoinService';
+// import JoinService from '../../../services/JoinService';
+import EventService from '../../../services/EventService';
 
 export default class FluxPreview extends Component {
 
   state = {
+    eventData: {},
   }
 
   componentWillMount() {
-    this.setState(this.props.location.state);
+    let eventData = {...this.props.location.state};
+    eventData.materials = eventData.materials.map(material => ({name: material, selected: false}));
+    this.setState({eventData});
   }
 
   onSelectSkillHandle(index) {
-    let skills = this.state.skills.slice();
+    let skills = [...this.state.eventData.skills];
     skills[index].selected = !skills[index].selected;
-    this.setState({skills});
+    let eventData = update(this.state.eventData, {$merge: {skills}});
+    this.setState({eventData});
   }
 
   onSelectMaterialHandle(index) {
-    let materials = this.state.materials.slice();
+    let materials = [...this.state.eventData.materials];
     materials[index].selected = !materials[index].selected;
-    this.setState({materials});
+    let eventData = update(this.state.eventData, {$merge: {materials}});
+    this.setState({eventData});
   }
 
   renderSkills() {
-    return this.state.skills.map((skill, index) => {
+    return this.state.eventData.skills.map((skill, index) => {
       return <CheckBox
-        key={index}
-        checkedColor='#546E7A'
-        iconRight
-        textStyle={styles.checkBoxText}
-        key={skill.id}
-        title={skill.nome}
-        checked={skill.selected}
-        onPress={() => this.onSelectSkillHandle(index)}
-        style={styles.checkBox}
-        // containerStyle={styles.checkBoxContainer}
-      />;
+          key={index}
+          checkedColor='#546E7A'
+          iconRight
+          textStyle={styles.checkBoxText}
+          key={skill.id}
+          title={skill.nome}
+          checked={skill.selected}
+          onPress={() => this.onSelectSkillHandle(index)}
+          style={styles.checkBox}
+          // containerStyle={styles.checkBoxContainer}
+        />;
     });
   }
 
   renderMaterials() {
-    return this.state.materials.map((material, index) => {
+    return this.state.eventData.materials.map((material, index) => {
       return <CheckBox
-        key={index}
-        checkedColor='#546E7A'
-        iconRight
-        textStyle={styles.checkBoxText}
-        key={material.id}
-        title={material.nome}
-        checked={material.selected}
-        onPress={() => this.onSelectMaterialHandle(index)}
-        style={styles.checkBox}
-        // containerStyle={styles.checkBoxContainer}
-      />;
+          key={index}
+          checkedColor='#546E7A'
+          iconRight
+          textStyle={styles.checkBoxText}
+          title={material.name}
+          checked={material.selected}
+          onPress={() => this.onSelectMaterialHandle(index)}
+          style={styles.checkBox}
+          // containerStyle={styles.checkBoxContainer}
+        />;
     });
   }
 
+  join() {
+    let evento_id = this.state.eventData.id;
+    let habilidades = this.state.eventData.skills
+    .filter(element => (element.selected))
+    .map(element => ({id: element.id}));
+    let materiais = this.state.eventData.materials
+    .filter(element => (element.selected))
+    .map(element => (element.name));
+
+    let data = { evento_id, habilidades, materiais };
+
+    console.log('DADOS ENVIADOS PARA COLABORAR', JSON.stringify(data) );
+
+    EventService.join(data)
+    .then(response => {
+      console.log('colaborarcolaborarcolaborarcolaborarcolaborar', response);
+    })
+    .catch(error => {
+      console.log('Join error:', error);
+    })
+
+  }
+
   render() {
-    let { id, name, people, description, date, address, skills, interests, materials, user, neighborhood } = this.state;
+    let { id, name, people, description, date, address, skills, interests, materials, user, neighborhood } = this.state.eventData;
 
     return (
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView>
-          { !this.state.skills.length ? null :
+          { !this.state.eventData.skills.length ? null :
             <View style={styles.group}>
               <Text style={styles.info}>POSSO CONTRIBUIR COMO?</Text>
               {this.renderSkills()}
             </View>
           }
-          { !this.state.materials.length ? null :
+          { !this.state.eventData.materials.length ? null :
             <View style={styles.group}>
               <Text style={styles.info}>CONSIGO ARRANJAR/DOAR:</Text>
               {this.renderMaterials()}
@@ -86,11 +116,12 @@ export default class FluxPreview extends Component {
           </ScrollView>
           <Text>Ao entrar neste fluxo eu permito que <Text style={styles.userName}>{user}</Text> entre em contato comigo por email.</Text>
         </View>
-        <TouchableRedirectorWrapper path={'/app/flux-congrats'} content={
-          <View style={styles.btnActionDone}>
-            <Text style={styles.btnActionDoneText}>CONFIRMAR</Text>
-          </View>
-        } />
+
+
+        <TouchableOpacity onPress={() => this.join()} style={styles.btnActionDone}>
+          <Text style={styles.btnActionDoneText}>CONFIRMAR</Text>
+        </TouchableOpacity>
+
       </View>
     );
   }
