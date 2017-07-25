@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
 
 import UserService from '../../services/UserService';
 
@@ -11,13 +11,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ECEFF1',
-    paddingTop: 21,
+    paddingTop: Platform.OS === 'ios' ? 21 : 0,
     width: '110%',
   },
   userName: {
-    padding: 16,
-    height: 50,
-    fontSize: 16,
+    paddingTop: 9,
+    paddingHorizontal: 12,
+    height: 35,
+    fontSize: 15,
     textAlign: 'left',
     backgroundColor: '#263238',
     color: '#ECEFF1',
@@ -70,6 +71,13 @@ export default Menu = () => {
         <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.listItem}>
             <Text style={styles.listItemText}> <Icon name="blackboard" style={styles.icon}/>  Criar Fluxo</Text>
+          </View>
+        } />
+        <View style={styles.divider} />
+
+        <TouchableRedirectorWrapper path="/app/about" content={
+          <View style={styles.listItem}>
+            <Text style={styles.listItemText}> <Icon name="news" style={styles.icon}/>  Sobre</Text>
           </View>
         } />
         <View style={styles.divider} />

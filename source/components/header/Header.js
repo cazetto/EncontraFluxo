@@ -20,6 +20,7 @@ const headerRoutesConfig = {
   '/app/flux-create-step-5': { title: 'CRIANDO UM FLUXO' },
   '/app/flux-preview': { title: 'VISUALIZAR FLUXO' },
   '/app/flux-join': { title: 'COLABORAR COM ESTE FLUXO' },
+  '/app/about': { title: 'SOBRE' },
 }
 
 class Header extends Component {

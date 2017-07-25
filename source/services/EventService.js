@@ -16,8 +16,7 @@ const EventService = {
     this.resource.objects.create(this.data);
   },
   delete(id) {
-    console.log('DELETE', id);
-    return this.resource.objects.delete({id});
+    return this.resource.objects.delete(id);
   }
 }
 
