@@ -22,24 +22,24 @@ export default class Dashboard extends Component {
     this.state = {
       neighborhood: null,
       neighborhoods: [],
-
       events: [],
+      currentTab: null,
     };
   }
 
   componentWillMount() {
     this.fetchNeighborhoods();
-
     this.fetchOpen();
-    // this.fetchInFlux();
-    // this.fetchHappening();
   }
 
   fetchOpen() {
-    EventService.find()
+    console.log('this.state.neighborhood', this.state.neighborhood);
+    let dataFilter = {};
+    if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    EventService.find(dataFilter)
     .then(({objects:events}) => {
       console.log(events);
-      this.setState({events});
+      this.setState({events, currentTab: 0});
     })
     .catch(error => {
       console.log('Error fetching open events', error);
@@ -47,10 +47,12 @@ export default class Dashboard extends Component {
   }
 
   fetchInFlux() {
-    EventService.findInFlux()
+    let dataFilter = {};
+    if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    EventService.findInFlux(dataFilter)
     .then(({objects:events}) => {
       console.log(events);
-      this.setState({events});
+      this.setState({events, currentTab: 1});
     })
     .catch(error => {
       console.log('Error fetching open events', error);
@@ -58,10 +60,12 @@ export default class Dashboard extends Component {
   }
 
   fetchHappening() {
-    EventService.findHappening()
+    let dataFilter = {};
+    if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    EventService.findHappening(dataFilter)
     .then(({objects:events}) => {
       console.log(events);
-      this.setState({events});
+      this.setState({events, currentTab: 2});
     })
     .catch(error => {
       console.log('Error fetching open events', error);
@@ -79,10 +83,20 @@ export default class Dashboard extends Component {
 
   onSelectNeighborhoodHandle(index) {
     this.setState({neighborhood: this.state.neighborhoods[index]});
+    setTimeout(() => {
+      if(this.state.currentTab === 0) this.fetchOpen();
+      if(this.state.currentTab === 1) this.fetchInFlux();
+      if(this.state.currentTab === 2) this.fetchHappening();
+    }, 1);
   }
 
   clearNeighborhood() {
     this.setState({neighborhood: null});
+    setTimeout(() => {
+      if(this.state.currentTab === 0) this.fetchOpen();
+      if(this.state.currentTab === 1) this.fetchInFlux();
+      if(this.state.currentTab === 2) this.fetchHappening();
+    }, 1);
   }
 
   render() {
@@ -112,15 +126,15 @@ export default class Dashboard extends Component {
 
           <View style={styles.filterBar}>
 
-            <TouchableOpacity onPress={() => { this.fetchOpen() }} style={[styles.filterBarButton, styles.filterBarButton1]}>
+            <TouchableOpacity onPress={() => { this.fetchOpen() }} style={[styles.filterBarButton, styles.filterBarButton1, this.state.currentTab === 0 && styles.selectedTab]}>
               <Text style={styles.filterBarButtonText}>Aberto</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { this.fetchInFlux() }} style={[styles.filterBarButton, styles.filterBarButton2]}>
+            <TouchableOpacity onPress={() => { this.fetchInFlux() }} style={[styles.filterBarButton, styles.filterBarButton2, this.state.currentTab === 1 && styles.selectedTab]}>
               <Text style={styles.filterBarButtonText}>No Fluxo</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { this.fetchHappening() }} style={[styles.filterBarButton, styles.filterBarButton3]}>
+            <TouchableOpacity onPress={() => { this.fetchHappening() }} style={[styles.filterBarButton, styles.filterBarButton3, this.state.currentTab === 2 && styles.selectedTab]}>
               <Text style={styles.filterBarButtonText}>Rolou</Text>
             </TouchableOpacity>
 
@@ -170,6 +184,9 @@ const styles = StyleSheet.create({
   },
   filterBarButton3: {
     borderBottomColor: '#1E88E5',
+  },
+  selectedTab: {
+    backgroundColor: '#CFD8DC',
   },
 
   filterBarButtonText: {
