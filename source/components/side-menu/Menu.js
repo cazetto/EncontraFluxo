@@ -15,9 +15,9 @@ const styles = StyleSheet.create({
     width: '110%',
   },
   userName: {
-    paddingTop: 9,
+    paddingTop: 10,
     paddingHorizontal: 12,
-    height: 39,
+    height: Platform.OS === 'ios' ? 39 : 40.5,
     fontSize: 15,
     textAlign: 'left',
     backgroundColor: '#263238',
