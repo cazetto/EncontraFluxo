@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
 import PeopleItem from './PeopleItem';
 
-export default class CopyModal extends Component {
+export default class ConnectedPeopleModal extends Component {
   state = {
     modalVisible: false,
   }
@@ -12,10 +12,6 @@ export default class CopyModal extends Component {
   componentWillMount() {
     let { contributors } = this.props;
     this.setState({contributors});
-  }
-
-  fetchEvent() {
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,8 +44,7 @@ export default class CopyModal extends Component {
           animationType={"fade"}
           transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}
-          >
+          onRequestClose={() => {alert("Modal has been closed.")}}>
           <View style={styles.container}>
             <View style={styles.wrapper}>
               <View style={styles.header}>
@@ -61,11 +56,9 @@ export default class CopyModal extends Component {
               <ScrollView style={styles.content}>
                 {this.renderPeople()}
               </ScrollView>
-
               <TouchableOpacity onPress={() => {this.copy()}} style={styles.btnCopy}>
                 <Text style={styles.btnCopyText}>COPIAR DADOS</Text>
               </TouchableOpacity>
-
             </View>
           </View>
         </Modal>
@@ -92,7 +85,6 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    // alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
   headerTitle: {
@@ -111,7 +103,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingHorizontal: 6,
   },
-
   btnCopy: {
     backgroundColor: '#039BE5',
     padding: 8,
