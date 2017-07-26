@@ -156,7 +156,7 @@ export default class Dashboard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 60 : 75),
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 60 : 64),
   },
 
   control: {

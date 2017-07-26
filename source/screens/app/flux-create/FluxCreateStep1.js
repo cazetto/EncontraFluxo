@@ -114,7 +114,9 @@ export default class FluxCreateStep1 extends Component {
             autoCorrect={false}
             keyboardType="default"
             autoCapitalize="none"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="next"
+            >
           </TextInput>
           <TextInput
             placeholder="LOCAL: Descreva onde ocorrerá o evento e se possivel informe uma referência."
@@ -124,7 +126,9 @@ export default class FluxCreateStep1 extends Component {
             autoCorrect={false}
             multiline={true}
             keyboardType="default"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="next"
+            >
           </TextInput>
           <Select
             placeholder="SELECIONE O BAIRRO"
@@ -179,7 +183,9 @@ export default class FluxCreateStep1 extends Component {
             multiline={true}
             keyboardType="default"
             autoCapitalize="sentences"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            >
           </TextInput>
         </View>
 
