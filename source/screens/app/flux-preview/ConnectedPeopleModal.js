@@ -33,10 +33,10 @@ export default class CopyModal extends Component {
   copy() {
     let contributorsString = this.state.contributors.reduce((accumulator, {nome, email, fone, habilidades, materiais}, index, array) => {
       let habilidadesString = habilidades.reduce((accumulator, {nome}, index, array) =>
-      `${accumulator}${nome}${ index < (array.length-1) ? ',' : '.'} `, '');
+      `${accumulator}${nome}${index<(array.length-1)?', ':'.'}`, '');
       let materiaisString = materiais.reduce((accumulator, nome, index, array) =>
-      `${accumulator}${nome}${ index < (array.length-1) ? ',' : '.'} `, '');
-      return `${accumulator}Nome: ${nome}\nEmail: ${email}\nHabilidades: ${habilidadesString}\nMateriais: ${materiaisString}\n\n`;
+      `${accumulator}${nome}${index<(array.length-1)?', ':'.'}`, '');
+      return `${accumulator}Nome: ${nome}\nEmail: ${email}\n${habilidadesString!=''?('Habilidades: '+habilidadesString):''}\n${materiaisString!=''?'Materiais: '+materiaisString:''}${index<(array.length-1)?'\n\n':''}`;
     }, '');
     Clipboard.setString(contributorsString);
   }
