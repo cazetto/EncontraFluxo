@@ -119,7 +119,8 @@ export default class FluxCreateStep1 extends Component {
             keyboardType="default"
             autoCapitalize="none"
             underlineColorAndroid="transparent"
-            returnKeyType="next"
+            returnKeyType="done"
+            blurOnSubmit={true}
             >
           </TextInput>
           <TextInput
@@ -131,7 +132,8 @@ export default class FluxCreateStep1 extends Component {
             multiline={true}
             keyboardType="default"
             underlineColorAndroid="transparent"
-            returnKeyType="next"
+            returnKeyType="done"
+            blurOnSubmit={true}
             >
           </TextInput>
           <Select
@@ -189,6 +191,7 @@ export default class FluxCreateStep1 extends Component {
             autoCapitalize="sentences"
             underlineColorAndroid="transparent"
             returnKeyType="done"
+            blurOnSubmit={true}
             >
           </TextInput>
         </View>
