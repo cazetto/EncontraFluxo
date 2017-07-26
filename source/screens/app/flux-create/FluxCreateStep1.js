@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
-import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native';
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import DatePicker from 'react-native-datepicker';
 import Select from '../../../components/select/Select';
@@ -104,6 +106,8 @@ export default class FluxCreateStep1 extends Component {
         pathname:"/app/flux-create-step-2",
         state: {editable: this.editable}
       }} /> :
+      <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+      <KeyboardAwareScrollView>
       <View style={styles.container}>
         <View style={styles.page}>
           <TextInput
@@ -196,6 +200,8 @@ export default class FluxCreateStep1 extends Component {
         </TouchableOpacity>
 
       </View>
+      </KeyboardAwareScrollView>
+      </TouchableWithoutFeedback>
     );
   }
 }

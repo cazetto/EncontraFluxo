@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Platform, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, View, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import { withRouter } from 'react-router';
 
@@ -51,21 +51,23 @@ class Header extends Component {
     const title = headerRoutesConfig[key] ? headerRoutesConfig[key].title : ' ';
 
     return (
-      <View style={styles.container}>
-        <View style={styles.leftColumn}>
-          <TouchableOpacity onPress={()=>{this.props.toggleSideMenu()}}>
-            <Icon name="menu" style={styles.menuIcon} />
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+        <View style={styles.container}>
+          <View style={styles.leftColumn}>
+            <TouchableOpacity onPress={()=>{this.props.toggleSideMenu()}}>
+              <Icon name="menu" style={styles.menuIcon} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.middeColumn}>
+            <Text style={styles.title}>{title}</Text>
+          </View>
+          <View style={styles.rightColumn}>
+            <TouchableOpacity onPress={()=>{this.back()}}>
+              <Icon name="arrow-back" style={styles.backIcon} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.middeColumn}>
-          <Text style={styles.title}>{title}</Text>
-        </View>
-        <View style={styles.rightColumn}>
-          <TouchableOpacity onPress={()=>{this.back()}}>
-            <Icon name="arrow-back" style={styles.backIcon} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
