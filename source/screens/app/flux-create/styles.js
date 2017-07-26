@@ -21,7 +21,7 @@ export default styles = StyleSheet.create({
     height: 83,
   },
   description: {
-    height: Dimensions.get('window').height -325,
+    height: Dimensions.get('window').height -329,
   },
   datePicker: {
     width: Dimensions.get('window').width - 20,
@@ -45,7 +45,7 @@ export default styles = StyleSheet.create({
   },
 
   materialList: {
-    height: Dimensions.get('window').height -205,
+    height: Dimensions.get('window').height -209,
     marginTop: 4,
   },
   materialListItem: {

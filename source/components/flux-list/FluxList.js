@@ -7,10 +7,10 @@ export default class FluxList extends Component {
 
   renderItems() {
     let items = this.props.items;
-    let color = this.props.color;
+
     if(!items) return <ActivityIndicator style={styles.activityIndicator} />
     return items.map(item => {
-      return <FluxListItem key={item.id} data={item} color={color} />;
+      return <FluxListItem key={item.id} data={item} />;
     })
   }
 

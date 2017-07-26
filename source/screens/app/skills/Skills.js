@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
 
   control: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 104 : 125),
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 108 : 125),
     marginHorizontal: 10,
   },
 

@@ -142,7 +142,7 @@ export default class Dashboard extends Component {
 
         </View>
 
-        <FluxList items={this.state.events} color="#FDD835"></FluxList>
+        <FluxList items={this.state.events}></FluxList>
 
         <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
@@ -156,7 +156,7 @@ export default class Dashboard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 56 : 75),
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 60 : 75),
   },
 
   control: {
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignItems: 'center',
   },
-
   filterBarButton1: {
     borderBottomColor: '#FBC02D',
   },
@@ -188,11 +187,9 @@ const styles = StyleSheet.create({
   selectedTab: {
     backgroundColor: '#CFD8DC',
   },
-
   filterBarButtonText: {
     color: '#37474F',
   },
-
   inputLabel: {
     marginTop: 14,
     marginBottom: 10,
@@ -207,7 +204,6 @@ const styles = StyleSheet.create({
     color: '#616161',
   },
   selectNeighborhood: {
-
   },
   selectNeighborhoodButton: {
     position: 'absolute',
@@ -226,7 +222,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
   selectNeighborhoodModal: {
-    // width: Dimensions.get('window').width - inputMargin * 2,
     width: '100%',
   },
   btnActionDone: {

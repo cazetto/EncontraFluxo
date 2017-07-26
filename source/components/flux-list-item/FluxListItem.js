@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import TouchableRedirectorWrapper from '../touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
+import UserService from '../../services/UserService';
 import NeighborhoodService from '../../services/NeighborhoodService';
 
 import moment from 'moment';
@@ -12,8 +13,19 @@ import moment from 'moment';
 export default class FluxListItem extends PureComponent {
 
   componentWillMount() {
-    let { color } = this.props;
-    let { id, nome:name, descricao:description, bairro_id:neighborhoodId, colaboradores:people, dt_evento:date } = this.props.data;
+    let { id, nome:name, descricao:description, bairro_id:neighborhoodId, colaboradores:people, dt_evento:date,
+    estou_participando, responsavel, materiais:materiaisNecessarios, habilidades:habilidadesNecessarias, colaboradores } = this.props.data;
+    // wat?
+    // SETA AMARELA - Fluxos que ainda não expiraram
+    // BOLA VERDE - Quando eu pertenço ou sou dono daquele fluxo
+    // SETA AZUL - Fluxos que ainda não expiraram e que conquistou o número de habilidades e materiais que ele precisa para acontecer
+    // '#FBC02D' '#7CB342' '#1E88E5'
+    // let eventIsNotExpiredAndCompleted = eventIsNotExpired && true;
+    let userIsOwnerOrContributor = UserService.id === responsavel.id || estou_participando;
+    let eventIsNotExpired = moment(date).diff(moment(), 'days') <= 0;
+    var color = '#1E88E5';
+    if (userIsOwnerOrContributor) color = '#7CB342';
+    if (eventIsNotExpired) color = '#FBC02D';
 
     this.setState({
       id,

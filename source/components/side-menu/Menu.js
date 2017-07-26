@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   userName: {
     paddingTop: 9,
     paddingHorizontal: 12,
-    height: 35,
+    height: 39,
     fontSize: 15,
     textAlign: 'left',
     backgroundColor: '#263238',

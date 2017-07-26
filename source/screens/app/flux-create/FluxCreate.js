@@ -354,6 +354,8 @@ const pageOneStyles = StyleSheet.create({
     padding: 10,
     marginVertical: 2,
     fontSize: 16,
+    lineHeight: 16,
+    textAlignVertical: 'top',
     color: '#616161',
     backgroundColor: '#FAFAFA',
   },
