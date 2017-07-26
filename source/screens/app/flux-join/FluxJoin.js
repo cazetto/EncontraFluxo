@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, ActivityIndicator, Dimensions, Platform } from 'react-native';
+import { Redirect } from 'react-router';
 
 import { CheckBox } from 'react-native-elements';
 
@@ -9,13 +10,13 @@ import update from 'immutability-helper';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
-// import JoinService from '../../../services/JoinService';
 import EventService from '../../../services/EventService';
 
 export default class FluxPreview extends Component {
 
   state = {
     eventData: {},
+    completed: false,
   }
 
   componentWillMount() {
@@ -86,20 +87,26 @@ export default class FluxPreview extends Component {
 
     EventService.join(data)
     .then(response => {
+
       console.log('colaborarcolaborarcolaborarcolaborarcolaborar', response);
+
+      this.setState({completed: true})
+
+
     })
     .catch(error => {
       console.log('Join error:', error);
     });
-
-    console.log('DADOS ENVIADOS PARA COLABORAR', JSON.stringify(data) );
-
   }
 
   render() {
     let { id, name, people, description, date, address, skills, interests, materials, user, neighborhood } = this.state.eventData;
 
     return (
+      this.state.completed ?
+      <Redirect push to={{
+        pathname:"/app/flux-congrats"
+      }} /> :
       <View style={styles.container}>
         <View style={styles.content}>
           <ScrollView>
@@ -118,12 +125,9 @@ export default class FluxPreview extends Component {
           </ScrollView>
           <Text>Ao entrar neste fluxo eu permito que <Text style={styles.userName}>{user}</Text> entre em contato comigo por email.</Text>
         </View>
-
-
         <TouchableOpacity onPress={() => this.join()} style={styles.btnActionDone}>
           <Text style={styles.btnActionDoneText}>CONFIRMAR</Text>
         </TouchableOpacity>
-
       </View>
     );
   }
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECEFF1',
   },
   content: {
-    // flex: 1,
+    flex: 1,
     padding: 20,
   },
   info: {

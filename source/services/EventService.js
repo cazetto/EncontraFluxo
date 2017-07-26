@@ -6,7 +6,7 @@ const EventService = {
   resource: new api.Tastypie.Resource('evento', { provider: APPLICATION_API_CONFIG.name }),
   resourceInFlux: new api.Tastypie.Resource('evento/no-fluxo', { provider: APPLICATION_API_CONFIG.name }),
   resourceHappening: new api.Tastypie.Resource('evento/acontecendo', { provider: APPLICATION_API_CONFIG.name }),
-  resourceJoin: new api.Tastypie.Resource('evento/colaborar', { provider: APPLICATION_API_CONFIG.name }),
+  resourceJoin: new api.Tastypie.Resource('colaborar', { provider: APPLICATION_API_CONFIG.name }),
   find(data) {
     return this.resource.objects.find(data);
   },
@@ -22,13 +22,12 @@ const EventService = {
     return this.resource.objects.delete(id);
   },
   findInFlux(data) {
-    return this.resourceInFlux.objects.find();
+    return this.resourceInFlux.objects.find(data);
   },
   findHappening(data) {
     return this.resourceHappening.objects.find(data);
   },
   join(data) {
-    // return this.resourceJoin.objects.update(data.evento_id, data);
     return this.resourceJoin.objects.create(data);
   }
 }

@@ -7,6 +7,8 @@ import moment from 'moment';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 import ModalConfirm from '../../../components/modal-confirm/ModalConfirm';
 
+import ConnectedPeopleModal from './ConnectedPeopleModal';
+
 import UserService from '../../../services/UserService';
 import EventService from '../../../services/EventService';
 import NeighborhoodService from '../../../services/NeighborhoodService';
@@ -20,6 +22,7 @@ export default class FluxPreview extends Component {
     fetchingNeighborhood: true,
 
     deleteModalIsVisible: false,
+    peopleModalIsVisible: false,
   }
 
   componentWillMount() {
@@ -33,6 +36,10 @@ export default class FluxPreview extends Component {
     EventService.get(id)
     .then(response => {
 
+      console.log('_________________________');
+      console.log(response);
+      console.log('_________________________');
+
       let {
         id,
         responsavel: { nome:eventUserName, id:eventUserId },
@@ -45,12 +52,12 @@ export default class FluxPreview extends Component {
         habilidades:skills,
         interesses:interests,
         materiais:materials,
+        colaboradores:contributors,
       } = response;
 
-      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
+      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials, contributors});
 
       this.fetchNeighborhood(neighborhoodId);
-
     })
     .catch(error => {
       console.log('Error when fetch event', error);
@@ -97,7 +104,7 @@ export default class FluxPreview extends Component {
 
     let {
       fetchingEvent, fetchingNeighborhood,
-      id, eventUserId, eventUserName, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood
+      id, eventUserId, eventUserName, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood, contributors
     } = this.state;
 
     let isOwner = eventUserId === userId;
@@ -142,10 +149,19 @@ export default class FluxPreview extends Component {
             confirm={() => {this.delete()}}
             cancel={() => {this.setState({deleteModalIsVisible:false})}}
           />
+
+          <ConnectedPeopleModal
+            contributors={this.state.contributors}
+            isVisible={this.state.peopleModalIsVisible}
+            close={() => {this.setState({peopleModalIsVisible:false})}}
+          />
+          <TouchableOpacity onPress={() => { this.setState({peopleModalIsVisible: true}) }} style={styles.btnConnectedPeople}>
+            <Text style={styles.btnConnectedPeopleText}>VER PESSOAS CONECTADAS</Text>
+          </TouchableOpacity>
         </View>
+
         {
-          isOwner
-          ?
+          isOwner ?
           <View style={styles.doubleBtns}>
             <View style={styles.btnHalfLeft}>
               <TouchableRedirectorWrapper path={`/app/flux-create-step-1`} state={{editable: this.state}} content={
@@ -228,5 +244,17 @@ const styles = StyleSheet.create({
     marginRight: 2,
     marginBottom: 3,
     borderBottomRightRadius: 4,
+  },
+  btnConnectedPeople: {
+    backgroundColor: '#43A047',
+    padding: 8,
+    marginHorizontal: '10%',
+    borderRadius: 4,
+  },
+  btnConnectedPeopleText: {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize: 15,
+    padding: 4,
   }
 });
