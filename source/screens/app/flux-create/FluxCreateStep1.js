@@ -96,6 +96,12 @@ export default class FluxCreateStep1 extends Component {
     this.setState({goNextScreen: true});
   }
 
+  done() {
+    let incompleteFill = Object.keys(this.state.eventData)
+    .some(current => this.state.eventData[current] === null || this.state.eventData[current] === '');
+    if(!incompleteFill) this.next();
+  }
+
   render() {
     let incompleteFill = Object.keys(this.state.eventData)
     .some(current => this.state.eventData[current] === null || this.state.eventData[current] === '');
@@ -121,6 +127,7 @@ export default class FluxCreateStep1 extends Component {
             underlineColorAndroid="transparent"
             returnKeyType="done"
             blurOnSubmit={true}
+            onSubmitEditing={() => {this.done()}}
             >
           </TextInput>
           <TextInput
@@ -134,6 +141,7 @@ export default class FluxCreateStep1 extends Component {
             underlineColorAndroid="transparent"
             returnKeyType="done"
             blurOnSubmit={true}
+            onSubmitEditing={() => {this.done()}}
             >
           </TextInput>
           <Select
@@ -192,6 +200,7 @@ export default class FluxCreateStep1 extends Component {
             underlineColorAndroid="transparent"
             returnKeyType="done"
             blurOnSubmit={true}
+            onSubmitEditing={() => {this.done()}}
             >
           </TextInput>
         </View>

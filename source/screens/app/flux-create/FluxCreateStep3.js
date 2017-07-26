@@ -103,7 +103,11 @@ export default class FluxCreateStep3 extends Component {
             autoCorrect={false}
             keyboardType="default"
             autoCapitalize="none"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onSubmitEditing={() => {this.addMaterial()}}
+            >
           </TextInput>
 
           <TouchableOpacity style={styles.addMaterialButton} onPress={() => {this.addMaterial()}}>
