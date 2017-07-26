@@ -70,16 +70,29 @@ export default class FluxPreview extends Component {
     });
   }
 
-  renderSkills(list) {
-    return list
-    .reduce((accumulator, {nome}, index, array) =>
-    `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
+  renderSkills() {
+    return !!this.state.skills.length && (
+      <View style={styles.group}>
+        <Text style={styles.infoLabel}>Habilidades: <Text style={styles.info}>
+            { this.state.skills.reduce((accumulator, {nome}, index, array) =>
+              `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '') }
+          </Text>
+        </Text>
+      </View>
+    );
   }
 
-  renderMaterials(list) {
-    return list
-    .reduce((accumulator, nome, index, array) =>
-    `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
+  renderMaterials() {
+    return !!this.state.materials.length && (
+      <View style={styles.group}>
+        <Text style={styles.infoLabel}>Materiais: <Text style={styles.info}>
+            { this.state.materials
+            .reduce((accumulator, nome, index, array) =>
+            `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '') }
+          </Text>
+        </Text>
+      </View>
+    );
   }
 
   delete() {
@@ -116,24 +129,22 @@ export default class FluxPreview extends Component {
         <View style={styles.content}>
           <ScrollView style={styles.scrollView}>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Nome: {name}</Text>
-              <Text style={[styles.info]}>Criador: {eventUserName}</Text>
-              <Text style={[styles.info]}>Bairro: {neighborhood}</Text>
-              <Text style={[styles.info]}>Local: {address}</Text>
-              <Text style={[styles.info]}>Data: {moment(date).format('DD/MM/YYYY')}</Text>
+              <Text style={styles.infoLabel}>Nome: <Text style={styles.info}>{name}</Text></Text>
+              <Text style={styles.infoLabel}>Criador: <Text style={styles.info}>{eventUserName}</Text></Text>
+              <Text style={styles.infoLabel}>Bairro: <Text style={styles.info}>{neighborhood}</Text></Text>
+              <Text style={styles.infoLabel}>Local: <Text style={styles.info}>{address}</Text></Text>
+              <Text style={styles.infoLabel}>Data: <Text style={styles.info}>{moment(date).format('DD/MM/YYYY')}</Text></Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>{people && people.length || 0} PESSOAS NO FLUXO</Text>
+              <Text style={styles.info}>{people && people.length || 0} PESSOAS NO FLUXO</Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Descrição: {description}</Text>
+              <Text style={styles.infoLabel}>Descrição: <Text style={styles.info}>{description}</Text></Text>
             </View>
-            <View style={styles.group}>
-              <Text style={[styles.info]}>Habilidades: {this.renderSkills(this.state.skills)}</Text>
-            </View>
-            <View style={styles.group}>
-              <Text style={[styles.info]}>Materiais: {this.renderMaterials(this.state.materials)}</Text>
-            </View>
+
+            {this.renderSkills()}
+            {this.renderMaterials()}
+
           </ScrollView>
 
           <ModalConfirm
@@ -196,7 +207,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   info: {
-    color: '#424242',
+    color: '#37474F',
+    fontWeight: '600',
+  },
+  infoLabel: {
+    color: '#37474F',
+    fontWeight: '400',
+    marginBottom: 3
   },
   group: {
     marginBottom: 10,
