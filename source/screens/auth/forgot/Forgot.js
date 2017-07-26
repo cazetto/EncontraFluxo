@@ -24,7 +24,7 @@ export default class Forgot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      credentials: {
+      data: {
         email: '',
       },
       isFetching: false,
@@ -35,18 +35,18 @@ export default class Forgot extends Component {
   delayedChangeCredentials(field) {
     return (
       _.debounce(value => {
-        let credentials = update(this.state.credentials, {$merge: {[field]:value}});
-        this.setState({credentials});
+        let data = update(this.state.data, {$merge: {[field]:value}});
+        this.setState({data});
       }, 100)
     );
   }
 
   forgot() {
     this.setState({isFetching: true});
-    AuthService.forgot(this.state.credentials)
+    AuthService.forgot(this.state.data)
     .then(response => {
-      this.refs.toast.show(`Senha enviada para: \n${this.state.credentials.email}`, 1000);
-      this.setState({credentials: {email: ''}, isFetching: false});
+      this.refs.toast.show(`Senha enviada para: \n${this.state.data.email}`, 1000);
+      this.setState({data: {email: ''}, isFetching: false});
       const delay = setTimeout(() => {
         clearTimeout(delay);
         this.setState({forgotComplete: true});
@@ -54,6 +54,7 @@ export default class Forgot extends Component {
     })
     .catch(error => {
       this.refs.toast.show(`Erro ao recuperar senha!`, 1000);
+      this.setState({data: {email: ''}, isFetching: false});
     })
   }
 
@@ -85,6 +86,10 @@ export default class Forgot extends Component {
     ) : null;
   }
 
+  done() {
+    if(this.state.data.email) this.forgot();
+  }
+
   render() {
     return (
       this.state.forgotComplete ? <Redirect to="/auth/login" /> :
@@ -93,13 +98,16 @@ export default class Forgot extends Component {
           <View style={styles.textInputWrapper}>
             <TextInput
               placeholder="E-mail"
-              defaultValue={this.state.credentials.email}
+              defaultValue={this.state.data.email}
               onChangeText={this.delayedChangeCredentials('email')}
               keyboardType="email-address"
               selectTextOnFocus
               underlineColorAndroid="transparent"
               autoCapitalize="none"
               autoCorrect={false}
+              returnKeyType="done"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.done()}}
               style={styles.textInput}
             />
           </View>
@@ -112,7 +120,7 @@ export default class Forgot extends Component {
           ref="toast"
           style={styles.toast}
           position="top"
-          positionValue={180}
+          positionValue={-50}
           fadeInDuration={750}
           fadeOutDuration={750}
           opacity={0.8}
