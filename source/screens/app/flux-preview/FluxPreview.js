@@ -35,11 +35,6 @@ export default class FluxPreview extends Component {
 
     EventService.get(id)
     .then(response => {
-
-      console.log('_________________________');
-      console.log(response);
-      console.log('_________________________');
-
       let {
         id,
         responsavel: { nome:eventUserName, id:eventUserId },
@@ -119,7 +114,7 @@ export default class FluxPreview extends Component {
       <Redirect push to={this.state.redirectURI} /> :
       <View style={styles.container}>
         <View style={styles.content}>
-          <ScrollView>
+          <ScrollView style={styles.scrollView}>
             <View style={styles.group}>
               <Text style={[styles.info]}>Nome: {name}</Text>
               <Text style={[styles.info]}>Criador: {eventUserName}</Text>
@@ -197,6 +192,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  scrollView: {
+    marginBottom: 10,
+  },
   info: {
     color: '#424242',
   },
@@ -248,7 +246,6 @@ const styles = StyleSheet.create({
   btnConnectedPeople: {
     backgroundColor: '#43A047',
     padding: 8,
-    marginHorizontal: '10%',
     borderRadius: 4,
   },
   btnConnectedPeopleText: {

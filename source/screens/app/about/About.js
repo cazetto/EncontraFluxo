@@ -63,17 +63,18 @@ const styles = StyleSheet.create({
   logoWelight: {
     resizeMode: 'contain',
     width: 100,
+    marginTop: -4,
   },
 
   openWelightSite: {
     position: 'absolute',
     left: 14,
     width: 135,
+    marginTop: -18,
     top: Dimensions.get('window').height - 80,
   },
   link: {
     color: '#0277BD',
-    marginTop: -6,
     fontWeight: '500'
   }
 });
