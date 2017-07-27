@@ -14,22 +14,28 @@ export default class FluxListItem extends PureComponent {
 
   componentWillMount() {
     let { id, nome:name, descricao:description, bairro_id:neighborhoodId, colaboradores:people, dt_evento:date,
-    estou_participando, responsavel, materiais:materiaisNecessarios, habilidades:habilidadesNecessarias, colaboradores } = this.props.data;
+    estou_participando, responsavel, materiais:materiaisNecessarios, habilidades:habilidadesNecessarias, suprido:supplied } = this.props.data;
     // wat?
     // SETA AMARELA - Fluxos que ainda não expiraram
     // BOLA VERDE - Quando eu pertenço ou sou dono daquele fluxo
     // SETA AZUL - Fluxos que ainda não expiraram e que conquistou o número de habilidades e materiais que ele precisa para acontecer
     // '#FBC02D' '#7CB342' '#1E88E5'
-    // let eventIsNotExpiredAndCompleted = eventIsNotExpired && true;
+
     let userIsOwnerOrContributor = UserService.id === responsavel.id || estou_participando;
     let eventIsNotExpired = moment(date).diff(moment(), 'days') <= 0;
-    var color = '#1E88E5';
-    if (userIsOwnerOrContributor) color = '#7CB342';
-    if (eventIsNotExpired) color = '#FBC02D';
+    let eventIsNotExpiredAndSuplied = eventIsNotExpired && supplied;
+
+    var colorArrow;
+    if(userIsOwnerOrContributor) colorArrow = '#7CB342';
+    if(eventIsNotExpired) colorArrow = '#FBC02D';
+    if(eventIsNotExpiredAndSuplied) colorArrow = '#1E88E5';
+
+    var colorBullet = userIsOwnerOrContributor ? '#7CB342' : '#546E7A';
 
     this.setState({
       id,
-      color,
+      colorArrow,
+      colorBullet,
       name,
       description,
       people,
@@ -48,12 +54,12 @@ export default class FluxListItem extends PureComponent {
   }
 
   render() {
-    let { id, color, name, description, neighborhood, people, date } = this.state;
+    let { id, colorArrow, colorBullet, name, description, neighborhood, people, date } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.leftColumn}>
           <View style={styles.header}>
-            <View style={[styles.bullet, {backgroundColor: color}]}></View>
+            <View style={[styles.bullet, {backgroundColor: colorBullet}]}></View>
             <Text style={styles.title}>{name}</Text>
           </View>
           <Text style={styles.neighborhood}>Bairro: {neighborhood}</Text>
@@ -68,9 +74,9 @@ export default class FluxListItem extends PureComponent {
           </View>
         </View>
         <View style={styles.rightColumn}>
-          <TouchableRedirectorWrapper path={`/app/flux-preview/${id}`} content={
-            <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color}]}/>
-          } />
+        <TouchableRedirectorWrapper path={`/app/flux-preview/${id}`} content={
+          <Icon name='md-arrow-dropright' style={[styles.arrowIcon, {color: colorArrow}]}/>
+        } />
         </View>
       </View>
     );
@@ -86,10 +92,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 0,
     borderBottomWidth: 2,
-    borderBottomColor: '#EEEEEE'
+    borderBottomColor: '#EEEEEE',
   },
   leftColumn: {
     paddingRight: 10,
+    width: Dimensions.get('window').width - 60,
   },
   rightColumn: {
     flexDirection: 'row',
@@ -137,7 +144,8 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     paddingVertical: 20,
-    paddingHorizontal: 14,
+    paddingLeft: 16,
+    width: 40,
     fontSize: 50,
-  }
+  },
 });

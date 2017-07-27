@@ -42,7 +42,7 @@ export default class Splash extends Component {
 
   componentDidMount() {
     this.animate();
-    const WAIT = 0;
+    const WAIT = 3000;
     this.timer = TimerMixin.setTimeout(() => {
       this.setState({redirectionTimeoutCompleted: true});
     }, WAIT);

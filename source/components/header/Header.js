@@ -80,7 +80,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: '#263238',
-    padding: 6,
+    paddingVertical: 6,
+    paddingLeft: 6,
+    paddingRight: 8,
     marginTop: Platform.OS === 'ios' ? 21 : 0,
   },
   leftColumn: {

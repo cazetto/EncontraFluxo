@@ -33,7 +33,6 @@ export default class Dashboard extends Component {
   }
 
   fetchOpen() {
-    console.log('this.state.neighborhood', this.state.neighborhood);
     let dataFilter = {};
     if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
     EventService.find(dataFilter)
@@ -100,50 +99,37 @@ export default class Dashboard extends Component {
   }
 
   render() {
-
     return (
       <View style={styles.container}>
-        <View style={styles.control}>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods.map(neighborhood => neighborhood.nome)}
-            onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
-            dropdownStyle={styles.selectNeighborhoodModal}
-            >
-            <View>
-              <TextInput
-                editable={false}
-                placeholder="SELECIONE O BAIRRO"
-                value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood.nome}`}
-                style={styles.input}
-                underlineColorAndroid="transparent"
-                ></TextInput>
-
-              <TouchableOpacity onPress={() => {this.clearNeighborhood()}} disabled={!this.state.neighborhood} style={styles.selectNeighborhoodButton}>
-                <Icon name={this.state.neighborhood ? 'cross' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
-              </TouchableOpacity>
-
-            </View>
-          </ModalDropdown>
-
-          <View style={styles.filterBar}>
-
-            <TouchableOpacity onPress={() => { this.fetchOpen() }} style={[styles.filterBarButton, styles.filterBarButton1, this.state.currentTab === 0 && styles.selectedTab]}>
-              <Text style={styles.filterBarButtonText}>Aberto</Text>
+        <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods.map(neighborhood => neighborhood.nome)}
+          onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
+          dropdownStyle={styles.selectNeighborhoodModal}
+          >
+          <View>
+            <TextInput
+              editable={false}
+              placeholder="SELECIONE O BAIRRO"
+              value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood.nome}`}
+              style={styles.input}
+              underlineColorAndroid="transparent"
+              ></TextInput>
+            <TouchableOpacity onPress={() => {this.clearNeighborhood()}} disabled={!this.state.neighborhood} style={styles.selectNeighborhoodButton}>
+              <Icon name={this.state.neighborhood ? 'cross' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => { this.fetchInFlux() }} style={[styles.filterBarButton, styles.filterBarButton2, this.state.currentTab === 1 && styles.selectedTab]}>
-              <Text style={styles.filterBarButtonText}>No Fluxo</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => { this.fetchHappening() }} style={[styles.filterBarButton, styles.filterBarButton3, this.state.currentTab === 2 && styles.selectedTab]}>
-              <Text style={styles.filterBarButtonText}>Rolou</Text>
-            </TouchableOpacity>
-
           </View>
-
+        </ModalDropdown>
+        <View style={styles.filterBar}>
+          <TouchableOpacity onPress={() => { this.fetchOpen() }} style={[styles.filterBarButton, styles.filterBarButton1, this.state.currentTab === 0 && styles.selectedTab]}>
+            <Text style={styles.filterBarButtonText}>Aberto</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { this.fetchInFlux() }} style={[styles.filterBarButton, styles.filterBarButton2, this.state.currentTab === 1 && styles.selectedTab]}>
+            <Text style={styles.filterBarButtonText}>No Fluxo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { this.fetchHappening() }} style={[styles.filterBarButton, styles.filterBarButton3, this.state.currentTab === 2 && styles.selectedTab]}>
+            <Text style={styles.filterBarButtonText}>Rolou</Text>
+          </TouchableOpacity>
         </View>
-
         <FluxList items={this.state.events}></FluxList>
-
         <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
@@ -156,14 +142,8 @@ export default class Dashboard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 60 : 64),
+    flex: 1,
   },
-
-  control: {
-    // marginLeft: inputMargin,
-    // marginRight: inputMargin,
-  },
-
   filterBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -198,7 +178,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 36,
-    padding: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
     fontSize: 16,
     backgroundColor: '#FAFAFA',
     color: '#616161',

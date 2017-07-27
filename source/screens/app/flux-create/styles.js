@@ -5,6 +5,7 @@ export default styles = StyleSheet.create({
     flex: 1,
   },
   page: {
+    flex: 1,
     backgroundColor: "#F5F5F5",
     paddingHorizontal: 10,
     paddingTop: 10,
@@ -22,7 +23,7 @@ export default styles = StyleSheet.create({
     height: 83,
   },
   description: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 329 : 336),
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 329 : 337),
   },
   datePicker: {
     width: Dimensions.get('window').width - 20,
