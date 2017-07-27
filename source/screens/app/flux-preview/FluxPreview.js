@@ -17,10 +17,8 @@ export default class FluxPreview extends Component {
 
   state = {
     id: null,
-
     fetchingEvent: true,
     fetchingNeighborhood: true,
-
     deleteModalIsVisible: false,
     peopleModalIsVisible: false,
   }
@@ -48,10 +46,10 @@ export default class FluxPreview extends Component {
         interesses:interests,
         materiais:materials,
         colaboradores:contributors,
+        estou_participando:contributing
       } = response;
 
-      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials, contributors});
-
+      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials, contributors, contributing});
       this.fetchNeighborhood(neighborhoodId);
     })
     .catch(error => {
@@ -108,17 +106,28 @@ export default class FluxPreview extends Component {
     })
   }
 
-  render() {
+  leaveFlux() {
+    let { contributors, userId } = this.state;
+    let { id } = contributors.filter(contributor => contributor.usuario_id === userId)[0];
+    EventService.leave(id)
+    .then(response => {
+      let newContributors = contributors.filter(contributor => contributor.usuario_id != userId);
+      this.setState({contributing: null, contributors:newContributors});
+    })
+    .catch(error => {
+      console.log('Error when leave flux:', error);
+    });
+  }
 
+  render() {
     let {
-      fetchingEvent, fetchingNeighborhood,
-      id, eventUserId, eventUserName, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood, contributors
+      id, fetchingEvent, fetchingNeighborhood,
+      eventUserId, eventUserName, userId, name, people,
+      description, date, address, skills, interests,
+      materials, user, neighborhood, contributors, contributing
     } = this.state;
 
     let isOwner = eventUserId === userId;
-
-    console.log('eventUserId', eventUserId);
-    console.log('userId');
 
     return (
       fetchingEvent || fetchingNeighborhood ?
@@ -141,12 +150,9 @@ export default class FluxPreview extends Component {
             <View style={styles.group}>
               <Text style={styles.infoLabel}>Descrição: <Text style={styles.info}>{description}</Text></Text>
             </View>
-
             {this.renderSkills()}
             {this.renderMaterials()}
-
           </ScrollView>
-
           <ModalConfirm
             isVisible={this.state.deleteModalIsVisible}
             text="Tem certeza que deseja excluir este fluxo?"
@@ -155,17 +161,17 @@ export default class FluxPreview extends Component {
             confirm={() => {this.delete()}}
             cancel={() => {this.setState({deleteModalIsVisible:false})}}
           />
-
           <ConnectedPeopleModal
             contributors={this.state.contributors}
             isVisible={this.state.peopleModalIsVisible}
             close={() => {this.setState({peopleModalIsVisible:false})}}
           />
+          { isOwner &&
           <TouchableOpacity onPress={() => { this.setState({peopleModalIsVisible: true}) }} style={styles.btnConnectedPeople}>
             <Text style={styles.btnConnectedPeopleText}>VER PESSOAS CONECTADAS</Text>
           </TouchableOpacity>
+          }
         </View>
-
         {
           isOwner ?
           <View style={styles.doubleBtns}>
@@ -182,6 +188,13 @@ export default class FluxPreview extends Component {
               </View>
             </TouchableOpacity>
           </View>
+          :
+          contributing ?
+          <TouchableOpacity onPress={() => {this.leaveFlux()}}>
+            <View style={styles.btnActionDone}>
+              <Text style={styles.btnActionDoneText}>SAIR DESSE FLUXO</Text>
+            </View>
+          </TouchableOpacity>
           :
           <TouchableRedirectorWrapper path={`/app/flux-join/${id}`} state={this.state} content={
             <View style={styles.btnActionDone}>

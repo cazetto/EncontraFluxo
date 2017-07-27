@@ -29,7 +29,10 @@ const EventService = {
   },
   join(data) {
     return this.resourceJoin.objects.create(data);
-  }
+  },
+  leave(data) {
+    return this.resourceJoin.objects.delete(data);
+  },
 }
 
 export default EventService;
