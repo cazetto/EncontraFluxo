@@ -28,7 +28,8 @@ export default class Skills extends Component {
 
   fetchSkills() {
     SkillService.find({ limit: 0 })
-    .then(({objects:skills}) => {
+    .then(({objects}) => {
+      let skills = objects.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
       this.setState({skills});
       this.fetchUserProfile();
     })
@@ -106,6 +107,7 @@ export default class Skills extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F5F5F5",
   },
   listHeader: {
     paddingHorizontal: 14,

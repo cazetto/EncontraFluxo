@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   selectModal: {
     width: Dimensions.get('window').width - inputMargin * 2,
+    height: '50%'
   },
   input: {
     height: 36,

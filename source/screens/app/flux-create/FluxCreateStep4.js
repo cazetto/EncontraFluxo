@@ -42,7 +42,8 @@ export default class FluxCreateStep4 extends Component {
         interest.selected = this.editable.interests.some(addedSkill => interest.id === addedSkill.id);
         return interest;
       }) : objects;
-      this.setState({interests, fetchingInterests: false});
+      let interestsOrdered = interests.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
+      this.setState({interests:interestsOrdered, fetchingInterests: false});
     })
     .catch(error => {});
   }

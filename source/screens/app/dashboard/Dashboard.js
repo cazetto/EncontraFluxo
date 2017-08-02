@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
   },
   selectNeighborhoodModal: {
     width: '100%',
+    height: '70%',
   },
   btnActionDone: {
     backgroundColor: '#7CB342',

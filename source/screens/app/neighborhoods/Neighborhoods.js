@@ -39,8 +39,8 @@ export default class Neighborhoods extends Component {
   // FETCHES
   fetchNeighborhoods() {
     NeighborhoodService.find()
-    .then(response => {
-      let neighborhoods = response.objects;
+    .then(({objects}) => {
+      let neighborhoods = objects.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
       this.setState({neighborhoods});
     });
   }
@@ -83,6 +83,7 @@ export default class Neighborhoods extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F5F5F5",
   },
   control: {
     flex: 1,
@@ -95,8 +96,6 @@ const styles = StyleSheet.create({
     color: '#757575',
   },
   select: {
-    borderWidth: 1,
-    borderColor: '#ECEFF1',
   },
   btnActionDone: {
     backgroundColor: '#455A64',

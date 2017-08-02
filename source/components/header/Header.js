@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#263238',
     paddingVertical: 6,
     paddingLeft: 6,
-    paddingRight: 8,
+    paddingRight: 4,
     marginTop: Platform.OS === 'ios' ? 21 : 0,
   },
   leftColumn: {

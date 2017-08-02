@@ -42,7 +42,8 @@ export default class FluxCreateStep2 extends Component {
         skill.selected = this.editable.skills.some(addedSkill => skill.id === addedSkill.id);
         return skill;
       }) : objects;
-      this.setState({skills, fetchingSkills: false});
+      let skillsOrdered = skills.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
+      this.setState({skills:skillsOrdered, fetchingSkills: false});
     })
     .catch(error => {});
   }

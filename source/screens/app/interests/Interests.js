@@ -28,7 +28,8 @@ export default class Interests extends Component {
 
   fetchInterests() {
     InterestService.find({ limit: 0 })
-    .then(({objects:interests}) => {
+    .then(({objects}) => {
+      let interests = objects.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
       this.setState({interests});
       this.fetchUserProfile();
     })
@@ -106,6 +107,7 @@ export default class Interests extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F5F5F5",
   },
   listHeader: {
     paddingHorizontal: 14,
