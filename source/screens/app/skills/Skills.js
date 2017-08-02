@@ -57,7 +57,7 @@ export default class Skills extends Component {
   }
 
   fetchSkills() {
-    SkillService.find()
+    SkillService.find({ limit: 0 })
     .then(({objects:availableSkills}) => this.setState({availableSkills}))
     .catch(error => console.log('Error when fetching skills.'));
   }

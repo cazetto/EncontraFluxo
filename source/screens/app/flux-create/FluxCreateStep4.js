@@ -39,7 +39,7 @@ export default class FluxCreateStep4 extends Component {
   }
 
   fetchInterests() {
-    InterestService.find()
+    InterestService.find({ limit: 0 })
     .then(({objects:availableInterests}) => this.setState({availableInterests}))
     .catch(error => {});
   }
