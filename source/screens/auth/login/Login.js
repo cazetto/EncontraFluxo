@@ -32,12 +32,10 @@ export default class Login extends Component {
     super(props);
     this.state = {
       data: {
-        username: 'andre@welight.co',
-        password: '123',
-        // username: 'cazetto.andre@gmail.com',
-        // password: '123456',
-        // username: '',
-        // password: '',
+        // username: 'andre@welight.co',
+        // password: '123',
+        username: '',
+        password: '',
       },
       keepMeLoggedIn: true,
       isFetching: false,
@@ -117,11 +115,14 @@ export default class Login extends Component {
     ) : null;
   }
 
+  done() {
+    if(this.state.data.username && this.state.data.password) this.login();
+  }
+
   render() {
     return (
       this.state.loginComplete ? <Redirect to="/app/dashboard" /> :
       <View style={styles.content}>
-
         <View style={[styles.textInputs]}>
           <View style={styles.textInputWrapper}>
             <TextInput
@@ -133,22 +134,27 @@ export default class Login extends Component {
               selectTextOnFocus
               autoCorrect={false}
               autoCapitalize="none"
+              returnKeyType="next"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.refs.passwordTextInput.focus()}}
               style={styles.textInput}
             />
           </View>
-
           <View style={styles.textInputWrapper}>
             <TextInput
+              ref='passwordTextInput'
               placeholder="Senha"
               defaultValue={this.state.data.password}
               onChangeText={this.delayedChangeState('data', 'password')}
               secureTextEntry
               selectTextOnFocus
               underlineColorAndroid="transparent"
+              returnKeyType="done"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.done()}}
               style={styles.textInput}
             />
           </View>
-
           <View style={styles.keepMeLoggedInWrapper}>
             <CheckBox
               checkedColor='#546E7A'
@@ -160,25 +166,21 @@ export default class Login extends Component {
               style={styles.keepMeLoggedIn}
             />
           </View>
-
         </View>
-
         <View style={styles.actions}>
           {this.renderLoginButton()}
           {this.renderSignupButton()}
           {this.renderForgotPasswordButton()}
         </View>
-
         <Toast
           ref="toast"
           style={styles.toast}
           position="top"
-          positionValue={155}
+          positionValue={-48}
           fadeInDuration={750}
           fadeOutDuration={750}
           opacity={0.8}
         />
-
       </View>
     );
   }

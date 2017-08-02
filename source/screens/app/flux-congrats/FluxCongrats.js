@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
-import {StyleSheet, View, Text, Image, Dimensions, ActivityIndicator} from 'react-native';
+import {StyleSheet, View, Text, Image, ActivityIndicator, Dimensions, Platform} from 'react-native';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 import UserService from '../../../services/UserService';
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECEFF1',
   },
   content: {
-    height: Dimensions.get('window').height - 104,
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 108 : 116),
   },
   balloon: {
     position: 'absolute',

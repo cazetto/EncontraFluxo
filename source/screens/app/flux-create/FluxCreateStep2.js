@@ -39,7 +39,7 @@ export default class FluxCreateStep2 extends Component {
   }
 
   fetchSkills() {
-    SkillService.find()
+    SkillService.find({ limit: 0 })
     .then(({objects:availableSkills}) => this.setState({availableSkills}))
     .catch(error => console.log('Error when fetching skills.'));
   }
@@ -71,7 +71,7 @@ export default class FluxCreateStep2 extends Component {
 
     return (
       this.state.isComplete ?
-      <Redirect to={{
+      <Redirect push to={{
         pathname:"/app/flux-create-step-3",
         state: {editable: this.editable}
       }} /> :

@@ -7,10 +7,10 @@ export default class FluxList extends Component {
 
   renderItems() {
     let items = this.props.items;
-    let color = this.props.color;
-    if(!items) return <ActivityIndicator style={styles.activityIndicator} />
-    return items.map(item => {
-      return <FluxListItem key={item.id} data={item} color={color} />;
+    return !items ? <ActivityIndicator style={styles.activityIndicator} /> :
+    items.length == 0 ? <Text style={styles.noneItems}>Não há nenhum fluxo aqui!</Text> :
+    items.map(item => {
+      return <FluxListItem key={item.id} data={item} />;
     })
   }
 
@@ -30,5 +30,10 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     marginTop: 20,
+  },
+  noneItems: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#37474F',
   }
 });

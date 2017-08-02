@@ -13,6 +13,7 @@ import Dashboard from './screens/app/dashboard/Dashboard';
 import FluxPreview from './screens/app/flux-preview/FluxPreview';
 import FluxJoin from './screens/app/flux-join/FluxJoin';
 import FluxCongrats from './screens/app/flux-congrats/FluxCongrats';
+import About from './screens/app/about/About';
 
 import FluxCreateStep1 from './screens/app/flux-create/FluxCreateStep1';
 import FluxCreateStep2 from './screens/app/flux-create/FluxCreateStep2';
@@ -36,6 +37,7 @@ const App = props => (
     <PrivateRoute path="/app/flux-preview/:id" component={FluxPreview} />
     <PrivateRoute path="/app/flux-join/:id" component={FluxJoin} />
     <PrivateRoute path="/app/flux-congrats" component={FluxCongrats} />
+    <PrivateRoute path="/app/about" component={About} />
     <PrivateRoute exact path="/app/flux-create-step-1" component={FluxCreateStep1} />
     <PrivateRoute exact path="/app/flux-create-step-2" component={FluxCreateStep2} />
     <PrivateRoute exact path="/app/flux-create-step-3" component={FluxCreateStep3} />

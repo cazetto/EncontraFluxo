@@ -9,13 +9,11 @@ import Icon from 'react-native-vector-icons/Entypo';
 
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 
-import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
-
-import Tab from './Tab';
-
 import NeighborhoodService from '../../../services/NeighborhoodService';
 import EventService from '../../../services/EventService';
 import UserService from '../../../services/UserService';
+
+import FluxList from '../../../components/flux-list/FluxList';
 
 export default class Dashboard extends Component {
 
@@ -24,24 +22,53 @@ export default class Dashboard extends Component {
     this.state = {
       neighborhood: null,
       neighborhoods: [],
-      index: 0,
-      routes: [
-        { key: '1', title: 'Aberto' },
-        { key: '2', title: 'No Fluxo' },
-        { key: '3', title: 'Rolou' },
-      ],
+      events: [],
+      currentTab: null,
     };
   }
 
   componentWillMount() {
     this.fetchNeighborhoods();
-    this.fetchEvents();
+    this.fetchOpen();
+  }
 
-    this.filters = [
-      this.filterOpened,
-      this.filterInFlux,
-      this.filterHappening,
-    ];
+  fetchOpen() {
+    let dataFilter = {};
+    if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    EventService.find(dataFilter)
+    .then(({objects:events}) => {
+      console.log(events);
+      this.setState({events, currentTab: 0});
+    })
+    .catch(error => {
+      console.log('Error fetching open events', error);
+    })
+  }
+
+  fetchInFlux() {
+    let dataFilter = {};
+    if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    EventService.findInFlux(dataFilter)
+    .then(({objects:events}) => {
+      console.log(events);
+      this.setState({events, currentTab: 1});
+    })
+    .catch(error => {
+      console.log('Error fetching open events', error);
+    })
+  }
+
+  fetchHappening() {
+    let dataFilter = {};
+    if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    EventService.findHappening(dataFilter)
+    .then(({objects:events}) => {
+      console.log(events);
+      this.setState({events, currentTab: 2});
+    })
+    .catch(error => {
+      console.log('Error fetching open events', error);
+    })
   }
 
   fetchNeighborhoods() {
@@ -53,111 +80,56 @@ export default class Dashboard extends Component {
     .catch(error => console.log('Error when fetch neighborhoods:', error));
   }
 
-  fetchEvents(data) {
-    EventService.find(data)
-    .then( ({objects}) => {
-      let events = objects.sort((a, b) => moment(a.dt_evento).diff(moment(b.dt_evento), 'days'));
-      let routes = this.state.routes.map((route, index) => {
-        let filterd = events.filter(this.filters[index]);
-        return update(route, { $merge: { events:filterd } });
-      });
-      this.setState({routes});
-    })
-    .catch(error => {
-      console.log('Error when fetch events:', error);
-    });
-  }
-
-  filterOpened({dt_evento:date}) {
-    // Retorna os fluxos que não expiraram a data
-    return moment(date).diff(moment(), 'days') > 0;
-  }
-
-  filterInFlux({usuario_id:creatorId}) {
-    // Retorna os fluxos o usuário logado criou, (fazer exibir nesta lista também os que ele está participando)
-    // Necessita recurso da API
-    return creatorId === UserService.id;
-  }
-
-  filterHappening(event) {
-    // Devera retornar todos os fluxos que conquistaram o numero de habilidades, materiais
-    // Necessita recurso da API
-    return true;
-  }
-
   onSelectNeighborhoodHandle(index) {
     this.setState({neighborhood: this.state.neighborhoods[index]});
-    this.fetchEvents({bairro_id: this.state.neighborhoods[index].id});
+    setTimeout(() => {
+      if(this.state.currentTab === 0) this.fetchOpen();
+      if(this.state.currentTab === 1) this.fetchInFlux();
+      if(this.state.currentTab === 2) this.fetchHappening();
+    }, 1);
   }
 
   clearNeighborhood() {
     this.setState({neighborhood: null});
-    this.fetchEvents();
+    setTimeout(() => {
+      if(this.state.currentTab === 0) this.fetchOpen();
+      if(this.state.currentTab === 1) this.fetchInFlux();
+      if(this.state.currentTab === 2) this.fetchHappening();
+    }, 1);
   }
-
-  handleChangeTab = index => this.setState({ index });
-
-  renderLabel = scene => {
-    let color = ['#FBC02D', '#7CB342', '#1E88E5'][scene.index];
-    const labelStyle = { textAlign: 'center', color: '#424242', backgroundColor: 'transparent' }
-    const boxStyle = { paddingHorizontal: 10, paddingTop: 10, paddingBottom: 4, marginBottom: 6};
-    let label = scene.route.title;
-    return (
-      <View style={boxStyle}>
-        <Text style={labelStyle}>{label}</Text>
-      </View>
-    );
-  }
-
-  renderHeader = props => <TabBar
-    renderLabel={this.renderLabel}
-    style={{backgroundColor: '#F5F5F5', height: 44, marginTop: -7,}}
-    indicatorStyle={{backgroundColor: '#EEEEEE',}}
-    labelStyle={{color: '#424242'}}
-    tabStyle={{  }}
-    {...props} />
-
-  renderScene = SceneMap({
-    '1': Tab,
-    '2': Tab,
-    '3': Tab,
-  });
 
   render() {
-
     return (
       <View style={styles.container}>
-        <View style={styles.control}>
-          <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods.map(neighborhood => neighborhood.nome)}
-            onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
-            dropdownStyle={styles.selectNeighborhoodModal}
-            >
-            <View>
-              <TextInput
-                editable={false}
-                placeholder="SELECIONE O BAIRRO"
-                value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood.nome}`}
-                style={styles.input}
-                underlineColorAndroid="transparent"
-                ></TextInput>
-
-              <TouchableOpacity onPress={() => {this.clearNeighborhood()}} disabled={!this.state.neighborhood} style={styles.selectNeighborhoodButton}>
-                <Icon name={this.state.neighborhood ? 'cross' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
-              </TouchableOpacity>
-
-            </View>
-          </ModalDropdown>
+        <ModalDropdown style={styles.selectNeighborhood} options={this.state.neighborhoods.map(neighborhood => neighborhood.nome)}
+          onSelect={index => { this.onSelectNeighborhoodHandle(index); }}
+          dropdownStyle={styles.selectNeighborhoodModal}
+          >
+          <View>
+            <TextInput
+              editable={false}
+              placeholder="SELECIONE O BAIRRO"
+              value={this.state.neighborhood && `BAIRRO: ${this.state.neighborhood.nome}`}
+              style={styles.input}
+              underlineColorAndroid="transparent"
+              ></TextInput>
+            <TouchableOpacity onPress={() => {this.clearNeighborhood()}} disabled={!this.state.neighborhood} style={styles.selectNeighborhoodButton}>
+              <Icon name={this.state.neighborhood ? 'cross' : 'chevron-small-down'} style={[styles.selectNeighborhoodIcon, this.state.neighborhood && styles.selectNeighborhoodIconChecked]}/>
+            </TouchableOpacity>
+          </View>
+        </ModalDropdown>
+        <View style={styles.filterBar}>
+          <TouchableOpacity onPress={() => { this.fetchOpen() }} style={[styles.filterBarButton, styles.filterBarButton1, this.state.currentTab === 0 && styles.selectedTab]}>
+            <Text style={styles.filterBarButtonText}>Aberto</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { this.fetchInFlux() }} style={[styles.filterBarButton, styles.filterBarButton2, this.state.currentTab === 1 && styles.selectedTab]}>
+            <Text style={styles.filterBarButtonText}>No Fluxo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { this.fetchHappening() }} style={[styles.filterBarButton, styles.filterBarButton3, this.state.currentTab === 2 && styles.selectedTab]}>
+            <Text style={styles.filterBarButtonText}>Rolou</Text>
+          </TouchableOpacity>
         </View>
-
-
-        <TabViewAnimated
-          style={styles.tabContainer}
-          navigationState={this.state}
-          renderScene={this.renderScene}
-          renderHeader={this.renderHeader}
-          onRequestChangeTab={this.handleChangeTab}
-        />
-
+        <FluxList items={this.state.events}></FluxList>
         <TouchableRedirectorWrapper path="/app/flux-create-step-1" content={
           <View style={styles.btnActionDone}>
             <Text style={styles.btnActionDoneText}>CRIAR UM FLUXO</Text>
@@ -170,14 +142,33 @@ export default class Dashboard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 56 : 75),
-  },
-  tabContainer: {
     flex: 1,
   },
-  control: {
-    // marginLeft: inputMargin,
-    // marginRight: inputMargin,
+  filterBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#ECEFF1',
+  },
+  filterBarButton: {
+    width: '33.33%',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    alignItems: 'center',
+  },
+  filterBarButton1: {
+    borderBottomColor: '#FBC02D',
+  },
+  filterBarButton2: {
+    borderBottomColor: '#7CB342',
+  },
+  filterBarButton3: {
+    borderBottomColor: '#1E88E5',
+  },
+  selectedTab: {
+    backgroundColor: '#CFD8DC',
+  },
+  filterBarButtonText: {
+    color: '#37474F',
   },
   inputLabel: {
     marginTop: 14,
@@ -187,13 +178,13 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 36,
-    padding: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
     fontSize: 16,
     backgroundColor: '#FAFAFA',
     color: '#616161',
   },
   selectNeighborhood: {
-
   },
   selectNeighborhoodButton: {
     position: 'absolute',
@@ -212,7 +203,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
   selectNeighborhoodModal: {
-    // width: Dimensions.get('window').width - inputMargin * 2,
     width: '100%',
   },
   btnActionDone: {

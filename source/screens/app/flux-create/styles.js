@@ -5,6 +5,7 @@ export default styles = StyleSheet.create({
     flex: 1,
   },
   page: {
+    flex: 1,
     backgroundColor: "#F5F5F5",
     paddingHorizontal: 10,
     paddingTop: 10,
@@ -14,6 +15,7 @@ export default styles = StyleSheet.create({
     padding: 10,
     marginVertical: 2,
     fontSize: 16,
+    textAlignVertical: 'top',
     color: '#616161',
     backgroundColor: '#FAFAFA',
   },
@@ -21,7 +23,7 @@ export default styles = StyleSheet.create({
     height: 83,
   },
   description: {
-    height: Dimensions.get('window').height -325,
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 329 : 337),
   },
   datePicker: {
     width: Dimensions.get('window').width - 20,
@@ -32,7 +34,6 @@ export default styles = StyleSheet.create({
     marginLeft: 4,
     color: '#757575',
   },
-
   addMaterialButton: {
     position: 'absolute',
     marginTop: 66,
@@ -43,9 +44,8 @@ export default styles = StyleSheet.create({
     color: '#37474F',
     backgroundColor: 'transparent',
   },
-
   materialList: {
-    height: Dimensions.get('window').height -205,
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 209 : 218),
     marginTop: 4,
   },
   materialListItem: {
@@ -63,8 +63,6 @@ export default styles = StyleSheet.create({
     fontSize: 22,
     color: '#b71c1c'
   },
-
-
   btnActionDone: {
     backgroundColor: '#455A64',
     padding: 8,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Route, Link } from 'react-router-native';
 
 import Login from './screens/auth/login/Login.js';
@@ -15,13 +15,15 @@ import { APPLICATION_API_CONFIG } from './services/config';
 APIService.init(APPLICATION_API_CONFIG.name, APPLICATION_API_CONFIG.url);
 
 export default Auth = () => (
-  <View style={styles.container}>
-    <Image source={logoImage} style={styles.logo} />
-    <Route path="/auth/login" component={Login} />
-    <Route path="/auth/logout" component={Logout} />
-    <Route path="/auth/signup" component={Signup} />
-    <Route path="/auth/forgot" component={Forgot} />
-  </View>
+  <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+    <View style={styles.container}>
+      <Image source={logoImage} style={styles.logo} />
+      <Route path="/auth/login" component={Login} />
+      <Route path="/auth/logout" component={Logout} />
+      <Route path="/auth/signup" component={Signup} />
+      <Route path="/auth/forgot" component={Forgot} />
+    </View>
+  </TouchableWithoutFeedback>
 );
 
 const styles = StyleSheet.create({
@@ -32,8 +34,8 @@ const styles = StyleSheet.create({
   logo: {
     width: '100%',
     height: '12%',
-    marginTop: '20%',
-    marginBottom: '20%',
+    marginTop: '15%',
+    marginBottom: '10%',
     resizeMode: 'contain',
     justifyContent: 'center',
     alignItems: 'center',

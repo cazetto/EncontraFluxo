@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Platform, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, View, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import { withRouter } from 'react-router';
 
@@ -20,6 +20,7 @@ const headerRoutesConfig = {
   '/app/flux-create-step-5': { title: 'CRIANDO UM FLUXO' },
   '/app/flux-preview': { title: 'VISUALIZAR FLUXO' },
   '/app/flux-join': { title: 'COLABORAR COM ESTE FLUXO' },
+  '/app/about': { title: 'SOBRE' },
 }
 
 class Header extends Component {
@@ -35,6 +36,10 @@ class Header extends Component {
     this.lastLocation = null;
   }
 
+  back() {
+    this.props.history.goBack();
+  }
+
   render() {
     let pathname = this.props.location.pathname;
 
@@ -46,18 +51,23 @@ class Header extends Component {
     const title = headerRoutesConfig[key] ? headerRoutesConfig[key].title : ' ';
 
     return (
-      <View style={styles.container}>
-        <View style={styles.leftColumn}>
-          <TouchableOpacity onPress={()=>{this.props.toggleSideMenu()}}>
-            <Icon name="menu" style={styles.menuIcon} />
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+        <View style={styles.container}>
+          <View style={styles.leftColumn}>
+            <TouchableOpacity onPress={()=>{this.props.toggleSideMenu()}}>
+              <Icon name="menu" style={styles.menuIcon} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.middeColumn}>
+            <Text style={styles.title}>{title}</Text>
+          </View>
+          <View style={styles.rightColumn}>
+            <TouchableOpacity onPress={()=>{this.back()}}>
+              <Icon name="arrow-back" style={styles.backIcon} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.middeColumn}>
-          <Text style={styles.title}>{title}</Text>
-        </View>
-        <View style={styles.rightColumn}>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -70,7 +80,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: '#263238',
-    padding: 4,
+    paddingVertical: 6,
+    paddingLeft: 6,
+    paddingRight: 8,
     marginTop: Platform.OS === 'ios' ? 21 : 0,
   },
   leftColumn: {
@@ -87,6 +99,13 @@ const styles = StyleSheet.create({
 
   menuIcon: {
     fontSize: 27,
+    marginLeft: 6,
+    color: '#FFF',
+  },
+
+  backIcon: {
+    marginTop: 2,
+    fontSize: 23,
     color: '#FFF',
   },
 

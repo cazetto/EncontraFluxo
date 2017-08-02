@@ -4,9 +4,11 @@ import { Route, Redirect } from 'react-router-native';
 // Get this from service inside the function
 const isAuthenticated = true;
 
+import UserService from '../../services/UserService';
+
 export default PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    isAuthenticated ? (
+    UserService.id ? (
       <Component {...props} />
     ) : (
       <Redirect to={{

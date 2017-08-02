@@ -39,7 +39,7 @@ export default class FluxCreateStep4 extends Component {
   }
 
   fetchInterests() {
-    InterestService.find()
+    InterestService.find({ limit: 0 })
     .then(({objects:availableInterests}) => this.setState({availableInterests}))
     .catch(error => {});
   }
@@ -70,7 +70,7 @@ export default class FluxCreateStep4 extends Component {
 
     return (
       this.state.isComplete ?
-      <Redirect to={{
+      <Redirect push to={{
         pathname:"/app/flux-create-step-5",
         state: {editable: this.editable}
       }} /> :

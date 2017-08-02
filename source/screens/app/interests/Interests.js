@@ -27,7 +27,7 @@ export default class Interests extends Component {
   }
 
   fetchInterests() {
-    InterestService.find()
+    InterestService.find({ limit: 0 })
     .then(({objects:interests}) => {
       this.setState({interests});
       this.fetchUserProfile();

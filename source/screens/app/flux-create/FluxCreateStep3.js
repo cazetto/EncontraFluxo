@@ -86,7 +86,7 @@ export default class FluxCreateStep3 extends Component {
   render() {
     return (
       this.state.isComplete ?
-      <Redirect to={{
+      <Redirect push to={{
         pathname:"/app/flux-create-step-4",
         state: {editable: this.editable}
       }} /> :
@@ -103,7 +103,11 @@ export default class FluxCreateStep3 extends Component {
             autoCorrect={false}
             keyboardType="default"
             autoCapitalize="none"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onSubmitEditing={() => {this.addMaterial()}}
+            >
           </TextInput>
 
           <TouchableOpacity style={styles.addMaterialButton} onPress={() => {this.addMaterial()}}>

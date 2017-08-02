@@ -17,62 +17,55 @@ import TouchableRedirectorWrapper from '../../../components/touchable-redirector
 import styles from '../styles';
 
 // Services import
-// import User from '../../api/User';
+import AuthService from '../../../services/AuthService';
 
 export default class Forgot extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      credentials: {
-        username: '',
+      data: {
+        email: '',
       },
       isFetching: false,
       loginComplete: false,
     };
   }
 
-  login() {
-    this.setState({isFetching: true});
-    this.loginSuccess(1000);
-    // User.doLogin(this.state.credentials)
-    // .then(response => {this.loginSuccess(1000)})
-    // .catch(error => {this.loginFail()});
-  }
-
-  loginSuccess(wait) {
-    this.toast.show('Login efetuado!');
-    if(!wait) this.setState({loginComplete: true, isFetching: false});
-    else {
-      const delay = setTimeout(() => {
-        clearTimeout(delay);
-        this.setState({loginComplete: true, isFetching: false});
-      }, wait);
-    }
-  }
-
-  loginFail() {
-    this.setState({isFetching: false});
-    this.toast.show('Dados incorretos!');
-  }
-
   delayedChangeCredentials(field) {
     return (
       _.debounce(value => {
-        let credentials = update(this.state.credentials, {$merge: {[field]:value}});
-        this.setState({credentials});
+        let data = update(this.state.data, {$merge: {[field]:value}});
+        this.setState({data});
       }, 100)
     );
+  }
+
+  forgot() {
+    this.setState({isFetching: true});
+    AuthService.forgot(this.state.data)
+    .then(response => {
+      this.refs.toast.show(`Senha enviada para: \n${this.state.data.email}`, 1000);
+      this.setState({data: {email: ''}, isFetching: false});
+      const delay = setTimeout(() => {
+        clearTimeout(delay);
+        this.setState({forgotComplete: true});
+      }, 2000);
+    })
+    .catch(error => {
+      this.refs.toast.show(`Erro ao recuperar senha!`, 1000);
+      this.setState({data: {email: ''}, isFetching: false});
+    })
   }
 
   renderForgotButton() {
     return !this.state.isFetching ? (
       <TouchableOpacity
       activeOpacity={0.5}
-      onPress={() => {this.login()}}
+      onPress={() => {this.forgot()}}
       style={[styles.touchable, styles.forgotButtonColor]}
       >
-        <Text style={styles.buttonText}>Entrar</Text>
+        <Text style={styles.buttonText}>Recuperar senha</Text>
       </TouchableOpacity>
     ) : (
       <ActivityIndicator
@@ -93,41 +86,45 @@ export default class Forgot extends Component {
     ) : null;
   }
 
+  done() {
+    if(this.state.data.email) this.forgot();
+  }
+
   render() {
     return (
-      this.state.loginComplete ? <Redirect to="/app" /> :
+      this.state.forgotComplete ? <Redirect to="/auth/login" /> :
       <View style={styles.content}>
-
         <View style={[styles.textInputs]}>
           <View style={styles.textInputWrapper}>
             <TextInput
               placeholder="E-mail"
-              defaultValue={this.state.credentials.username}
-              onChangeText={this.delayedChangeCredentials('username')}
+              defaultValue={this.state.data.email}
+              onChangeText={this.delayedChangeCredentials('email')}
               keyboardType="email-address"
               selectTextOnFocus
               underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="done"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.done()}}
               style={styles.textInput}
             />
           </View>
-
         </View>
-
         <View style={styles.actions}>
           {this.renderForgotButton()}
           {this.renderBack()}
         </View>
-
         <Toast
-          ref={(c) => { this.toast = c; }}
+          ref="toast"
           style={styles.toast}
-          position='top'
-          positionValue={155}
+          position="top"
+          positionValue={-50}
           fadeInDuration={750}
-          fadeOutDuration={1000}
+          fadeOutDuration={750}
           opacity={0.8}
         />
-
       </View>
     );
   }

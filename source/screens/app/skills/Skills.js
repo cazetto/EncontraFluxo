@@ -57,7 +57,7 @@ export default class Skills extends Component {
   }
 
   fetchSkills() {
-    SkillService.find()
+    SkillService.find({ limit: 0 })
     .then(({objects:availableSkills}) => this.setState({availableSkills}))
     .catch(error => console.log('Error when fetching skills.'));
   }
@@ -116,10 +116,11 @@ export default class Skills extends Component {
 const styles = StyleSheet.create({
 
   container: {
+    flex: 1,
   },
 
   control: {
-    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 104 : 125),
+    height: Dimensions.get('window').height - (Platform.OS === 'ios' ? 108 : 116),
     marginHorizontal: 10,
   },
 

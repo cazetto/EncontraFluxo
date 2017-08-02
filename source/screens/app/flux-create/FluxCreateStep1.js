@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
-import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native';
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import DatePicker from 'react-native-datepicker';
 import Select from '../../../components/select/Select';
@@ -94,16 +96,24 @@ export default class FluxCreateStep1 extends Component {
     this.setState({goNextScreen: true});
   }
 
+  done() {
+    let incompleteFill = Object.keys(this.state.eventData)
+    .some(current => this.state.eventData[current] === null || this.state.eventData[current] === '');
+    if(!incompleteFill) this.next();
+  }
+
   render() {
     let incompleteFill = Object.keys(this.state.eventData)
     .some(current => this.state.eventData[current] === null || this.state.eventData[current] === '');
 
     return (
       this.state.goNextScreen ?
-      <Redirect to={{
+      <Redirect push to={{
         pathname:"/app/flux-create-step-2",
         state: {editable: this.editable}
       }} /> :
+      <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+      <KeyboardAwareScrollView>
       <View style={styles.container}>
         <View style={styles.page}>
           <TextInput
@@ -114,7 +124,11 @@ export default class FluxCreateStep1 extends Component {
             autoCorrect={false}
             keyboardType="default"
             autoCapitalize="none"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onSubmitEditing={() => {this.done()}}
+            >
           </TextInput>
           <TextInput
             placeholder="LOCAL: Descreva onde ocorrerá o evento e se possivel informe uma referência."
@@ -124,7 +138,11 @@ export default class FluxCreateStep1 extends Component {
             autoCorrect={false}
             multiline={true}
             keyboardType="default"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onSubmitEditing={() => {this.done()}}
+            >
           </TextInput>
           <Select
             placeholder="SELECIONE O BAIRRO"
@@ -179,7 +197,11 @@ export default class FluxCreateStep1 extends Component {
             multiline={true}
             keyboardType="default"
             autoCapitalize="sentences"
-            underlineColorAndroid="transparent">
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onSubmitEditing={() => {this.done()}}
+            >
           </TextInput>
         </View>
 
@@ -190,6 +212,8 @@ export default class FluxCreateStep1 extends Component {
         </TouchableOpacity>
 
       </View>
+      </KeyboardAwareScrollView>
+      </TouchableWithoutFeedback>
     );
   }
 }

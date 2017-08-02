@@ -7,6 +7,8 @@ import moment from 'moment';
 import TouchableRedirectorWrapper from '../../../components/touchable-redirector-wrapper/TouchableRedirectorWrapper';
 import ModalConfirm from '../../../components/modal-confirm/ModalConfirm';
 
+import ConnectedPeopleModal from './ConnectedPeopleModal';
+
 import UserService from '../../../services/UserService';
 import EventService from '../../../services/EventService';
 import NeighborhoodService from '../../../services/NeighborhoodService';
@@ -15,11 +17,10 @@ export default class FluxPreview extends Component {
 
   state = {
     id: null,
-
     fetchingEvent: true,
     fetchingNeighborhood: true,
-
     deleteModalIsVisible: false,
+    peopleModalIsVisible: false,
   }
 
   componentWillMount() {
@@ -32,7 +33,6 @@ export default class FluxPreview extends Component {
 
     EventService.get(id)
     .then(response => {
-
       let {
         id,
         responsavel: { nome:eventUserName, id:eventUserId },
@@ -45,12 +45,12 @@ export default class FluxPreview extends Component {
         habilidades:skills,
         interesses:interests,
         materiais:materials,
+        colaboradores:contributors,
+        estou_participando:contributing
       } = response;
 
-      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials});
-
+      this.setState({fetchingEvent:false, id, eventUserId, userId, eventUserName, neighborhoodId, name, people, description, date, address, skills, interests, interests, materials, contributors, contributing});
       this.fetchNeighborhood(neighborhoodId);
-
     })
     .catch(error => {
       console.log('Error when fetch event', error);
@@ -68,16 +68,29 @@ export default class FluxPreview extends Component {
     });
   }
 
-  renderSkills(list) {
-    return list
-    .reduce((accumulator, {nome}, index, array) =>
-    `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
+  renderSkills() {
+    return !!this.state.skills.length && (
+      <View style={styles.group}>
+        <Text style={styles.infoLabel}>Habilidades: <Text style={styles.info}>
+            { this.state.skills.reduce((accumulator, {nome}, index, array) =>
+              `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '') }
+          </Text>
+        </Text>
+      </View>
+    );
   }
 
-  renderMaterials(list) {
-    return list
-    .reduce((accumulator, nome, index, array) =>
-    `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '');
+  renderMaterials() {
+    return !!this.state.materials.length && (
+      <View style={styles.group}>
+        <Text style={styles.infoLabel}>Materiais: <Text style={styles.info}>
+            { this.state.materials
+            .reduce((accumulator, nome, index, array) =>
+            `${accumulator}${nome}${(index < array.length-1 ? ', ' : '.')}`, '') }
+          </Text>
+        </Text>
+      </View>
+    );
   }
 
   delete() {
@@ -93,47 +106,53 @@ export default class FluxPreview extends Component {
     })
   }
 
-  render() {
+  leaveFlux() {
+    let { contributors, userId } = this.state;
+    let { id } = contributors.filter(contributor => contributor.usuario_id === userId)[0];
+    EventService.leave(id)
+    .then(response => {
+      let newContributors = contributors.filter(contributor => contributor.usuario_id != userId);
+      this.setState({contributing: null, contributors:newContributors});
+    })
+    .catch(error => {
+      console.log('Error when leave flux:', error);
+    });
+  }
 
+  render() {
     let {
-      fetchingEvent, fetchingNeighborhood,
-      id, eventUserId, eventUserName, userId, name, people, description, date, address, skills, interests, materials, user, neighborhood
+      id, fetchingEvent, fetchingNeighborhood,
+      eventUserId, eventUserName, userId, name, people,
+      description, date, address, skills, interests,
+      materials, user, neighborhood, contributors, contributing
     } = this.state;
 
     let isOwner = eventUserId === userId;
-
-    console.log('eventUserId', eventUserId);
-    console.log('userId');
 
     return (
       fetchingEvent || fetchingNeighborhood ?
       <ActivityIndicator style={styles.activityIndicator} /> :
       this.state.redirectURI ?
-      <Redirect to={this.state.redirectURI} /> :
+      <Redirect push to={this.state.redirectURI} /> :
       <View style={styles.container}>
         <View style={styles.content}>
-          <ScrollView>
+          <ScrollView style={styles.scrollView}>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Nome: {name}</Text>
-              <Text style={[styles.info]}>Criador: {eventUserName}</Text>
-              <Text style={[styles.info]}>Bairro: {neighborhood}</Text>
-              <Text style={[styles.info]}>Local: {address}</Text>
-              <Text style={[styles.info]}>Data: {moment(date).format('DD/MM/YYYY')}</Text>
+              <Text style={styles.infoLabel}>Nome: <Text style={styles.info}>{name}</Text></Text>
+              <Text style={styles.infoLabel}>Criador: <Text style={styles.info}>{eventUserName}</Text></Text>
+              <Text style={styles.infoLabel}>Bairro: <Text style={styles.info}>{neighborhood}</Text></Text>
+              <Text style={styles.infoLabel}>Local: <Text style={styles.info}>{address}</Text></Text>
+              <Text style={styles.infoLabel}>Data: <Text style={styles.info}>{moment(date).format('DD/MM/YYYY')}</Text></Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>{people && people.length || 0} PESSOAS NO FLUXO</Text>
+              <Text style={styles.info}>{people && people.length || 0} PESSOAS NO FLUXO</Text>
             </View>
             <View style={styles.group}>
-              <Text style={[styles.info]}>Descrição: {description}</Text>
+              <Text style={styles.infoLabel}>Descrição: <Text style={styles.info}>{description}</Text></Text>
             </View>
-            <View style={styles.group}>
-              <Text style={[styles.info]}>Habilidades: {this.renderSkills(this.state.skills)}</Text>
-            </View>
-            <View style={styles.group}>
-              <Text style={[styles.info]}>Materiais: {this.renderMaterials(this.state.materials)}</Text>
-            </View>
+            {this.renderSkills()}
+            {this.renderMaterials()}
           </ScrollView>
-
           <ModalConfirm
             isVisible={this.state.deleteModalIsVisible}
             text="Tem certeza que deseja excluir este fluxo?"
@@ -142,10 +161,19 @@ export default class FluxPreview extends Component {
             confirm={() => {this.delete()}}
             cancel={() => {this.setState({deleteModalIsVisible:false})}}
           />
+          <ConnectedPeopleModal
+            contributors={this.state.contributors}
+            isVisible={this.state.peopleModalIsVisible}
+            close={() => {this.setState({peopleModalIsVisible:false})}}
+          />
+          { isOwner &&
+          <TouchableOpacity onPress={() => { this.setState({peopleModalIsVisible: true}) }} style={styles.btnConnectedPeople}>
+            <Text style={styles.btnConnectedPeopleText}>VER PESSOAS CONECTADAS</Text>
+          </TouchableOpacity>
+          }
         </View>
         {
-          isOwner
-          ?
+          isOwner ?
           <View style={styles.doubleBtns}>
             <View style={styles.btnHalfLeft}>
               <TouchableRedirectorWrapper path={`/app/flux-create-step-1`} state={{editable: this.state}} content={
@@ -160,6 +188,13 @@ export default class FluxPreview extends Component {
               </View>
             </TouchableOpacity>
           </View>
+          :
+          contributing ?
+          <TouchableOpacity onPress={() => {this.leaveFlux()}}>
+            <View style={styles.btnActionDone}>
+              <Text style={styles.btnActionDoneText}>SAIR DESSE FLUXO</Text>
+            </View>
+          </TouchableOpacity>
           :
           <TouchableRedirectorWrapper path={`/app/flux-join/${id}`} state={this.state} content={
             <View style={styles.btnActionDone}>
@@ -181,8 +216,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  scrollView: {
+    marginBottom: 10,
+  },
   info: {
-    color: '#424242',
+    color: '#37474F',
+    fontWeight: '600',
+  },
+  infoLabel: {
+    color: '#37474F',
+    fontWeight: '400',
+    marginBottom: 3
   },
   group: {
     marginBottom: 10,
@@ -228,5 +272,16 @@ const styles = StyleSheet.create({
     marginRight: 2,
     marginBottom: 3,
     borderBottomRightRadius: 4,
+  },
+  btnConnectedPeople: {
+    backgroundColor: '#43A047',
+    padding: 8,
+    borderRadius: 4,
+  },
+  btnConnectedPeopleText: {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize: 15,
+    padding: 4,
   }
 });

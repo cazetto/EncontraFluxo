@@ -33,9 +33,12 @@ export default class SignupComponent extends Component {
     this.state = {
       data: {
         bairro_id: 1,
-        nome: 'André Pesci Cazetto',
-        email: (Math.random()* 1000) + 'user@gmail.com',
-        senha: '123456',
+        // nome: 'André Pesci Cazetto',
+        // email: (Math.random()* 1000) + 'user@gmail.com',
+        // senha: '123456',
+        nome: '',
+        email: '',
+        senha: '',
         habilidades: [],
         interesses: [],
       },
@@ -125,6 +128,10 @@ export default class SignupComponent extends Component {
     ) : null;
   }
 
+  done() {
+    if(this.state.data.nome && this.state.data.email && this.state.data.senha) this.signup();
+  }
+
   render() {
     return (
       this.state.signupComplete ? <Redirect to="/app/skills" /> :
@@ -138,29 +145,39 @@ export default class SignupComponent extends Component {
               keyboardType="default"
               selectTextOnFocus
               underlineColorAndroid="transparent"
+              returnKeyType="next"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.refs.emailTextInput.focus()}}
               style={styles.textInput}
             />
           </View>
           <View style={styles.textInputWrapper}>
             <TextInput
+              ref='emailTextInput'
               placeholder="E-mail"
               defaultValue={this.state.data.email}
               onChangeText={this.delayedChangeCredentials('email')}
               keyboardType="email-address"
               autoCapitalize="none"
-              selectTextOnFocus
               underlineColorAndroid="transparent"
+              returnKeyType="next"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.refs.passwordTextInput.focus()}}
               style={styles.textInput}
             />
           </View>
           <View style={styles.textInputWrapper}>
             <TextInput
+              ref='passwordTextInput'
               placeholder="Senha"
               defaultValue={this.state.data.senha}
               onChangeText={this.delayedChangeCredentials('senha')}
               secureTextEntry
               selectTextOnFocus
               underlineColorAndroid="transparent"
+              returnKeyType="done"
+              blurOnSubmit={true}
+              onSubmitEditing={() => {this.done()}}
               style={styles.textInput}
             />
           </View>
@@ -186,7 +203,7 @@ export default class SignupComponent extends Component {
           ref="toast"
           style={styles.toast}
           position='top'
-          positionValue={-40}
+          positionValue={-48}
           fadeInDuration={750}
           fadeOutDuration={2000}
           opacity={0.8}
