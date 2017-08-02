@@ -61,7 +61,7 @@ export default Menu = () => {
         } />
         <View style={styles.divider} />
 
-        <TouchableRedirectorWrapper path="/app/skills" content={
+        <TouchableRedirectorWrapper path="/app/neighborhoods" content={
           <View style={styles.listItem}>
             <Text style={styles.listItemText}> <Icon name="round-brush" style={styles.icon}/>  Editar Perfil</Text>
           </View>

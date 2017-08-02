@@ -7,6 +7,7 @@ import SideMenuHOC from './components/side-menu/SideMenuHOC';
 import Header from './components/header/Header';
 import PrivateRoute from './components/private-route/PrivateRoute';
 
+import Neighborhoods from './screens/app/neighborhoods/Neighborhoods';
 import Interests from './screens/app/interests/Interests';
 import Skills from './screens/app/skills/Skills';
 import Dashboard from './screens/app/dashboard/Dashboard';
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
 const App = props => (
   <View style={styles.container}>
     <Header {...props} />
+    <PrivateRoute path="/app/neighborhoods" component={Neighborhoods} />
     <PrivateRoute path="/app/skills" component={Skills} />
     <PrivateRoute path="/app/interests" component={Interests} />
     <PrivateRoute path="/app/dashboard" component={Dashboard} />
