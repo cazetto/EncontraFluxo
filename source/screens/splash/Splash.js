@@ -34,7 +34,7 @@ export default class Splash extends Component {
       UserService.id = response.id;
       UserService.user = response;
       // this.setState({redirectionRoute: '/app/dashboard'});
-      this.setState({redirectionRoute: '/app/flux-create-step-2'});
+      this.setState({redirectionRoute: '/app/flux-create-step-4'});
     })
     .catch(error => {
       this.setState({redirectionRoute: '/auth/login'});

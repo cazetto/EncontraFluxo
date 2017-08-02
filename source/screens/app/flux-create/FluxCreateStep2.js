@@ -67,13 +67,13 @@ export default class FluxCreateStep2 extends Component {
     .filter(skill => skill.selected)
     .map(({id}) => ({id}));
     EventService.data = update(EventService.data, {$merge: {habilidades}});
-    this.setState({isComplete: true});
+    this.setState({redirect: true});
   }
 
   render() {
     let incompleteFill = false;
     return (
-      this.state.isComplete ?
+      this.state.redirect ?
       <Redirect push to={{
         pathname:"/app/flux-create-step-3",
         state: {editable: this.editable}

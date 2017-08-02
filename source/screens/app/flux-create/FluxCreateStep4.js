@@ -1,91 +1,90 @@
-import React, {Component} from 'react';
-import { Redirect } from 'react-router';
-import {StyleSheet, View, Text, TextInput, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import React, { Component } from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Icon,
+  Switch,
+  Dimensions,
+  Platform,
+} from 'react-native';
 
-import ItemDistributionList from '../../../components/item-distribution-list/ItemDistributionList';
+import { Redirect } from 'react-router';
 
 import update from 'immutability-helper';
-import _ from 'lodash';
 
-import styles from './styles';
-
-// Services imports
 import InterestService from '../../../services/InterestService';
 import EventService from '../../../services/EventService';
 
 export default class FluxCreateStep4 extends Component {
-  state = {
-    availableInterests: [],
-    addedInterests: [],
-    eventData: {
-      interesses: [],
-    },
-    isComplete: false,
-  }
 
-  constructor(props) {
-    super(props);
-  }
+  state = {
+    interests: [],
+  };
 
   componentWillMount() {
     let editState = this.props.location.state;
-    if(editState.editable) {
-      let { editable } = editState;
-      this.editable = editable;
-      let editableInterests = editable.interests.map(({id}) => ({id}));
-      this.setState({eventData:{interesses:editableInterests}, addedInterests:editable.interests});
-    }
+    if(editState)
+    if(editState.editable) this.editable = editState.editable;
     this.fetchInterests();
   }
 
   fetchInterests() {
     InterestService.find({ limit: 0 })
-    .then(({objects:availableInterests}) => this.setState({availableInterests}))
+    .then(({objects}) => {
+      let interests = this.editable ? objects.map(interest => {
+        interest.selected = this.editable.interests.some(addedSkill => interest.id === addedSkill.id);
+        return interest;
+      }) : objects;
+      this.setState({interests});
+    })
     .catch(error => {});
   }
 
-  // Input changes
-  delayedChangeTextInput(field) {
-    return (
-      _.debounce(value => {
-        let eventData = update(this.state.eventData, {$merge: {[field]:value}});
-        this.setState({eventData});
-      }, 100)
-    );
+  selectItem(index, value) {
+    let interests = this.state.interests.slice();
+    let current = interests[index].selected = value;
+    this.setState({interests});
   }
 
-  onChangeInterestsHandle(addedInterests, availableInterests) {
-    let interesses = addedInterests.map(current => ({id: current.id}));
-    let eventData = update(this.state.eventData, {$merge: {interesses}});
-    this.setState({addedInterests, availableInterests, eventData});
+  renderInterests() {
+    return this.state.interests.map((interest, index) => {
+      return (
+        <View style={styles.listItem} key={index}>
+          <Text style={styles.title}>{interest.nome}</Text>
+          <Switch
+            onValueChange={value => this.selectItem(index, value)}
+            value={ interest.selected } />
+        </View>
+      );
+    });
   }
 
   next() {
-    EventService.data = update(EventService.data, {$merge: this.state.eventData});
-    this.setState({isComplete: true});
+    let interesses = this.state.interests
+    .filter(interest => interest.selected)
+    .map(({id}) => ({id}));
+    EventService.data = update(EventService.data, {$merge: {interesses}});
+    this.setState({redirect: true});
   }
 
   render() {
-    let incompleteFill = this.state.eventData.interesses.length === 0;
-
+    let incompleteFill = false;
     return (
-      this.state.isComplete ?
+      this.state.redirect ?
       <Redirect push to={{
         pathname:"/app/flux-create-step-5",
         state: {editable: this.editable}
       }} /> :
-
       <View style={styles.container}>
-
-        <View style={styles.page}>
-          <Text style={styles.inputLabel}>Você pretende reunir pessoas com quais interesses?</Text>
-          <ItemDistributionList
-            placeholder="ADICIONE UM INTERESSE"
-            available={this.state.availableInterests}
-            added={this.state.addedInterests}
-            onAddedItemsChanged={(available, added) => this.onChangeInterestsHandle(available, added)}
-          />
+        <View style={styles.listHeader}>
+          <Text style={styles.listHeaderLabel}>Você pretende reunir pessoas com quais interesses?</Text>
         </View>
+        <ScrollView>
+          {this.renderInterests()}
+        </ScrollView>
 
         <TouchableOpacity onPress={() => {this.next()}} disabled={incompleteFill}>
           <View style={[styles.btnActionDone, incompleteFill && styles.btnActionDoneDisabled]}>
@@ -97,3 +96,46 @@ export default class FluxCreateStep4 extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listHeader: {
+    padding: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ECEFF1',
+    backgroundColor: '#F5F5F5',
+  },
+  listHeaderLabel: {
+    fontSize: 14,
+    color: '#757575',
+    textAlign: 'center',
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ECEFF1',
+    backgroundColor: '#FAFAFA',
+  },
+  title: {
+    color: '#757575',
+  },
+  btnActionDone: {
+    backgroundColor: '#455A64',
+    padding: 8,
+    margin: 3,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+  },
+  btnActionDoneText: {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize: 15,
+    padding: 4
+  },
+
+});
