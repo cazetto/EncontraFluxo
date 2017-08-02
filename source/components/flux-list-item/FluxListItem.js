@@ -25,7 +25,7 @@ export default class FluxListItem extends PureComponent {
     let eventIsNotExpired = moment(date).diff(moment(), 'days') <= 0;
     let eventIsNotExpiredAndSuplied = eventIsNotExpired && supplied;
 
-    var colorArrow;
+    var colorArrow = '#546E7A'
     if(userIsOwnerOrContributor) colorArrow = '#7CB342';
     if(eventIsNotExpired) colorArrow = '#FBC02D';
     if(eventIsNotExpiredAndSuplied) colorArrow = '#1E88E5';

@@ -60,14 +60,13 @@ export default class FluxCreateStep1 extends Component {
 
       this.setState({eventData});
     }
-
-    console.log('blablablabla', this.props.location.state);
   }
 
   // Fetches
   fetchNeighborhoods() {
     NeighborhoodService.find()
-    .then( ({objects:neighborhoods}) => {
+    .then( ({objects}) => {
+      let neighborhoods = objects.sort((a, b) => a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0);
       this.setState({neighborhoods});
     });
   }
