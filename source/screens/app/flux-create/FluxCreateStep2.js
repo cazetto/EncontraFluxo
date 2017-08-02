@@ -18,6 +18,8 @@ import update from 'immutability-helper';
 import SkillService from '../../../services/SkillService';
 import EventService from '../../../services/EventService';
 
+import styles from './styles';
+
 export default class FluxCreateStep2 extends Component {
 
   state = {
@@ -53,7 +55,7 @@ export default class FluxCreateStep2 extends Component {
     return this.state.skills.map((skill, index) => {
       return (
         <View style={styles.listItem} key={index}>
-          <Text style={styles.title}>{skill.nome}</Text>
+          <Text style={styles.listItemTitle}>{skill.nome}</Text>
           <Switch
             onValueChange={value => this.selectItem(index, value)}
             value={ skill.selected } />
@@ -96,46 +98,3 @@ export default class FluxCreateStep2 extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  listHeader: {
-    padding: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECEFF1',
-    backgroundColor: '#F5F5F5',
-  },
-  listHeaderLabel: {
-    fontSize: 14,
-    color: '#757575',
-    textAlign: 'center',
-  },
-  listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECEFF1',
-    backgroundColor: '#FAFAFA',
-  },
-  title: {
-    color: '#757575',
-  },
-  btnActionDone: {
-    backgroundColor: '#455A64',
-    padding: 8,
-    margin: 3,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
-  },
-  btnActionDoneText: {
-    textAlign: 'center',
-    color: '#FFF',
-    fontSize: 15,
-    padding: 4
-  },
-
-});

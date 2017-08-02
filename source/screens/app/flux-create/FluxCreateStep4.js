@@ -18,6 +18,8 @@ import update from 'immutability-helper';
 import InterestService from '../../../services/InterestService';
 import EventService from '../../../services/EventService';
 
+import styles from './styles';
+
 export default class FluxCreateStep4 extends Component {
 
   state = {
@@ -53,7 +55,7 @@ export default class FluxCreateStep4 extends Component {
     return this.state.interests.map((interest, index) => {
       return (
         <View style={styles.listItem} key={index}>
-          <Text style={styles.title}>{interest.nome}</Text>
+          <Text style={styles.listItemTitle}>{interest.nome}</Text>
           <Switch
             onValueChange={value => this.selectItem(index, value)}
             value={ interest.selected } />
@@ -85,57 +87,12 @@ export default class FluxCreateStep4 extends Component {
         <ScrollView>
           {this.renderInterests()}
         </ScrollView>
-
         <TouchableOpacity onPress={() => {this.next()}} disabled={incompleteFill}>
           <View style={[styles.btnActionDone, incompleteFill && styles.btnActionDoneDisabled]}>
             <Text style={styles.btnActionDoneText}>CONTINUAR</Text>
           </View>
         </TouchableOpacity>
-
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  listHeader: {
-    padding: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECEFF1',
-    backgroundColor: '#F5F5F5',
-  },
-  listHeaderLabel: {
-    fontSize: 14,
-    color: '#757575',
-    textAlign: 'center',
-  },
-  listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECEFF1',
-    backgroundColor: '#FAFAFA',
-  },
-  title: {
-    color: '#757575',
-  },
-  btnActionDone: {
-    backgroundColor: '#455A64',
-    padding: 8,
-    margin: 3,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
-  },
-  btnActionDoneText: {
-    textAlign: 'center',
-    color: '#FFF',
-    fontSize: 15,
-    padding: 4
-  },
-
-});
