@@ -86,6 +86,9 @@ export default styles = StyleSheet.create({
     fontSize: 22,
     color: '#b71c1c'
   },
+  activityIndicator: {
+    marginTop: '50%',
+  },
   btnActionDone: {
     backgroundColor: '#455A64',
     padding: 8,

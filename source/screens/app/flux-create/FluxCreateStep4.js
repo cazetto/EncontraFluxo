@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Icon,
   Switch,
+  ActivityIndicator,
   Dimensions,
   Platform,
 } from 'react-native';
@@ -24,6 +25,7 @@ export default class FluxCreateStep4 extends Component {
 
   state = {
     interests: [],
+    fetchingInterests: true,
   };
 
   componentWillMount() {
@@ -40,7 +42,7 @@ export default class FluxCreateStep4 extends Component {
         interest.selected = this.editable.interests.some(addedSkill => interest.id === addedSkill.id);
         return interest;
       }) : objects;
-      this.setState({interests});
+      this.setState({interests, fetchingInterests: false});
     })
     .catch(error => {});
   }
@@ -73,13 +75,15 @@ export default class FluxCreateStep4 extends Component {
   }
 
   render() {
-    let incompleteFill = false;
+    let incompleteFill = !this.state.interests.some(interest => interest.selected);
     return (
       this.state.redirect ?
       <Redirect push to={{
         pathname:"/app/flux-create-step-5",
         state: {editable: this.editable}
       }} /> :
+      this.state.fetchingInterests ?
+      <ActivityIndicator style={styles.activityIndicator} /> :
       <View style={styles.container}>
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderLabel}>Você pretende reunir pessoas com quais interesses?</Text>

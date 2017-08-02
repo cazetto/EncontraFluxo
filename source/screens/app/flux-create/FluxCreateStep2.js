@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Icon,
   Switch,
+  ActivityIndicator,
   Dimensions,
   Platform,
 } from 'react-native';
@@ -24,6 +25,7 @@ export default class FluxCreateStep2 extends Component {
 
   state = {
     skills: [],
+    fetchingSkills: true,
   };
 
   componentWillMount() {
@@ -40,7 +42,7 @@ export default class FluxCreateStep2 extends Component {
         skill.selected = this.editable.skills.some(addedSkill => skill.id === addedSkill.id);
         return skill;
       }) : objects;
-      this.setState({skills});
+      this.setState({skills, fetchingSkills: false});
     })
     .catch(error => {});
   }
@@ -73,13 +75,15 @@ export default class FluxCreateStep2 extends Component {
   }
 
   render() {
-    let incompleteFill = false;
+    let incompleteFill = !this.state.skills.some(skill => skill.selected);
     return (
       this.state.redirect ?
       <Redirect push to={{
         pathname:"/app/flux-create-step-3",
         state: {editable: this.editable}
       }} /> :
+      this.state.fetchingSkills ?
+      <ActivityIndicator style={styles.activityIndicator} /> :
       <View style={styles.container}>
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderLabel}>Para tornar este fluxo possível, pessoas com as quais habilidades devem fazer parte?</Text>
