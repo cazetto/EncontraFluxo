@@ -22,7 +22,7 @@ export default class Dashboard extends Component {
     this.state = {
       neighborhood: null,
       neighborhoods: [],
-      events: [],
+      events: null,
       currentTab: null,
     };
   }
@@ -35,6 +35,7 @@ export default class Dashboard extends Component {
   fetchOpen() {
     let dataFilter = {};
     if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    this.setState({events: null});
     EventService.find(dataFilter)
     .then(({objects:events}) => {
       console.log(events);
@@ -48,6 +49,7 @@ export default class Dashboard extends Component {
   fetchInFlux() {
     let dataFilter = {};
     if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    this.setState({events: null});
     EventService.findInFlux(dataFilter)
     .then(({objects:events}) => {
       console.log(events);
@@ -61,6 +63,7 @@ export default class Dashboard extends Component {
   fetchHappening() {
     let dataFilter = {};
     if(this.state.neighborhood) dataFilter.bairro_id = this.state.neighborhood.id;
+    this.setState({events: null});
     EventService.findHappening(dataFilter)
     .then(({objects:events}) => {
       console.log(events);

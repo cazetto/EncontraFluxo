@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   noneItems: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: '50%',
     color: '#37474F',
   }
 });
