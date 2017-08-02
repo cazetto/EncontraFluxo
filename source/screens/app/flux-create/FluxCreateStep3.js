@@ -58,11 +58,12 @@ export default class FluxCreateStep3 extends Component {
   }
 
   addMaterial() {
-    const material = this.state.material;
+    const material = this.state.material.trim();
+    console.log('material', material);
     if(material === '') return;
     let materiais = [...this.state.eventData.materiais];
     materiais.push(material);
-    this.setState({eventData:{materiais}, material: null});
+    this.setState({eventData:{materiais}, material: ''});
   }
 
   onRemoveMaterialHandle(item) {
