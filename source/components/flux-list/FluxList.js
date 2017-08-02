@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
     // borderColor: '#FDD835',
   },
   activityIndicator: {
-    marginTop: 20,
+    marginTop: '50%',
   },
   noneItems: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: '50%',
     color: '#37474F',
   }
 });

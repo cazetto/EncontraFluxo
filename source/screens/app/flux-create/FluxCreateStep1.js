@@ -32,7 +32,7 @@ export default class FluxCreateStep1 extends Component {
       dt_evento: null,
       descricao: null,
     },
-    goNextScreen: false,
+    redirect: false,
 
     editing: false,
   }
@@ -93,7 +93,7 @@ export default class FluxCreateStep1 extends Component {
 
   next() {
     EventService.data = update(EventService.data, {$merge: this.state.eventData});
-    this.setState({goNextScreen: true});
+    this.setState({redirect: true});
   }
 
   done() {
@@ -107,7 +107,7 @@ export default class FluxCreateStep1 extends Component {
     .some(current => this.state.eventData[current] === null || this.state.eventData[current] === '');
 
     return (
-      this.state.goNextScreen ?
+      this.state.redirect ?
       <Redirect push to={{
         pathname:"/app/flux-create-step-2",
         state: {editable: this.editable}

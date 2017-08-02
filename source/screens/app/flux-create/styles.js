@@ -28,6 +28,29 @@ export default styles = StyleSheet.create({
   datePicker: {
     width: Dimensions.get('window').width - 20,
   },
+  listHeader: {
+    padding: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ECEFF1',
+    backgroundColor: '#F5F5F5',
+  },
+  listHeaderLabel: {
+    fontSize: 14,
+    color: '#757575',
+    textAlign: 'center',
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ECEFF1',
+    backgroundColor: '#FAFAFA',
+  },
+  listItemTitle: {
+    color: '#757575',
+  },
   inputLabel: {
     marginTop: 10,
     marginBottom: 4,
@@ -62,6 +85,9 @@ export default styles = StyleSheet.create({
     marginTop: 3,
     fontSize: 22,
     color: '#b71c1c'
+  },
+  activityIndicator: {
+    marginTop: '50%',
   },
   btnActionDone: {
     backgroundColor: '#455A64',

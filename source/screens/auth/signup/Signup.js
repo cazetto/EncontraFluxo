@@ -134,7 +134,7 @@ export default class SignupComponent extends Component {
 
   render() {
     return (
-      this.state.signupComplete ? <Redirect to="/app/skills" /> :
+      this.state.signupComplete ? <Redirect to="/app/neighborhoods" /> :
       <View style={styles.content}>
         <View style={[styles.textInputs]}>
           <View style={styles.textInputWrapper}>

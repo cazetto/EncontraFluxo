@@ -22,7 +22,7 @@ export default class FluxCreateStep3 extends Component {
     eventData: {
       materiais: [],
     },
-    isComplete: false,
+    redirect: false,
   }
 
   constructor(props) {
@@ -54,7 +54,7 @@ export default class FluxCreateStep3 extends Component {
   next() {
     EventService.data = update(EventService.data, {$merge: this.state.eventData});
     console.log(EventService.data);
-    this.setState({isComplete: true});
+    this.setState({redirect: true});
   }
 
   addMaterial() {
@@ -85,7 +85,7 @@ export default class FluxCreateStep3 extends Component {
 
   render() {
     return (
-      this.state.isComplete ?
+      this.state.redirect ?
       <Redirect push to={{
         pathname:"/app/flux-create-step-4",
         state: {editable: this.editable}
