@@ -33,7 +33,8 @@ export default class Splash extends Component {
       APIService.authorize(APPLICATION_API_CONFIG.name, response.username, response.api_key);
       UserService.id = response.id;
       UserService.user = response;
-      this.setState({redirectionRoute: '/app/dashboard'});
+      // this.setState({redirectionRoute: '/app/dashboard'});
+      this.setState({redirectionRoute: '/app/flux-create-step-2'});
     })
     .catch(error => {
       this.setState({redirectionRoute: '/auth/login'});
@@ -42,7 +43,8 @@ export default class Splash extends Component {
 
   componentDidMount() {
     this.animate();
-    const WAIT = 3000;
+    // const WAIT = 3000;
+    const WAIT = 0;
     this.timer = TimerMixin.setTimeout(() => {
       this.setState({redirectionTimeoutCompleted: true});
     }, WAIT);
